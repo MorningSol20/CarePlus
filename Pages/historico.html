@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="../images/favicon.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Histórico - Care Plus</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="historico">
+  <div class="sidebar-overlay"></div>
+
+
+  <!-- Sidebar -->
+  <aside class="sidebar mobile-hidden">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">CP</div>
+      <div class="sidebar-info">
+        <div class="sidebar-title">Care Plus</div>
+        <div class="sidebar-subtitle">Saúde em Primeiro Lugar</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="../dashboard.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span class="nav-item-label">Início</span>
+      </a>
+
+      <a href="../Pages/vacinas.html" class="nav-item">
+        <i class="fas fa-syringe"></i>
+        <span class="nav-item-label">Vacinas</span>
+      </a>
+
+      <a href="../Pages/receitas.html" class="nav-item">
+        <i class="fas fa-file-medical"></i>
+        <span class="nav-item-label">Receitas</span>
+      </a>
+
+      <a href="../Pages/agendamento.html" class="nav-item">
+        <i class="fas fa-calendar"></i>
+        <span class="nav-item-label">Agendar</span>
+      </a>
+
+      <a href="../Pages/historico.html" class="nav-item active">
+        <i class="fas fa-clock"></i>
+        <span class="nav-item-label">Histórico</span>
+      </a>
+
+      <a href="../Pages/profissionais.html" class="nav-item">
+        <i class="fas fa-users"></i>
+        <span class="nav-item-label">Profissionais</span>
+      </a>
+    </nav>
+
+      <a href="#" class="nav-item logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span class="nav-item-label">Sair</span>
+      </a>
+  </aside>
+
+  <!-- Main Wrapper (Contém Topbar e Content) -->
+  <div class="main-wrapper">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <!-- Botão de Controle Único -->
+        <button class="toggle-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      <div class="topbar-right">
+        <a href="./Pages/notificacoes.html" class="notification-btn" title="Notificações">
+          <i class="fas fa-bell"></i> <span class="notification-badge"></span>
+        </a>
+        <a href="./Pages/configuracoes.html" class="notification-btn" title="Configurações">
+          <i class="fas fa-cog"></i>
+        </a>
+        <div class="user-avatar">JD</div>
+      </div>
+    </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Header -->
+    <div style="margin-bottom: 32px;">
+      <h1 style="font-size: 32px; font-weight: bold; margin-bottom: 8px;">Historico de Consultas</h1>
+      <p style="color: var(--text-secondary);">Acompanhe todas as suas consultas anteriores</p>
+    </div>
+
+    <!-- Consultas List -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <!-- Consulta 1 -->
+      <div class="card">
+        <div style="display: flex; align-items: flex-start; gap: 16px;">
+          <div style="width: 48px; height: 48px; background-color: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i class="fas fa-user" style="color: #1e40af; font-size: 24px;"></i>
+          </div>
+          <div style="flex: 1;">
+            <h3 style="font-weight: 600; margin-bottom: 4px;">Dra. Ana Silva</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Clinico Geral</p>
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <i class="fas fa-calendar"></i>
+                <span>10/05/2026</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <i class="fas fa-clock"></i>
+                <span>14:30</span>
+              </div>
+            </div>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0;">Consulta de rotina. Paciente em bom estado de saude.</p>
+          </div>
+          <a href="#" class="btn btn-outline btn-sm">Detalhes</a>
+        </div>
+      </div>
+
+      <!-- Consulta 2 -->
+      <div class="card">
+        <div style="display: flex; align-items: flex-start; gap: 16px;">
+          <div style="width: 48px; height: 48px; background-color: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i class="fas fa-user" style="color: #1e40af; font-size: 24px;"></i>
+          </div>
+          <div style="flex: 1;">
+            <h3 style="font-weight: 600; margin-bottom: 4px;">Dr. Roberto Santos</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Cardiologia</p>
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <i class="fas fa-calendar"></i>
+                <span>01/05/2026</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <i class="fas fa-clock"></i>
+                <span>10:00</span>
+              </div>
+            </div>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0;">Avaliacao cardiaca. Pressao arterial normal.</p>
+          </div>
+          <a href="#" class="btn btn-outline btn-sm">Detalhes</a>
+        </div>
+      </div>
+
+      <!-- Consulta 3 -->
+      <div class="card">
+        <div style="display: flex; align-items: flex-start; gap: 16px;">
+          <div style="width: 48px; height: 48px; background-color: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i class="fas fa-user" style="color: #1e40af; font-size: 24px;"></i>
+          </div>
+          <div style="flex: 1;">
+            <h3 style="font-weight: 600; margin-bottom: 4px;">Dra. Marina Costa</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Dermatologia</p>
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <i class="fas fa-calendar"></i>
+                <span>15/04/2026</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <i class="fas fa-clock"></i>
+                <span>15:00</span>
+              </div>
+            </div>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0;">Avaliacao de pele. Prescricao de tratamento.</p>
+          </div>
+          <a href="#" class="btn btn-outline btn-sm">Detalhes</a>
+        </div>
+      </div>
+
+      <!-- Consulta 4 -->
+      <div class="card">
+        <div style="display: flex; align-items: flex-start; gap: 16px;">
+          <div style="width: 48px; height: 48px; background-color: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i class="fas fa-user" style="color: #1e40af; font-size: 24px;"></i>
+          </div>
+          <div style="flex: 1;">
+            <h3 style="font-weight: 600; margin-bottom: 4px;">Dr. Felipe Oliveira</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Oftalmologia</p>
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <i class="fas fa-calendar"></i>
+                <span>20/03/2026</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <i class="fas fa-clock"></i>
+                <span>11:30</span>
+              </div>
+            </div>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0;">Teste de visao. Prescricao de oculos.</p>
+          </div>
+          <a href="#" class="btn btn-outline btn-sm">Detalhes</a>
+        </div>
+      </div>
+
+      <!-- Consulta 5 -->
+      <div class="card">
+        <div style="display: flex; align-items: flex-start; gap: 16px;">
+          <div style="width: 48px; height: 48px; background-color: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i class="fas fa-user" style="color: #1e40af; font-size: 24px;"></i>
+          </div>
+          <div style="flex: 1;">
+            <h3 style="font-weight: 600; margin-bottom: 4px;">Dra. Juliana Pereira</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Psicologia</p>
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <i class="fas fa-calendar"></i>
+                <span>05/03/2026</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <i class="fas fa-clock"></i>
+                <span>09:00</span>
+              </div>
+            </div>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0;">Sessao de acompanhamento psicologico.</p>
+          </div>
+          <a href="#" class="btn btn-outline btn-sm">Detalhes</a>
+        </div>
+      </div>
+
+      <!-- Consulta 6 -->
+      <div class="card">
+        <div style="display: flex; align-items: flex-start; gap: 16px;">
+          <div style="width: 48px; height: 48px; background-color: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i class="fas fa-user" style="color: #1e40af; font-size: 24px;"></i>
+          </div>
+          <div style="flex: 1;">
+            <h3 style="font-weight: 600; margin-bottom: 4px;">Dr. Carlos Mendes</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Ortopedia</p>
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <i class="fas fa-calendar"></i>
+                <span>10/02/2026</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <i class="fas fa-clock"></i>
+                <span>16:00</span>
+              </div>
+            </div>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0;">Avaliacao ortopedica. Fisioterapia recomendada.</p>
+          </div>
+          <a href="#" class="btn btn-outline btn-sm">Detalhes</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - Care Plus</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .registro-container {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .registro-card {
+      width: 100%;
+      max-width: 400px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      padding: 32px;
+    }
+
+    .registro-header {
+      position: absolute;
+      top: 32px;
+      left: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: opacity 0.15s ease;
+    }
+
+    .registro-header:hover {
+      opacity: 0.8;
+    }
+
+    .registro-header-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #1e40af, #1e3a8a);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .registro-title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .registro-subtitle {
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .terms-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .terms-checkbox input {
+      margin-top: 4px;
+      cursor: pointer;
+    }
+
+    .terms-checkbox label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .terms-checkbox a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .terms-checkbox a:hover {
+      color: var(--primary-dark);
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 24px;
+      color: var(--text-secondary);
+    }
+
+    .login-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-link a:hover {
+      color: var(--primary-dark);
+    }
+  </style>
+</head>
+<body>
+  <div class="registro-container">
+    <!-- Logo -->
+    <a href="index.html" class="registro-header">
+      <div class="registro-header-icon">CP</div>
+      <span style="font-weight: bold; font-size: 16px;">Care Plus</span>
+    </a>
+
+    <!-- Registro Card -->
+    <div class="registro-card">
+      <h1 class="registro-title">Crie sua conta</h1>
+      <p class="registro-subtitle">Comece a cuidar da sua saúde hoje</p>
+
+      <!-- Registro Form -->
+      <form id="registroForm">
+        <!-- Name -->
+        <div class="form-group">
+          <label for="name" class="form-label">Nome Completo</label>
+          <div class="form-input-wrapper">
+            <i class="fas fa-user form-input-icon"></i>
+            <input type="text" id="name" name="name" class="form-control with-icon" placeholder="Joao Silva" required>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email" class="form-label">Email</label>
+          <div class="form-input-wrapper">
+            <i class="fas fa-envelope form-input-icon"></i>
+            <input type="email" id="email" name="email" class="form-control with-icon" placeholder="seu@email.com" required>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label for="phone" class="form-label">Telefone</label>
+          <div class="form-input-wrapper">
+            <i class="fas fa-phone form-input-icon"></i>
+            <input type="tel" id="phone" name="phone" class="form-control with-icon" placeholder="(11) 99999-9999">
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="password" class="form-label">Senha</label>
+          <div class="form-input-wrapper">
+            <i class="fas fa-lock form-input-icon"></i>
+            <input type="password" id="password" name="password" class="form-control with-icon" placeholder="••••••••" required>
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+          <label for="confirmPassword" class="form-label">Confirmar Senha</label>
+          <div class="form-input-wrapper">
+            <i class="fas fa-lock form-input-icon"></i>
+            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control with-icon" placeholder="••••••••" required>
+          </div>
+        </div>
+
+        <!-- Terms -->
+        <div class="terms-checkbox">
+          <input type="checkbox" id="terms" required>
+          <label for="terms">
+            Concordo com os <a href="#">Termos de Servico</a> e <a href="#">Politica de Privacidade</a>
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary w-100" style="height: 48px; font-weight: 600;">
+          Criar Conta
+        </button>
+      </form>
+
+      <!-- Login Link -->
+      <div class="login-link">
+        Ja tem uma conta? <a href="login.html">Entrar</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
