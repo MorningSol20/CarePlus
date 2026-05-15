@@ -129,7 +129,7 @@
         <span class="nav-item-label">Receitas</span>
       </a>
 
-      <a href="../Pages/agendamento.html" class="nav-item">
+      <a href="../Pages/profissionais.html" class="nav-item active">
         <i class="fas fa-calendar"></i>
         <span class="nav-item-label">Agendar</span>
       </a>
@@ -138,18 +138,13 @@
         <i class="fas fa-clock"></i>
         <span class="nav-item-label">Histórico</span>
       </a>
-
-      <a href="../Pages/profissionais.html" class="nav-item">
-        <i class="fas fa-users"></i>
-        <span class="nav-item-label">Profissionais</span>
-      </a>
     </nav>
 
     <div class="sidebar-footer">
-      <button class="logout-btn">
+      <a href="../index.html" class="logout-btn">
         <i class="fas fa-sign-out-alt"></i>
         <span>Sair</span>
-      </button>
+      </a>
     </div>
   </aside>
 
@@ -174,148 +169,142 @@
       </div>
     </header>
 
+    <!-- breadcrumb -->
+    <div class="container mb-3 p-3">
+
+      <div class="d-flex justify-content-between align-items-center">
+
+        <!-- Step 1 -->
+        <div class="text-center flex-fill">
+          <div id="step-profissional"
+            class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto"
+            style="width: 36px; height: 36px;">
+            <i class="fas fa-user"></i>
+          </div>
+          <small class="d-block mt-1 fw-semibold text-muted">Profissional</small>
+        </div>
+
+        <!-- Line -->
+        <div class="flex-fill border-top mx-2"></div>
+
+        <!-- Step 2 -->
+        <div class="text-center flex-fill">
+          <div id="step-horario"
+            class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto"
+            style="width: 36px; height: 36px;">
+            <i class="fas fa-clock"></i>
+          </div>
+          <small class="d-block mt-1 fw-semibold">Data & Hora</small>
+        </div>
+
+        <!-- Line -->
+        <div class="flex-fill border-top mx-2"></div>
+
+        <!-- Step 3 -->
+        <div class="text-center flex-fill">
+          <div id="step-confirmar"
+            class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto"
+            style="width: 36px; height: 36px;">
+            <i class="fas fa-check"></i>
+          </div>
+          <small class="d-block mt-1 fw-semibold text-muted">Confirmar</small>
+        </div>
+
+      </div>
+    </div>
+
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="container py-4">
+
       <!-- Header -->
-      <div style="margin-bottom: 32px;">
-        <h1 style="font-size: 32px; font-weight: bold; margin-bottom: 8px;">Agendar Consulta</h1>
-        <p style="color: var(--text-secondary);">Escolha um profissional e horario disponivel</p>
+      <div class="mb-4">
+        <h1 class="fw-bold mb-1">Agendar Consulta</h1>
+        <p class="text-muted mb-0">
+          Escolha um profissional e horário disponível
+        </p>
       </div>
 
-      <div class="grid grid-2" style="gap: 32px;">
+      <div class="row g-4">
+
         <!-- Left Column -->
-        <div>
-          <!-- Professional Selection -->
-          <div class="card mb-4">
-            <h2 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Selecione o Profissional</h2>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-              <div style="border: 2px solid var(--primary); border-radius: 8px; padding: 16px; cursor: pointer;">
-                <h3 style="font-weight: 600; margin-bottom: 4px;">Dra. Ana Silva</h3>
-                <p style="font-size: 13px; color: var(--text-secondary); margin: 0;">Clinico Geral</p>
-              </div>
-              <div
-                style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; cursor: pointer; transition: all 0.15s ease;">
-                <h3 style="font-weight: 600; margin-bottom: 4px;">Dr. Roberto Santos</h3>
-                <p style="font-size: 13px; color: var(--text-secondary); margin: 0;">Cardiologia</p>
-              </div>
-              <div
-                style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; cursor: pointer; transition: all 0.15s ease;">
-                <h3 style="font-weight: 600; margin-bottom: 4px;">Dra. Marina Costa</h3>
-                <p style="font-size: 13px; color: var(--text-secondary); margin: 0;">Dermatologia</p>
-              </div>
-            </div>
-          </div>
+        <div class="col-12 col-lg-6">
 
           <!-- Date Selection -->
-          <div class="card">
-            <h2 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Selecione a Data</h2>
-            <div class="calendar-grid" style="margin-bottom: 16px;">
-              <div style="text-align: center; font-weight: 600; color: var(--text-secondary); font-size: 12px;">Dom
-              </div>
-              <div style="text-align: center; font-weight: 600; color: var(--text-secondary); font-size: 12px;">Seg
-              </div>
-              <div style="text-align: center; font-weight: 600; color: var(--text-secondary); font-size: 12px;">Ter
-              </div>
-              <div style="text-align: center; font-weight: 600; color: var(--text-secondary); font-size: 12px;">Qua
-              </div>
-              <div style="text-align: center; font-weight: 600; color: var(--text-secondary); font-size: 12px;">Qui
-              </div>
-              <div style="text-align: center; font-weight: 600; color: var(--text-secondary); font-size: 12px;">Sex
-              </div>
-              <div style="text-align: center; font-weight: 600; color: var(--text-secondary); font-size: 12px;">Sab
-              </div>
-
-              <button class="calendar-day" disabled>1</button>
-              <button class="calendar-day" disabled>2</button>
-              <button class="calendar-day" disabled>3</button>
-              <button class="calendar-day" disabled>4</button>
-              <button class="calendar-day" disabled>5</button>
-              <button class="calendar-day" disabled>6</button>
-              <button class="calendar-day" disabled>7</button>
-              <button class="calendar-day" disabled>8</button>
-              <button class="calendar-day" disabled>9</button>
-              <button class="calendar-day" disabled>10</button>
-              <button class="calendar-day available">11</button>
-              <button class="calendar-day available">12</button>
-              <button class="calendar-day available">13</button>
-              <button class="calendar-day available">14</button>
-              <button class="calendar-day available selected">15</button>
-              <button class="calendar-day available">16</button>
-              <button class="calendar-day available">17</button>
-              <button class="calendar-day available">18</button>
-              <button class="calendar-day available">19</button>
-              <button class="calendar-day available">20</button>
-              <button class="calendar-day available">21</button>
-              <button class="calendar-day available">22</button>
-              <button class="calendar-day available">23</button>
-              <button class="calendar-day available">24</button>
-              <button class="calendar-day available">25</button>
-              <button class="calendar-day available">26</button>
-              <button class="calendar-day available">27</button>
-              <button class="calendar-day available">28</button>
-              <button class="calendar-day available">29</button>
-              <button class="calendar-day available">30</button>
-              <button class="calendar-day available">31</button>
+          <div class="card border-0 shadow-sm rounded-4 p-3">
+            <h5 class="fw-semibold mb-3">Selecione a Data</h5>
+            <!-- Weekdays -->
+            <div class="d-grid text-center small fw-semibold text-muted mb-2"
+              style="grid-template-columns: repeat(7, 1fr);">
+              <div>Dom</div>
+              <div>Seg</div>
+              <div>Ter</div>
+              <div>Qua</div>
+              <div>Qui</div>
+              <div>Sex</div>
+              <div>Sab</div>
             </div>
-            <input type="hidden" name="selectedDate" value="2026-05-15">
+
+            <!-- Calendar -->
+            <div id="calendar" class="d-grid gap-2" style="grid-template-columns: repeat(7, 1fr);">
+            </div>
+            <!-- Selected date -->
+            <input type="hidden" id="selectedDate" name="selectedDate">
           </div>
         </div>
 
         <!-- Right Column -->
-        <div>
-          <!-- Time Selection -->
-          <div class="card mb-4">
-            <h2 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Selecione o Horario</h2>
-            <div class="time-slots">
-              <button class="time-slot">08:00</button>
-              <button class="time-slot">08:30</button>
-              <button class="time-slot">09:00</button>
-              <button class="time-slot">09:30</button>
-              <button class="time-slot">10:00</button>
-              <button class="time-slot">10:30</button>
-              <button class="time-slot">14:00</button>
-              <button class="time-slot">14:30</button>
-              <button class="time-slot">15:00</button>
-              <button class="time-slot">15:30</button>
-              <button class="time-slot selected">16:00</button>
-              <button class="time-slot">16:30</button>
-            </div>
-            <input type="hidden" name="selectedTime" value="16:00">
-          </div>
+        <div class="col-12 col-lg-6">
 
-          <!-- Confirmation -->
-          <div class="confirmation-section show">
-            <h3 style="font-weight: 600; margin-bottom: 16px; color: #15803d;">Resumo da Consulta</h3>
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
-              <div
-                style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #bbf7d0;">
-                <span style="color: var(--text-secondary);">Profissional</span>
-                <span style="font-weight: 600;">Dra. Ana Silva</span>
-              </div>
-              <div
-                style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #bbf7d0;">
-                <span style="color: var(--text-secondary);">Especialidade</span>
-                <span style="font-weight: 600;">Clinico Geral</span>
-              </div>
-              <div
-                style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #bbf7d0;">
-                <span style="color: var(--text-secondary);">Data</span>
-                <span class="confirmation-date" style="font-weight: 600;">15 de maio de 2026</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="color: var(--text-secondary);">Horario</span>
-                <span class="confirmation-time" style="font-weight: 600;">16:00</span>
-              </div>
-            </div>
-            <button class="btn btn-success w-100"
-              style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-              <i class="fas fa-check"></i>
-              Confirmar Agendamento
-            </button>
+          <!-- Time Selection -->
+          <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+            <h5 class="fw-semibold mb-3">Selecione o Horário</h5>
+            <div id="timeSlots" class="d-flex flex-wrap gap-2"></div>
+            <input type="hidden" id="selectedTime" name="selectedTime">
           </div>
         </div>
+
+        <!-- Confirmation -->
+        <div class="card border-0 shadow-sm rounded-4 p-3">
+
+          <h5 class="fw-semibold text-success mb-3">Resumo da Consulta</h5>
+
+          <div class="d-flex flex-column gap-3">
+
+            <div class="d-flex justify-content-between border-bottom pb-2">
+              <span class="text-muted">Profissional</span>
+              <span class="fw-semibold" id="res-profissional">Dra. Ana Silva</span>
+            </div>
+
+            <div class="d-flex justify-content-between border-bottom pb-2">
+              <span class="text-muted">Especialidade</span>
+              <span class="fw-semibold" id="res-especialidade">Clínico Geral</span>
+            </div>
+
+            <div class="d-flex justify-content-between border-bottom pb-2">
+              <span class="text-muted">Data</span>
+              <span class="fw-semibold" id="res-data">--</span>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Horário</span>
+              <span class="fw-semibold" id="res-horario">--</span>
+            </div>
+
+          </div>
+
+          <button class="btn btn-success w-100 mt-3 d-flex align-items-center justify-content-center gap-2">
+            <i class="fas fa-check"></i>
+            Confirmar Agendamento
+          </button>
+
+        </div>
+
       </div>
-    </main>
+
+  </div>
+
+  </div>
+  </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

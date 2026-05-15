@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="./css/style.css">
 </head>
 
-<body data-page="home">
+<body data-page="dashboard">
   <!-- Overlay (Fundo escuro no mobile) -->
   <div class="sidebar-overlay"></div>
 
@@ -30,7 +30,7 @@
     </div>
 
     <nav class="sidebar-nav">
-      <a href="./Pages/agendamento.html" class="nav-item active">
+      <a href="./Pages/dashboard.html" class="nav-item">
         <i class="fas fa-home"></i>
         <span class="nav-item-label">Início</span>
       </a>
@@ -45,7 +45,7 @@
         <span class="nav-item-label">Receitas</span>
       </a>
 
-      <a href="./Pages/agendamento.html" class="nav-item">
+      <a href="./Pages/profissionais.html" class="nav-item">
         <i class="fas fa-calendar"></i>
         <span class="nav-item-label">Agendar</span>
       </a>
@@ -54,18 +54,13 @@
         <i class="fas fa-clock"></i>
         <span class="nav-item-label">Histórico</span>
       </a>
-
-      <a href="./Pages/profissionais.html" class="nav-item">
-        <i class="fas fa-users"></i>
-        <span class="nav-item-label">Profissionais</span>
-      </a>
     </nav>
 
     <div class="sidebar-footer">
-      <button class="logout-btn">
+      <a href="./index.html" class="logout-btn">
         <i class="fas fa-sign-out-alt"></i>
         <span>Sair</span>
-      </button>
+      </a>
     </div>
   </aside>
 
@@ -101,37 +96,74 @@
       </div>
 
       <!-- Quick Stats -->
-      <div class="grid grid-4 mb-4">
-        <div class="card" style="border-left: 4px solid #3b82f6;">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-            <i class="fas fa-calendar" style="color: #3b82f6; font-size: 20px;"></i>
-            <span style="font-size: 12px; color: var(--text-secondary); opacity: 0.75;">Proxima Consulta</span>
+      <div class="row g-3 mb-4">
+
+        <!-- Consulta -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-primary">
+            <div class="card-body">
+
+              <p class="text-primary fw-semibold small mb-2">
+                Proxíma Consulta
+              </p>
+
+              <h2 class="fw-bold text-primary mb-0">
+                --
+              </h2>
+
+            </div>
           </div>
-          <div style="font-size: 24px; font-weight: bold;">15 de Maio</div>
         </div>
 
-        <div class="card" style="border-left: 4px solid #10b981;">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-            <i class="fas fa-syringe" style="color: #10b981; font-size: 20px;"></i>
-            <span style="font-size: 12px; color: var(--text-secondary); opacity: 0.75;">Vacinas</span>
+        <!-- Vacinas -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-success">
+            <div class="card-body">
+
+              <p class="text-success fw-semibold small mb-2">
+                Vacinas
+              </p>
+
+              <h2 class="fw-bold text-success mb-0">
+                --
+              </h2>
+
+            </div>
           </div>
-          <div style="font-size: 24px; font-weight: bold;">3 Pendentes</div>
         </div>
 
-        <div class="card" style="border-left: 4px solid #f97316;">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-            <i class="fas fa-file-medical" style="color: #f97316; font-size: 20px;"></i>
-            <span style="font-size: 12px; color: var(--text-secondary); opacity: 0.75;">Receitas</span>
+        <!-- Receitas -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-danger">
+            <div class="card-body">
+
+              <p class="text-danger fw-semibold small mb-2">
+                Receitas
+              </p>
+
+              <h2 class="fw-bold text-danger mb-0">
+                --
+              </h2>
+
+            </div>
           </div>
-          <div style="font-size: 24px; font-weight: bold;">2 Ativas</div>
         </div>
 
-        <div class="card" style="border-left: 4px solid #a855f7;">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-            <i class="fas fa-clock" style="color: #a855f7; font-size: 20px;"></i>
-            <span style="font-size: 12px; color: var(--text-secondary); opacity: 0.75;">Historico</span>
+        <!-- Historico -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-warning">
+            <div class="card-body">
+
+              <p class="text-warning fw-semibold small mb-2">
+                Histórico
+              </p>
+
+              <h2 class="fw-bold text-warning mb-0">
+                --
+              </h2>
+
+            </div>
           </div>
-          <div style="font-size: 24px; font-weight: bold;">12 Consultas</div>
         </div>
       </div>
 
@@ -139,50 +171,25 @@
       <div class="card mb-4">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
           <h2 style="font-size: 20px; margin: 0;">Proximas Consultas</h2>
-          <a href="agendamento.html" class="btn btn-primary btn-sm">Agendar Nova</a>
+          <a href="./Pages/profissionais.html" class="btn btn-primary btn-sm">Agendar Nova</a>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-          <!-- Consultation 1 -->
-          <div
-            style="display: flex; align-items: flex-start; gap: 16px; padding: 16px; background-color: #f9fafb; border-radius: 8px; border: 1px solid var(--border-color);">
-            <div
-              style="width: 48px; height: 48px; background: linear-gradient(135deg, #60a5fa, #3b82f6); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;">
-              <i class="fas fa-user"></i>
+        <!-- Empty State -->
+        <div class="card border-0 shadow-sm rounded-4 py-5 px-4 mt-3 bg-white empty-state">
+          <div class="d-flex flex-column align-items-center justify-content-center text-center w-100 mx-auto">
+            <div class="bg-primary bg-opacity-10 rounded-circle p-4 mb-4">
+              <img src="../images/date.png" alt="Consultas" style="width: 70px;">
             </div>
-            <div style="flex: 1;">
-              <h3 style="font-weight: 600; margin-bottom: 4px;">Dra. Ana Silva</h3>
-              <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Clinico Geral</p>
-              <div style="display: flex; align-items: center; gap: 16px; font-size: 13px; color: var(--text-secondary);">
-                <span>15 de Maio as 14:30</span>
-                <div style="display: flex; align-items: center; gap: 4px;">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <span>Clinica Central</span>
-                </div>
-              </div>
-            </div>
-            <a href="#" class="btn btn-outline btn-sm">Detalhes</a>
-          </div>
-
-          <!-- Consultation 2 -->
-          <div
-            style="display: flex; align-items: flex-start; gap: 16px; padding: 16px; background-color: #f9fafb; border-radius: 8px; border: 1px solid var(--border-color);">
-            <div
-              style="width: 48px; height: 48px; background: linear-gradient(135deg, #60a5fa, #3b82f6); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;">
-              <i class="fas fa-user"></i>
-            </div>
-            <div style="flex: 1;">
-              <h3 style="font-weight: 600; margin-bottom: 4px;">Dr. Roberto Santos</h3>
-              <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Cardiologia</p>
-              <div style="display: flex; align-items: center; gap: 16px; font-size: 13px; color: var(--text-secondary);">
-                <span>22 de Maio as 10:00</span>
-                <div style="display: flex; align-items: center; gap: 4px;">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <span>Hospital Sao Paulo</span>
-                </div>
-              </div>
-            </div>
-            <a href="#" class="btn btn-outline btn-sm">Detalhes</a>
+            <h4 class="fw-semibold mb-2">
+              Nenhuma consulta agendada
+            </h4>
+            <p class="text-muted mb-4 col-lg-6">
+              Quando houver consultas agendadas, elas aparecerão aqui.
+            </p>
+            <a href="./Pages/profissionais.html" class="btn btn-primary px-4 py-2">
+              <i class="fas fa-calendar-plus me-2"></i>
+              Agendar Consulta
+            </a>
           </div>
         </div>
       </div>
@@ -196,11 +203,12 @@
               style="width: 48px; height: 48px; background-color: #dcfce7; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
               <i class="fas fa-syringe" style="color: #15803d; font-size: 24px;"></i>
             </div>
-            <h3 style="font-size: 18px; font-weight: 600; margin: 0;">Carteira de Vacinacao</h3>
+            <h3 style="font-size: 18px; font-weight: 600; margin: 0;">Carteira de Vacinação</h3>
           </div>
-          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">Acompanhe suas vacinas e datas de
+          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">Acompanhe suas vacinas e datas
+            de
             reforco</p>
-          <a href="vacinas.html" class="btn btn-success w-100">Visualizar Vacinas</a>
+          <a href="./Pages/vacinas.html" class="btn btn-success w-100">Visualizar Vacinas</a>
         </div>
 
         <!-- Receitas Card -->
@@ -214,46 +222,17 @@
           </div>
           <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">Acesse suas receitas medicas e
             prescricoes</p>
-          <a href="receitas.html" class="btn"
+          <a href="./Pages/receitas.html" class="btn"
             style="background-color: #f97316; color: white; border: none; width: 100%;">Visualizar Receitas</a>
         </div>
       </div>
 
       <!-- Profissionais Recomendados -->
       <div class="card">
-        <h2 style="font-size: 20px; margin-bottom: 24px;">Profissionais Recomendados</h2>
+        <h2 class="card-title">Profissionais Recomendados</h2>
+        <p class="card-text text-muted">Confira os três profissionais mais bem avaliados da plataforma.</p>
         <div class="grid grid-3">
           <!-- Professional 1 -->
-          <div
-            style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; transition: box-shadow 0.15s ease;">
-            <div
-              style="width: 100%; height: 128px; background: linear-gradient(135deg, #e0f2fe, #bae6fd); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-              <i class="fas fa-user" style="font-size: 48px; color: #0369a1; opacity: 0.5;"></i>
-            </div>
-            <h3 style="font-weight: 600; margin-bottom: 4px;">Dra. Marina Costa</h3>
-            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">Dermatologia</p>
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 14px; font-weight: 500; color: #ca8a04;">★ 4.9</span>
-              <a href="agendamento.html" class="btn btn-outline btn-sm">Agendar</a>
-            </div>
-          </div>
-
-          <!-- Professional 2 -->
-          <div
-            style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; transition: box-shadow 0.15s ease;">
-            <div
-              style="width: 100%; height: 128px; background: linear-gradient(135deg, #e0f2fe, #bae6fd); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-              <i class="fas fa-user" style="font-size: 48px; color: #0369a1; opacity: 0.5;"></i>
-            </div>
-            <h3 style="font-weight: 600; margin-bottom: 4px;">Dr. Felipe Oliveira</h3>
-            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">Oftalmologia</p>
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 14px; font-weight: 500; color: #ca8a04;">★ 4.8</span>
-              <a href="agendamento.html" class="btn btn-outline btn-sm">Agendar</a>
-            </div>
-          </div>
-
-          <!-- Professional 3 -->
           <div
             style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; transition: box-shadow 0.15s ease;">
             <div
@@ -264,7 +243,36 @@
             <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">Psicologia</p>
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <span style="font-size: 14px; font-weight: 500; color: #ca8a04;">★ 5.0</span>
-              <a href="agendamento.html" class="btn btn-outline btn-sm">Agendar</a>
+              <a href="./Pages/profissionais.html" class="btn btn-outline btn-sm">Agendar</a>
+            </div>
+          </div>
+          <!-- Professional 2 -->
+          <div
+            style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; transition: box-shadow 0.15s ease;">
+            <div
+              style="width: 100%; height: 128px; background: linear-gradient(135deg, #e0f2fe, #bae6fd); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+              <i class="fas fa-user" style="font-size: 48px; color: #0369a1; opacity: 0.5;"></i>
+            </div>
+            <h3 style="font-weight: 600; margin-bottom: 4px;">Dra. Marina Costa</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">Dermatologia</p>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 14px; font-weight: 500; color: #ca8a04;">★ 4.9</span>
+              <a href="./Pages/profissionais.html" class="btn btn-outline btn-sm">Agendar</a>
+            </div>
+          </div>
+
+          <!-- Professional 3 -->
+          <div
+            style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; transition: box-shadow 0.15s ease;">
+            <div
+              style="width: 100%; height: 128px; background: linear-gradient(135deg, #e0f2fe, #bae6fd); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+              <i class="fas fa-user" style="font-size: 48px; color: #0369a1; opacity: 0.5;"></i>
+            </div>
+            <h3 style="font-weight: 600; margin-bottom: 4px;">Dr. Felipe Oliveira</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">Oftalmologia</p>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 14px; font-weight: 500; color: #ca8a04;">★ 4.8</span>
+              <a href="./Pages/profissionais.html" class="btn btn-outline btn-sm">Agendar</a>
             </div>
           </div>
         </div>

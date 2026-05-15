@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <link rel="icon" href="../images/favicon.png" type="image/png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vacinas - Care Plus</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body data-page="vacinas">
   <!-- Sidebar Overlay -->
   <div class="sidebar-overlay"></div>
@@ -40,7 +44,7 @@
         <span class="nav-item-label">Receitas</span>
       </a>
 
-      <a href="../Pages/agendamento.html" class="nav-item">
+      <a href="../Pages/profissionais.html" class="nav-item">
         <i class="fas fa-calendar"></i>
         <span class="nav-item-label">Agendar</span>
       </a>
@@ -49,18 +53,13 @@
         <i class="fas fa-clock"></i>
         <span class="nav-item-label">Histórico</span>
       </a>
-
-      <a href="../Pages/profissionais.html" class="nav-item">
-        <i class="fas fa-users"></i>
-        <span class="nav-item-label">Profissionais</span>
-      </a>
     </nav>
 
     <div class="sidebar-footer">
-      <button class="logout-btn">
+      <a href="../index.html" class="logout-btn">
         <i class="fas fa-sign-out-alt"></i>
         <span>Sair</span>
-      </button>
+      </a>
     </div>
   </aside>
 
@@ -85,142 +84,115 @@
       </div>
     </header>
 
-  <!-- Main Content -->
-  <main class="main-content">
-    <!-- Header -->
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px;">
-      <div>
-        <h1 style="font-size: 32px; font-weight: bold; margin-bottom: 8px;">Carteira de Vacinacao</h1>
-        <p style="color: var(--text-secondary);">Acompanhe seu historico de vacinas</p>
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px;">
+        <div>
+          <h1 style="font-size: 32px; font-weight: bold; margin-bottom: 8px;">Carteira de Vacinacao</h1>
+          <p style="color: var(--text-secondary);">Acompanhe seu historico de vacinas</p>
+        </div>
+        <button class="btn btn-primary">
+          <i class="fas fa-syringe"></i>
+          Registrar Vacina
+        </button>
       </div>
-      <button class="btn btn-primary">
-        <i class="fas fa-syringe"></i>
-        Registrar Vacina
-      </button>
-    </div>
 
-    <!-- Table -->
-    <div class="card">
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Vacina</th>
-              <th>Status</th>
-              <th>Data Aplicacao</th>
-              <th>Proxima Dose</th>
-              <th>Acoes</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                  <div style="width: 40px; height: 40px; background-color: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-syringe" style="color: #1e40af;"></i>
-                  </div>
-                  <span style="font-weight: 500;">COVID-19</span>
-                </div>
-              </td>
-              <td><span class="badge badge-success"><i class="fas fa-check-circle"></i> Completo</span></td>
-              <td>15/03/2026</td>
-              <td>-</td>
-              <td><a href="#" class="btn btn-outline btn-sm">Detalhes</a></td>
-            </tr>
-            <tr>
-              <td>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                  <div style="width: 40px; height: 40px; background-color: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-syringe" style="color: #1e40af;"></i>
-                  </div>
-                  <span style="font-weight: 500;">Influenza</span>
-                </div>
-              </td>
-              <td><span class="badge badge-warning"><i class="fas fa-clock"></i> Pendente</span></td>
-              <td>-</td>
-              <td>20/05/2026</td>
-              <td><a href="#" class="btn btn-outline btn-sm">Detalhes</a></td>
-            </tr>
-            <tr>
-              <td>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                  <div style="width: 40px; height: 40px; background-color: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-syringe" style="color: #1e40af;"></i>
-                  </div>
-                  <span style="font-weight: 500;">Tetano</span>
-                </div>
-              </td>
-              <td><span class="badge badge-success"><i class="fas fa-check-circle"></i> Completo</span></td>
-              <td>10/01/2025</td>
-              <td>10/01/2030</td>
-              <td><a href="#" class="btn btn-outline btn-sm">Detalhes</a></td>
-            </tr>
-            <tr>
-              <td>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                  <div style="width: 40px; height: 40px; background-color: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-syringe" style="color: #1e40af;"></i>
-                  </div>
-                  <span style="font-weight: 500;">Hepatite B</span>
-                </div>
-              </td>
-              <td><span class="badge badge-success"><i class="fas fa-check-circle"></i> Completo</span></td>
-              <td>05/02/2026</td>
-              <td>-</td>
-              <td><a href="#" class="btn btn-outline btn-sm">Detalhes</a></td>
-            </tr>
-            <tr>
-              <td>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                  <div style="width: 40px; height: 40px; background-color: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-syringe" style="color: #1e40af;"></i>
-                  </div>
-                  <span style="font-weight: 500;">Meningite</span>
-                </div>
-              </td>
-              <td><span class="badge badge-danger"><i class="fas fa-exclamation-circle"></i> Vencida</span></td>
-              <td>15/05/2021</td>
-              <td>15/05/2026</td>
-              <td><a href="#" class="btn btn-outline btn-sm">Detalhes</a></td>
-            </tr>
-            <tr>
-              <td>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                  <div style="width: 40px; height: 40px; background-color: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-syringe" style="color: #1e40af;"></i>
-                  </div>
-                  <span style="font-weight: 500;">Febre Amarela</span>
-                </div>
-              </td>
-              <td><span class="badge badge-info"><i class="fas fa-check-circle"></i> Ativo</span></td>
-              <td>22/04/2026</td>
-              <td>22/04/2036</td>
-              <td><a href="#" class="btn btn-outline btn-sm">Detalhes</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+      <!-- Stats -->
+      <div class="row g-3 mb-4">
 
-    <!-- Stats -->
-    <div class="grid grid-3" style="margin-top: 24px;">
-      <div class="card" style="border-left: 4px solid #10b981;">
-        <p style="font-size: 12px; font-weight: 500; color: #15803d; margin-bottom: 8px;">Vacinas Completas</p>
-        <p style="font-size: 32px; font-weight: bold; color: #15803d; margin: 0;">4</p>
+        <!-- Vacinas completas -->
+        <div class="col-12 col-md-4">
+          <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-success">
+            <div class="card-body">
+
+              <p class="text-success fw-semibold small mb-2">
+                Vacinas completas
+              </p>
+
+              <h2 class="fw-bold text-success mb-0">
+                0
+              </h2>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Pendentes -->
+        <div class="col-12 col-md-4">
+          <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-warning">
+            <div class="card-body">
+
+              <p class="text-warning fw-semibold small mb-2">
+                Pendentes
+              </p>
+
+              <h2 class="fw-bold text-warning mb-0">
+                0
+              </h2>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Vencidas -->
+        <div class="col-12 col-md-4">
+          <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-danger">
+            <div class="card-body">
+
+              <p class="text-danger fw-semibold small mb-2">
+                Vencidas
+              </p>
+
+              <h2 class="fw-bold text-danger mb-0">
+                0
+              </h2>
+
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="card" style="border-left: 4px solid #f97316;">
-        <p style="font-size: 12px; font-weight: 500; color: #92400e; margin-bottom: 8px;">Pendentes</p>
-        <p style="font-size: 32px; font-weight: bold; color: #92400e; margin: 0;">1</p>
-      </div>
-      <div class="card" style="border-left: 4px solid #ef4444;">
-        <p style="font-size: 12px; font-weight: 500; color: #991b1b; margin-bottom: 8px;">Vencidas</p>
-        <p style="font-size: 32px; font-weight: bold; color: #991b1b; margin: 0;">1</p>
-      </div>
-    </div>
-  </main>
+
+      <!-- Table -->
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Vacina</th>
+                <th>Status</th>
+                <th>Data Aplicacao</th>
+                <th>Proxima Dose</th>
+                <th>Acoes</th>
+              </tr>
+            </thead>
+
+          </table>
+
+          <!-- Empty State -->
+          <div class="card border-0 shadow-sm rounded-4 py-5 px-4 mt-3 bg-white empty-state">
+            <div class="d-flex flex-column align-items-center justify-content-center text-center w-100 mx-auto">
+              <div class="bg-primary bg-opacity-10 rounded-circle p-4 mb-4">
+                <img src="../images/syringe.png" alt="Vacinas" style="width: 70px;">
+              </div>
+              <h4 class="fw-semibold mb-2">
+                Nenhuma vacina registrada
+              </h4>
+              <p class="text-muted mb-4 col-lg-6">
+                Quando houver vacinas cadastradas, elas aparecerão aqui para acompanhamento.
+              </p>
+              <button class="btn btn-primary px-4 py-2">
+                <i class="fas fa-syringe me-2"></i>
+                Registrar Vacina
+              </button>
+            </div>
+          </div>
+        </div>
+    </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/script.js"></script>
 </body>
+
 </html>
