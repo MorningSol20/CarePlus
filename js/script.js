@@ -479,9 +479,8 @@ function formatDate(iso) {
  */
 function vacinaBadge(status) {
     const map = {
-        completa: { cls: 'badge-success', icon: 'fa-check-circle',      label: 'Completa' },
-        pendente: { cls: 'badge-warning', icon: 'fa-clock',             label: 'Pendente' },
-        vencida:  { cls: 'badge-danger',  icon: 'fa-exclamation-circle', label: 'Vencida'  },
+        aplicada: { cls: 'badge-success', icon: 'fa-check-circle',       label: 'Aplicada' },
+        vencida:  { cls: 'badge-danger',  icon: 'fa-exclamation-circle',  label: 'Vencida'  },
     };
     const s = map[status] || { cls: 'badge-gray', icon: 'fa-question-circle', label: status };
     return `<span class="badge ${s.cls}"><i class="fas ${s.icon}"></i>${s.label}</span>`;
@@ -511,8 +510,7 @@ function initializeVacinaForm() {
     };
 
     const statusLabels = {
-        completa: { cls: 'badge-success', label: 'Completa' },
-        pendente: { cls: 'badge-warning', label: 'Pendente' },
+        aplicada: { cls: 'badge-success', label: 'Aplicada' },
         vencida:  { cls: 'badge-danger',  label: 'Vencida'  },
     };
 
@@ -608,8 +606,8 @@ function initializeVacinaForm() {
 function loadVacinas() {
     const tbody      = document.getElementById('vacinasTableBody');
     const emptyState = document.getElementById('vacinasEmptyState');
-    const statC      = document.getElementById('statCompletas');
-    const statP      = document.getElementById('statPendentes');
+    const statT      = document.getElementById('statTotal');
+    const statA      = document.getElementById('statAplicadas');
     const statV      = document.getElementById('statVencidas');
 
     if (!tbody) return;
@@ -617,11 +615,11 @@ function loadVacinas() {
     const vacinas = getVacinas();
 
     // Contadores
-    const counts = { completa: 0, pendente: 0, vencida: 0 };
+    const counts = { aplicada: 0, vencida: 0 };
     vacinas.forEach(v => { if (counts[v.status] !== undefined) counts[v.status]++; });
 
-    if (statC) statC.textContent = counts.completa;
-    if (statP) statP.textContent = counts.pendente;
+    if (statT) statT.textContent = vacinas.length;
+    if (statA) statA.textContent = counts.aplicada;
     if (statV) statV.textContent = counts.vencida;
 
     // Tabela / empty state

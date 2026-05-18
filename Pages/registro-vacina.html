@@ -266,8 +266,7 @@
                 <label class="form-label" for="vacinaStatus">Status <span style="color:var(--danger)">*</span></label>
                 <select id="vacinaStatus" name="status" class="form-select" required>
                   <option value="" disabled selected>Selecione o status</option>
-                  <option value="completa">Completa</option>
-                  <option value="pendente">Pendente</option>
+                  <option value="aplicada">Aplicada</option>
                   <option value="vencida">Vencida</option>
                 </select>
               </div>
@@ -285,7 +284,10 @@
                   <p class="form-hint">Quando foi aplicada</p>
                 </div>
                 <div class="col-12 col-sm-6">
-                  <label class="form-label" for="vacinaValidade">Validade</label>
+                  <label class="form-label" for="vacinaValidade">
+                    Validade
+                    <span style="font-weight:400;color:var(--text-muted);font-size:11px;margin-left:4px;">(opcional)</span>
+                  </label>
                   <input type="date" id="vacinaValidade" name="validade" class="form-control">
                   <p class="form-hint">Data de vencimento da dose</p>
                 </div>
@@ -293,9 +295,12 @@
 
               <div class="row g-3 mb-2">
                 <div class="col-12 col-sm-6">
-                  <label class="form-label" for="vacinaRenovacao">Data de Renovação</label>
+                  <label class="form-label" for="vacinaRenovacao">
+                    Data de Renovação
+                    <span style="font-weight:400;color:var(--text-muted);font-size:11px;margin-left:4px;">(opcional)</span>
+                  </label>
                   <input type="date" id="vacinaRenovacao" name="dataRenovacao" class="form-control">
-                  <p class="form-hint">Próxima dose ou reforço</p>
+                  <p class="form-hint">Deixe em branco para vacinas dose única</p>
                 </div>
               </div>
 
@@ -360,8 +365,8 @@
                 <ul style="font-size:12px;color:var(--text-secondary);padding-left:14px;margin:0;line-height:1.8;">
                   <li>O <strong>nome</strong> e o <strong>status</strong> são obrigatórios</li>
                   <li>Use a <strong>data de aplicação</strong> para registrar quando foi vacinado</li>
-                  <li>A <strong>validade</strong> é a data de vencimento da dose aplicada</li>
-                  <li>A <strong>renovação</strong> indica quando você deve tomar a próxima dose</li>
+                  <li>A <strong>validade</strong> e a <strong>renovação</strong> são opcionais — vacinas de dose única não precisam desses campos</li>
+                  <li>Exemplo: Poliomielite, Febre Amarela e BCG geralmente são dose única</li>
                 </ul>
               </div>
             </div>
