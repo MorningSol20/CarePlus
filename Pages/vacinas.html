@@ -40,9 +40,9 @@
         <i class="fas fa-file-prescription"></i>
         <span class="nav-item-label">Receitas</span>
       </a>
-      <a href="./profissionais.html" class="nav-item">
+      <a href="./agendamentos.html" class="nav-item">
         <i class="fas fa-calendar-alt"></i>
-        <span class="nav-item-label">Agendar</span>
+        <span class="nav-item-label">Agendamentos</span>
       </a>
       <a href="./historico.html" class="nav-item">
         <i class="fas fa-history"></i>
@@ -99,13 +99,7 @@
       <div class="page-header">
         <div class="page-header-text">
           <h1>Carteira de Vacinação</h1>
-          <p>Acompanhe seu histórico e próximas doses</p>
-        </div>
-        <div class="page-header-actions">
-          <button class="btn-primary">
-            <i class="fas fa-plus"></i>
-            Registrar Vacina
-          </button>
+          <p>Acompanhe o status de todas as vacinas recomendadas</p>
         </div>
       </div>
 
@@ -117,18 +111,8 @@
             <i class="fas fa-check-circle"></i>
           </div>
           <div class="stat-card-info">
-            <div class="stat-card-label">Completas</div>
-            <div class="stat-card-value">0</div>
-          </div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-card-icon orange">
-            <i class="fas fa-clock"></i>
-          </div>
-          <div class="stat-card-info">
-            <div class="stat-card-label">Pendentes</div>
-            <div class="stat-card-value">0</div>
+            <div class="stat-card-label">Aplicadas</div>
+            <div class="stat-card-value" id="statAplicadas">0</div>
           </div>
         </div>
 
@@ -138,16 +122,27 @@
           </div>
           <div class="stat-card-info">
             <div class="stat-card-label">Vencidas</div>
-            <div class="stat-card-value">0</div>
+            <div class="stat-card-value" id="statVencidas">0</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-icon blue">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="stat-card-info">
+            <div class="stat-card-label">Não Registradas</div>
+            <div class="stat-card-value" id="statNaoRegistradas">0</div>
           </div>
         </div>
 
       </div>
 
-      <!-- Tabela -->
+      <!-- Tabela de Vacinas -->
       <div class="card">
         <div class="card-header-row">
-          <h2>Minhas Vacinas</h2>
+          <h2>Vacinas Recomendadas</h2>
+          <span style="font-size:12px;color:var(--text-muted);" id="vacinasTotal"></span>
         </div>
 
         <div class="table-responsive">
@@ -157,29 +152,15 @@
                 <th>Vacina</th>
                 <th>Status</th>
                 <th>Data de Aplicação</th>
-                <th>Próxima Dose</th>
-                <th>Ações</th>
+                <th>Válida até</th>
+                <th style="width:60px;"></th>
               </tr>
             </thead>
             <tbody id="vacinasTableBody">
-              <!-- dados dinâmicos -->
+              <!-- renderizado via JS -->
             </tbody>
           </table>
         </div>
-
-        <!-- Empty State -->
-        <div class="empty-state">
-          <div class="empty-state-icon">
-            <img src="../images/syringe.png" alt="Vacinas">
-          </div>
-          <h4>Nenhuma vacina registrada</h4>
-          <p>Quando houver vacinas cadastradas, elas aparecerão aqui para acompanhamento.</p>
-          <button class="btn-primary btn-sm">
-            <i class="fas fa-plus"></i>
-            Registrar Primeira Vacina
-          </button>
-        </div>
-
       </div>
 
     </main>
@@ -196,7 +177,7 @@
         <i class="fas fa-syringe"></i>
         <span>Vacinas</span>
       </a>
-      <a href="./profissionais.html" class="mobile-nav-item" data-page-link="profissionais">
+      <a href="./agendamentos.html" class="mobile-nav-item" data-page-link="agendamentos">
         <i class="fas fa-calendar-alt"></i>
         <span>Agendar</span>
       </a>
@@ -210,6 +191,78 @@
       </a>
     </div>
   </nav>
+
+  <!-- Modal de Registro de Aplicação -->
+  <div class="modal-backdrop" id="vacinaModal" role="dialog" aria-modal="true" aria-labelledby="modalVacinaNome">
+    <div class="modal-box">
+
+      <div class="modal-header">
+        <div>
+          <h3 id="modalVacinaNome">—</h3>
+          <p id="modalVacinaProtecao">—</p>
+        </div>
+        <button class="modal-close" id="modalCloseBtn" title="Fechar" aria-label="Fechar">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <input type="hidden" id="modalVacinaId">
+
+        <!-- Data de Aplicação -->
+        <div>
+          <label class="form-label" for="modalDataAplicacao">
+            Data de Aplicação <span style="color:var(--danger)">*</span>
+          </label>
+          <input type="date" id="modalDataAplicacao" class="form-control">
+        </div>
+
+        <!-- Preview: Válida até (vacinas com renovação) -->
+        <div id="modalValidadePreview" style="display:none;">
+          <div class="modal-info-box" style="background:var(--success-50);border:1px solid var(--success-100);">
+            <div class="info-icon" style="background:var(--success-100);">
+              <i class="fas fa-calendar-check" style="color:var(--success);"></i>
+            </div>
+            <div>
+              <div class="info-text-label" style="color:var(--success);">Válida até</div>
+              <div class="info-text-value" id="modalValidadeData">—</div>
+              <div class="info-text-sub" id="modalValidadeDescricao"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preview: Dose única -->
+        <div id="modalDoseUnica" style="display:none;">
+          <div class="modal-info-box" style="background:var(--info-50);border:1px solid var(--info-100);">
+            <div class="info-icon" style="background:var(--info-100);">
+              <i class="fas fa-shield-alt" style="color:var(--info);"></i>
+            </div>
+            <div>
+              <div class="info-text-label" style="color:var(--info);">Dose única</div>
+              <div class="info-text-sub">Esta vacina confere proteção vitalícia após a aplicação</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Remover registro (exibido só quando já há registro) -->
+        <div id="modalRemoverArea" style="display:none;padding-top:4px;border-top:1px solid var(--border-color);">
+          <button class="btn-ghost btn-sm" id="modalRemoverBtn" style="color:var(--danger);font-size:12px;">
+            <i class="fas fa-trash-alt"></i>
+            Remover registro desta vacina
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-outline" id="modalCancelBtn">Cancelar</button>
+        <button class="btn-primary" id="modalSalvarBtn">
+          <i class="fas fa-save"></i>
+          Salvar
+        </button>
+      </div>
+
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/script.js"></script>
