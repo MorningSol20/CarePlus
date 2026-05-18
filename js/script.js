@@ -438,33 +438,58 @@ function loadProfissionalData() {
 }
 
 /* ============================================================
-   VACINAS — Registro e Listagem
+   VACINAS — Lista predefinida, registros e modal
    ============================================================ */
 
 /**
- * Retorna todas as vacinas salvas no localStorage.
- * @returns {Array}
+ * Lista oficial de vacinas recomendadas.
+ * renovacaoDias: null = dose única (proteção vitalícia)
+ * renovacaoDias: número = dias até a próxima dose/reforço
  */
-function getVacinas() {
+const VACINAS_LISTA = [
+    { id: 'bcg',             nome: 'BCG',                      protecao: 'Tuberculose',                    renovacaoDias: null  },
+    { id: 'hepatite-b',      nome: 'Hepatite B',               protecao: 'Hepatite B',                     renovacaoDias: null  },
+    { id: 'hepatite-a',      nome: 'Hepatite A',               protecao: 'Hepatite A',                     renovacaoDias: null  },
+    { id: 'pentavalente',    nome: 'Pentavalente',             protecao: 'Difteria, Tétano, Coqueluche, Hib e Hepatite B', renovacaoDias: null },
+    { id: 'poliomielite',    nome: 'Poliomielite (VIP/VOP)',   protecao: 'Paralisia infantil',             renovacaoDias: null  },
+    { id: 'rotavirus',       nome: 'Rotavírus',                protecao: 'Gastroenterite por Rotavírus',   renovacaoDias: null  },
+    { id: 'pneumococica-10', nome: 'Pneumocócica 10-valente',  protecao: 'Pneumonia e infecções bacterianas', renovacaoDias: null },
+    { id: 'pneumococica-23', nome: 'Pneumocócica 23-valente',  protecao: 'Pneumonia (adultos e idosos)',   renovacaoDias: 1825  },
+    { id: 'meningococica-c', nome: 'Meningocócica C',          protecao: 'Meningite C',                    renovacaoDias: null  },
+    { id: 'meningococica-acwy', nome: 'Meningocócica ACWY',   protecao: 'Meningite ACWY',                 renovacaoDias: 1825  },
+    { id: 'febre-amarela',   nome: 'Febre Amarela',            protecao: 'Febre Amarela',                  renovacaoDias: null  },
+    { id: 'triplice-viral',  nome: 'Tríplice Viral (SCR)',     protecao: 'Sarampo, Caxumba e Rubéola',    renovacaoDias: null  },
+    { id: 'varicela',        nome: 'Varicela',                 protecao: 'Catapora',                       renovacaoDias: null  },
+    { id: 'hpv',             nome: 'HPV',                      protecao: 'Papilomavírus Humano',           renovacaoDias: null  },
+    { id: 'influenza',       nome: 'Influenza',                protecao: 'Gripe sazonal',                  renovacaoDias: 365   },
+    { id: 'dt',              nome: 'dT — Dupla Adulto',        protecao: 'Difteria e Tétano',             renovacaoDias: 3650  },
+    { id: 'dtpa',            nome: 'dTpa — Tríplice Acelular', protecao: 'Difteria, Tétano e Coqueluche (adulto)', renovacaoDias: 3650 },
+    { id: 'covid-19',        nome: 'COVID-19',                 protecao: 'Coronavírus',                    renovacaoDias: 365   },
+    { id: 'dengue',          nome: 'Dengue',                   protecao: 'Dengue',                         renovacaoDias: null  },
+    { id: 'herpes-zoster',   nome: 'Herpes Zóster',            protecao: 'Herpes Zóster (adultos ≥50 anos)', renovacaoDias: null },
+];
+
+/**
+ * Retorna os registros salvos no localStorage.
+ * Estrutura: { [vacinaId]: { dataAplicacao: 'YYYY-MM-DD', validade: 'YYYY-MM-DD' | null } }
+ */
+function getVacinasRegistros() {
     try {
-        return JSON.parse(localStorage.getItem('careplus_vacinas') || '[]');
+        return JSON.parse(localStorage.getItem('careplus_vacinas_registros') || '{}');
     } catch {
-        return [];
+        return {};
     }
 }
 
 /**
- * Salva o array de vacinas no localStorage.
- * @param {Array} vacinas
+ * Salva os registros no localStorage.
  */
-function saveVacinas(vacinas) {
-    localStorage.setItem('careplus_vacinas', JSON.stringify(vacinas));
+function saveVacinasRegistros(registros) {
+    localStorage.setItem('careplus_vacinas_registros', JSON.stringify(registros));
 }
 
 /**
  * Formata uma string ISO (YYYY-MM-DD) para DD/MM/YYYY.
- * @param {string} iso
- * @returns {string}
  */
 function formatDate(iso) {
     if (!iso) return '—';
@@ -473,195 +498,228 @@ function formatDate(iso) {
 }
 
 /**
- * Retorna o HTML do badge para um status de vacina.
- * @param {string} status
- * @returns {string}
+ * Calcula a data de validade somando dias à data de aplicação.
+ * Retorna string YYYY-MM-DD ou null (dose única).
  */
-function vacinaBadge(status) {
-    const map = {
-        aplicada: { cls: 'badge-success', icon: 'fa-check-circle',       label: 'Aplicada' },
-        vencida:  { cls: 'badge-danger',  icon: 'fa-exclamation-circle',  label: 'Vencida'  },
-    };
-    const s = map[status] || { cls: 'badge-gray', icon: 'fa-question-circle', label: status };
-    return `<span class="badge ${s.cls}"><i class="fas ${s.icon}"></i>${s.label}</span>`;
-}
-
-/* ── Formulário de registro (registro-vacina.html) ── */
-
-function initializeVacinaForm() {
-    const form = document.getElementById('vacinaForm');
-    if (!form) return;
-
-    // Preview em tempo real
-    const fields = {
-        nome:          document.getElementById('vacinaNome'),
-        status:        document.getElementById('vacinaStatus'),
-        dataAplicacao: document.getElementById('vacinaAplicacao'),
-        validade:      document.getElementById('vacinaValidade'),
-        dataRenovacao: document.getElementById('vacinaRenovacao'),
-    };
-
-    const preview = {
-        nome:      document.getElementById('previewNome'),
-        status:    document.getElementById('previewStatus'),
-        aplicacao: document.getElementById('previewAplicacao'),
-        validade:  document.getElementById('previewValidade'),
-        renovacao: document.getElementById('previewRenovacao'),
-    };
-
-    const statusLabels = {
-        aplicada: { cls: 'badge-success', label: 'Aplicada' },
-        vencida:  { cls: 'badge-danger',  label: 'Vencida'  },
-    };
-
-    function updatePreview() {
-        // Nome
-        if (preview.nome) {
-            const val = fields.nome ? fields.nome.value.trim() : '';
-            preview.nome.textContent = val || '—';
-            preview.nome.classList.toggle('placeholder', !val);
-        }
-
-        // Status
-        if (preview.status && fields.status) {
-            const s = statusLabels[fields.status.value];
-            if (s) {
-                preview.status.innerHTML = `<span class="badge ${s.cls}">${s.label}</span>`;
-            } else {
-                preview.status.innerHTML = `<span class="badge badge-gray">—</span>`;
-            }
-        }
-
-        // Datas
-        [
-            [fields.dataAplicacao, preview.aplicacao],
-            [fields.validade,      preview.validade],
-            [fields.dataRenovacao, preview.renovacao],
-        ].forEach(([input, el]) => {
-            if (!input || !el) return;
-            const val = formatDate(input.value);
-            el.textContent = val;
-            el.classList.toggle('placeholder', !input.value);
-        });
-    }
-
-    // Escuta mudanças em todos os campos
-    Object.values(fields).forEach(f => {
-        if (f) f.addEventListener('input', updatePreview);
-        if (f) f.addEventListener('change', updatePreview);
-    });
-
-    // Submit
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const nome   = fields.nome   ? fields.nome.value.trim()   : '';
-        const status = fields.status ? fields.status.value.trim() : '';
-
-        // Validação básica
-        if (!nome) {
-            showFieldError(fields.nome, 'Informe o nome da vacina.');
-            fields.nome.focus();
-            return;
-        }
-        if (!status) {
-            showFieldError(fields.status, 'Selecione o status da vacina.');
-            fields.status.focus();
-            return;
-        }
-
-        const vacina = {
-            id:            Date.now(),
-            nome,
-            status,
-            dataAplicacao: fields.dataAplicacao ? fields.dataAplicacao.value : '',
-            validade:      fields.validade      ? fields.validade.value      : '',
-            dataRenovacao: fields.dataRenovacao ? fields.dataRenovacao.value : '',
-        };
-
-        const vacinas = getVacinas();
-        vacinas.push(vacina);
-        saveVacinas(vacinas);
-
-        // Feedback visual
-        const btn = document.getElementById('btnRegistrar');
-        if (btn) {
-            btn.disabled  = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando…';
-        }
-
-        const toast = document.getElementById('toastSucesso');
-        if (toast) {
-            toast.classList.add('show');
-        }
-
-        setTimeout(() => {
-            window.location.href = './vacinas.html';
-        }, 1200);
-    });
-}
-
-/* ── Listagem de vacinas (vacinas.html) ── */
-
-function loadVacinas() {
-    const tbody      = document.getElementById('vacinasTableBody');
-    const emptyState = document.getElementById('vacinasEmptyState');
-    const statT      = document.getElementById('statTotal');
-    const statA      = document.getElementById('statAplicadas');
-    const statV      = document.getElementById('statVencidas');
-
-    if (!tbody) return;
-
-    const vacinas = getVacinas();
-
-    // Contadores
-    const counts = { aplicada: 0, vencida: 0 };
-    vacinas.forEach(v => { if (counts[v.status] !== undefined) counts[v.status]++; });
-
-    if (statT) statT.textContent = vacinas.length;
-    if (statA) statA.textContent = counts.aplicada;
-    if (statV) statV.textContent = counts.vencida;
-
-    // Tabela / empty state
-    if (vacinas.length === 0) {
-        if (emptyState) emptyState.style.display = '';
-        return;
-    }
-
-    if (emptyState) emptyState.style.display = 'none';
-
-    tbody.innerHTML = vacinas.map(v => `
-        <tr>
-          <td>
-            <span style="font-weight:600;">${v.nome}</span>
-          </td>
-          <td>${vacinaBadge(v.status)}</td>
-          <td>${formatDate(v.dataAplicacao)}</td>
-          <td>${formatDate(v.dataRenovacao) !== '—'
-                ? formatDate(v.dataRenovacao)
-                : '<span style="color:var(--text-muted);font-size:12px;">Não informado</span>'
-              }</td>
-          <td>
-            <div style="display:flex;gap:6px;">
-              <button
-                class="btn-ghost btn-sm"
-                title="Excluir"
-                onclick="excluirVacina(${v.id})"
-                style="color:var(--danger);padding:5px 8px;">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-    `).join('');
+function calcularValidade(dataAplicacao, renovacaoDias) {
+    if (!renovacaoDias || !dataAplicacao) return null;
+    const data = new Date(dataAplicacao + 'T00:00:00');
+    data.setDate(data.getDate() + renovacaoDias);
+    return data.toISOString().split('T')[0];
 }
 
 /**
- * Remove uma vacina pelo ID e recarrega a listagem.
- * @param {number} id
+ * Determina o status de uma vacina com base no registro e na data atual.
+ * Retorna: 'nao-registrada' | 'aplicada' | 'vencida'
  */
-function excluirVacina(id) {
-    const vacinas = getVacinas().filter(v => v.id !== id);
-    saveVacinas(vacinas);
-    loadVacinas();
+function getVacinaStatus(vacina, registro) {
+    if (!registro || !registro.dataAplicacao) return 'nao-registrada';
+    if (!vacina.renovacaoDias) return 'aplicada'; // dose única, nunca vence
+
+    const hoje    = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    const validade = new Date(registro.validade + 'T00:00:00');
+
+    return validade < hoje ? 'vencida' : 'aplicada';
+}
+
+/**
+ * Retorna o HTML do badge para um status de vacina.
+ */
+function vacinaBadge(status) {
+    const map = {
+        'aplicada':       { cls: 'badge-success', icon: 'fa-check-circle',      label: 'Aplicada'       },
+        'vencida':        { cls: 'badge-danger',  icon: 'fa-exclamation-circle', label: 'Vencida'        },
+        'nao-registrada': { cls: 'badge-gray',    icon: 'fa-minus-circle',       label: 'Não registrada' },
+    };
+    const s = map[status] || map['nao-registrada'];
+    return `<span class="badge ${s.cls}"><i class="fas ${s.icon}"></i>${s.label}</span>`;
+}
+
+/* ── Listagem (vacinas.html) ── */
+
+function loadVacinas() {
+    const tbody   = document.getElementById('vacinasTableBody');
+    const statA   = document.getElementById('statAplicadas');
+    const statV   = document.getElementById('statVencidas');
+    const statN   = document.getElementById('statNaoRegistradas');
+    const totalEl = document.getElementById('vacinasTotal');
+
+    if (!tbody) return;
+
+    const registros = getVacinasRegistros();
+    const counts    = { aplicada: 0, vencida: 0, 'nao-registrada': 0 };
+
+    tbody.innerHTML = VACINAS_LISTA.map(vacina => {
+        const registro = registros[vacina.id] || null;
+        const status   = getVacinaStatus(vacina, registro);
+        counts[status]++;
+
+        const dataAplicacao = registro ? formatDate(registro.dataAplicacao) : '—';
+        const validadeStr   = registro && registro.validade
+            ? formatDate(registro.validade)
+            : vacina.renovacaoDias === null && registro
+                ? '<span class="badge badge-info" style="font-size:10px;"><i class="fas fa-shield-alt"></i>Dose única</span>'
+                : '<span style="color:var(--text-muted);font-size:12px;">—</span>';
+
+        const btnLabel = registro ? 'Editar' : 'Registrar';
+        const btnIcon  = registro ? 'fa-pencil-alt' : 'fa-syringe';
+        const btnStyle = registro ? 'btn-ghost btn-sm' : 'btn-outline btn-sm';
+
+        return `
+          <tr>
+            <td>
+              <div style="font-weight:600;line-height:1.3;">${vacina.nome}</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${vacina.protecao}</div>
+            </td>
+            <td>${vacinaBadge(status)}</td>
+            <td style="color:${registro ? 'var(--text-primary)' : 'var(--text-muted)'};">${dataAplicacao}</td>
+            <td>${validadeStr}</td>
+            <td>
+              <button
+                class="${btnStyle}"
+                title="${btnLabel}"
+                onclick="openVacinaModal('${vacina.id}')">
+                <i class="fas ${btnIcon}"></i>
+                ${btnLabel}
+              </button>
+            </td>
+          </tr>`;
+    }).join('');
+
+    if (statA) statA.textContent = counts['aplicada'];
+    if (statV) statV.textContent = counts['vencida'];
+    if (statN) statN.textContent = counts['nao-registrada'];
+    if (totalEl) totalEl.textContent = `${VACINAS_LISTA.length} vacinas`;
+}
+
+/* ── Modal de aplicação ── */
+
+function initializeVacinaForm() {
+    const modal      = document.getElementById('vacinaModal');
+    if (!modal) return;
+
+    const closeBtn   = document.getElementById('modalCloseBtn');
+    const cancelBtn  = document.getElementById('modalCancelBtn');
+    const salvarBtn  = document.getElementById('modalSalvarBtn');
+    const removerBtn = document.getElementById('modalRemoverBtn');
+    const dataInput  = document.getElementById('modalDataAplicacao');
+
+    function closeModal() {
+        modal.classList.remove('show');
+        dataInput.value = '';
+        document.getElementById('modalValidadePreview').style.display = 'none';
+        document.getElementById('modalDoseUnica').style.display       = 'none';
+        document.getElementById('modalRemoverArea').style.display     = 'none';
+    }
+
+    closeBtn.addEventListener('click',  closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('show')) closeModal();
+    });
+
+    // Atualiza preview da validade ao mudar a data
+    dataInput.addEventListener('input', function () {
+        const vacinaId = document.getElementById('modalVacinaId').value;
+        const vacina   = VACINAS_LISTA.find(v => v.id === vacinaId);
+        if (!vacina || !this.value) return;
+        atualizarPreviewValidade(vacina, this.value);
+    });
+
+    // Salvar
+    salvarBtn.addEventListener('click', function () {
+        const vacinaId = document.getElementById('modalVacinaId').value;
+        const data     = dataInput.value;
+
+        if (!data) {
+            dataInput.style.borderColor = 'var(--danger)';
+            dataInput.focus();
+            setTimeout(() => { dataInput.style.borderColor = ''; }, 2000);
+            return;
+        }
+
+        const vacina    = VACINAS_LISTA.find(v => v.id === vacinaId);
+        const validade  = calcularValidade(data, vacina ? vacina.renovacaoDias : null);
+        const registros = getVacinasRegistros();
+
+        registros[vacinaId] = { dataAplicacao: data, validade };
+        saveVacinasRegistros(registros);
+
+        closeModal();
+        loadVacinas();
+    });
+
+    // Remover registro
+    removerBtn.addEventListener('click', function () {
+        const vacinaId  = document.getElementById('modalVacinaId').value;
+        const registros = getVacinasRegistros();
+        delete registros[vacinaId];
+        saveVacinasRegistros(registros);
+        closeModal();
+        loadVacinas();
+    });
+}
+
+/**
+ * Atualiza o bloco de preview de validade dentro do modal.
+ */
+function atualizarPreviewValidade(vacina, dataAplicacao) {
+    const previewEl = document.getElementById('modalValidadePreview');
+    const doseEl    = document.getElementById('modalDoseUnica');
+    const dataEl    = document.getElementById('modalValidadeData');
+    const descEl    = document.getElementById('modalValidadeDescricao');
+
+    if (vacina.renovacaoDias === null) {
+        if (previewEl) previewEl.style.display = 'none';
+        if (doseEl)    doseEl.style.display    = 'flex';
+    } else {
+        if (doseEl)    doseEl.style.display    = 'none';
+        const validade = calcularValidade(dataAplicacao, vacina.renovacaoDias);
+        if (dataEl) dataEl.textContent = formatDate(validade);
+        if (descEl) {
+            const anos = Math.round(vacina.renovacaoDias / 365);
+            descEl.textContent = anos >= 1
+                ? `Reforço necessário em ${anos} ano${anos > 1 ? 's' : ''}`
+                : `Reforço necessário em ${vacina.renovacaoDias} dias`;
+        }
+        if (previewEl) previewEl.style.display = 'flex';
+    }
+}
+
+/**
+ * Abre o modal pré-preenchido para uma vacina específica.
+ * @param {string} vacinaId
+ */
+function openVacinaModal(vacinaId) {
+    const modal   = document.getElementById('vacinaModal');
+    const vacina  = VACINAS_LISTA.find(v => v.id === vacinaId);
+    if (!modal || !vacina) return;
+
+    const registro  = getVacinasRegistros()[vacinaId] || null;
+    const dataInput = document.getElementById('modalDataAplicacao');
+
+    document.getElementById('modalVacinaId').value      = vacinaId;
+    document.getElementById('modalVacinaNome').textContent    = vacina.nome;
+    document.getElementById('modalVacinaProtecao').textContent = vacina.protecao;
+
+    // Preenche data se já tiver registro
+    dataInput.value = registro ? registro.dataAplicacao : '';
+
+    // Preview de validade
+    if (dataInput.value) {
+        atualizarPreviewValidade(vacina, dataInput.value);
+    } else {
+        document.getElementById('modalValidadePreview').style.display = 'none';
+        document.getElementById('modalDoseUnica').style.display       = 'none';
+    }
+
+    // Área de remoção (só exibida quando já há registro)
+    document.getElementById('modalRemoverArea').style.display = registro ? 'block' : 'none';
+
+    modal.classList.add('show');
+    setTimeout(() => dataInput.focus(), 200);
 }
