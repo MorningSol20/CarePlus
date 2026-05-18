@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
     loadProfissionalData();
     initializeVacinaForm();
     loadVacinas();
+    loadReceitas();
+    initializeReceitaModal();
 });
 
 /* ============================================================
@@ -410,6 +412,207 @@ function initializeSearch() {
             item.style.display = (!query || text.includes(query)) ? '' : 'none';
         });
     });
+}
+
+/* ============================================================
+   RECEITAS — Mock de dados e modal de visualização
+   ============================================================ */
+
+const RECEITAS_MOCK = [
+    {
+        id: 'REC-2026-001',
+        diagnostico: 'Influenza A + Otite Média Aguda',
+        instituicao: 'Clínica São Lucas',
+        medico: 'Dra. Ana Carvalho',
+        crm: 'CRM-SP 12.345',
+        especialidade: 'Clínico Geral',
+        emissao: '2026-05-10',
+        validade: '2026-06-09',
+        itens: [
+            {
+                medicamento: 'Oseltamivir (Tamiflu) 75 mg',
+                posologia: '1 cápsula de 12 em 12 horas, por 5 dias',
+                observacao: 'Iniciar o tratamento em até 48h do início dos sintomas. Tomar com alimento.'
+            },
+            {
+                medicamento: 'Amoxicilina 500 mg',
+                posologia: '1 cápsula de 8 em 8 horas, por 7 dias',
+                observacao: 'Manter a série completa mesmo com melhora dos sintomas.'
+            },
+            {
+                medicamento: 'Ibuprofeno 600 mg',
+                posologia: '1 comprimido de 8 em 8 horas, por até 5 dias',
+                observacao: 'Usar somente em caso de dor ou febre ≥ 38 °C. Não exceder 3 comprimidos por dia.'
+            },
+            {
+                medicamento: 'Dipirona Sódica 500 mg',
+                posologia: '1 comprimido de 6 em 6 horas, conforme necessidade',
+                observacao: 'Se febre persistir acima de 38,5 °C. Não usar junto com Ibuprofeno.'
+            }
+        ]
+    },
+    {
+        id: 'REC-2025-047',
+        diagnostico: 'Síndrome Gripal — Influenza',
+        instituicao: 'UBS Vila Mariana',
+        medico: 'Dr. Lucas Almeida',
+        crm: 'CRM-SP 54.321',
+        especialidade: 'Clínico Geral',
+        emissao: '2025-11-15',
+        validade: '2025-12-15',
+        itens: [
+            {
+                medicamento: 'Paracetamol 750 mg',
+                posologia: '1 comprimido de 6 em 6 horas, conforme necessidade',
+                observacao: 'Usar somente em caso de febre ou dor. Não exceder 4 comprimidos por dia.'
+            },
+            {
+                medicamento: 'Loratadina 10 mg',
+                posologia: '1 comprimido ao dia, por 7 dias',
+                observacao: 'Tomar preferencialmente à noite. Pode causar sonolência leve.'
+            },
+            {
+                medicamento: 'Solução Fisiológica Nasal 0,9%',
+                posologia: '2 jatos em cada narina, 3 vezes ao dia, por 7 dias',
+                observacao: 'Para higiene e desobstrução nasal. Incline levemente a cabeça ao aplicar.'
+            }
+        ]
+    }
+];
+
+/**
+ * Calcula o status de uma receita com base na data de validade.
+ * @param {string} validade  YYYY-MM-DD
+ * @returns {'ativa'|'expirada'}
+ */
+function getReceitaStatus(validade) {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    return new Date(validade + 'T00:00:00') >= hoje ? 'ativa' : 'expirada';
+}
+
+/**
+ * Retorna o HTML do badge para o status de uma receita.
+ */
+function receitaBadge(status) {
+    if (status === 'ativa') {
+        return `<span class="badge badge-success"><i class="fas fa-check-circle"></i>Ativa</span>`;
+    }
+    return `<span class="badge badge-danger"><i class="fas fa-hourglass-end"></i>Expirada</span>`;
+}
+
+/**
+ * Renderiza a tabela de receitas e atualiza os contadores.
+ */
+function loadReceitas() {
+    const tbody     = document.getElementById('receitasTableBody');
+    const statAtiva = document.getElementById('statAtivas');
+    const statExp   = document.getElementById('statExpiradas');
+    const statTot   = document.getElementById('statTotal');
+
+    if (!tbody) return;
+
+    let ativas = 0, expiradas = 0;
+
+    tbody.innerHTML = RECEITAS_MOCK.map(r => {
+        const status = getReceitaStatus(r.validade);
+        if (status === 'ativa') ativas++; else expiradas++;
+
+        const rowStyle = status === 'expirada'
+            ? 'opacity:.75;'
+            : '';
+
+        return `
+          <tr style="${rowStyle}">
+            <td>
+              <div style="font-weight:600;line-height:1.3;">${r.id}</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${r.diagnostico}</div>
+            </td>
+            <td>
+              <div style="font-weight:500;">${r.medico}</div>
+              <div style="font-size:11px;color:var(--text-muted);">${r.especialidade}</div>
+            </td>
+            <td>${formatDate(r.emissao)}</td>
+            <td style="color:${status === 'expirada' ? 'var(--danger)' : 'var(--text-primary)'};">
+              ${formatDate(r.validade)}
+            </td>
+            <td>${receitaBadge(status)}</td>
+            <td>
+              <button
+                class="btn-ghost"
+                title="Visualizar receita"
+                onclick="openReceitaModal('${r.id}')"
+                style="padding:7px;color:var(--primary);">
+                <i class="fas fa-eye"></i>
+              </button>
+            </td>
+          </tr>`;
+    }).join('');
+
+    if (statAtiva) statAtiva.textContent = ativas;
+    if (statExp)   statExp.textContent   = expiradas;
+    if (statTot)   statTot.textContent   = RECEITAS_MOCK.length;
+}
+
+/**
+ * Inicializa os eventos de fechar o modal de receita.
+ */
+function initializeReceitaModal() {
+    const modal    = document.getElementById('receitaModal');
+    if (!modal) return;
+
+    function closeModal() { modal.classList.remove('show'); }
+
+    document.getElementById('receitaModalClose').addEventListener('click', closeModal);
+    document.getElementById('receitaModalFechar').addEventListener('click', closeModal);
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('show')) closeModal();
+    });
+}
+
+/**
+ * Abre o modal com os dados de uma receita específica.
+ * @param {string} receitaId
+ */
+function openReceitaModal(receitaId) {
+    const modal   = document.getElementById('receitaModal');
+    const receita = RECEITAS_MOCK.find(r => r.id === receitaId);
+    if (!modal || !receita) return;
+
+    const status = getReceitaStatus(receita.validade);
+
+    document.getElementById('modalReceitaTitulo').textContent     = receita.id;
+    document.getElementById('modalReceitaStatusBadge').innerHTML  = receitaBadge(status);
+    document.getElementById('modalReceitaDiagnostico').textContent = receita.diagnostico;
+    document.getElementById('modalInstituicao').textContent       = receita.instituicao;
+    document.getElementById('modalMedico').textContent            = receita.medico;
+    document.getElementById('modalCRM').textContent               = receita.crm;
+    document.getElementById('modalEspecialidade').textContent     = receita.especialidade;
+    document.getElementById('modalEmissao').textContent           = formatDate(receita.emissao);
+    document.getElementById('modalValidade').textContent          = formatDate(receita.validade);
+
+    // Altera cor da validade se expirada
+    const validadeEl = document.getElementById('modalValidade');
+    validadeEl.style.color = status === 'expirada' ? 'var(--danger)' : '';
+
+    // Itens da receita
+    document.getElementById('modalItens').innerHTML = receita.itens.map((item, i) => `
+        <div class="receita-item">
+          <div class="receita-item-num">${i + 1}</div>
+          <div class="receita-item-body">
+            <div class="receita-item-nome">${item.medicamento}</div>
+            <div class="receita-item-posologia">${item.posologia}</div>
+            ${item.observacao
+                ? `<span class="receita-item-obs"><i class="fas fa-info-circle" style="margin-right:4px;color:var(--info);"></i>${item.observacao}</span>`
+                : ''}
+          </div>
+        </div>`
+    ).join('');
+
+    modal.classList.add('show');
 }
 
 /* ============================================================

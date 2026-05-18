@@ -99,7 +99,7 @@
       <div class="page-header">
         <div class="page-header-text">
           <h1>Minhas Receitas</h1>
-          <p>Acesse suas receitas médicas e prescrições</p>
+          <p>Acesse e acompanhe suas prescrições médicas</p>
         </div>
       </div>
 
@@ -111,18 +111,18 @@
             <i class="fas fa-file-medical"></i>
           </div>
           <div class="stat-card-info">
-            <div class="stat-card-label">Receitas Ativas</div>
-            <div class="stat-card-value">0</div>
+            <div class="stat-card-label">Ativas</div>
+            <div class="stat-card-value" id="statAtivas">0</div>
           </div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-card-icon orange">
+          <div class="stat-card-icon red">
             <i class="fas fa-hourglass-end"></i>
           </div>
           <div class="stat-card-info">
             <div class="stat-card-label">Expiradas</div>
-            <div class="stat-card-value">0</div>
+            <div class="stat-card-value" id="statExpiradas">0</div>
           </div>
         </div>
 
@@ -132,20 +132,34 @@
           </div>
           <div class="stat-card-info">
             <div class="stat-card-label">Total</div>
-            <div class="stat-card-value">0</div>
+            <div class="stat-card-value" id="statTotal">0</div>
           </div>
         </div>
 
       </div>
 
-      <!-- Lista / Empty State -->
+      <!-- Tabela de Receitas -->
       <div class="card">
-        <div class="empty-state">
-          <div class="empty-state-icon">
-            <img src="../images/evidence.png" alt="Receitas">
-          </div>
-          <h4>Nenhuma receita registrada</h4>
-          <p>Quando houver receitas cadastradas, elas aparecerão aqui para acompanhamento.</p>
+        <div class="card-header-row">
+          <h2>Prescrições Médicas</h2>
+        </div>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Receita</th>
+                <th>Médico</th>
+                <th>Emissão</th>
+                <th>Validade</th>
+                <th>Status</th>
+                <th style="width:52px;"></th>
+              </tr>
+            </thead>
+            <tbody id="receitasTableBody">
+              <!-- renderizado via JS -->
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -177,6 +191,80 @@
       </a>
     </div>
   </nav>
+
+  <!-- Modal de Visualização de Receita -->
+  <div class="modal-backdrop" id="receitaModal" role="dialog" aria-modal="true" aria-labelledby="modalReceitaTitulo">
+    <div class="modal-box modal-box-lg">
+
+      <div class="modal-header">
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px;">
+            <h3 id="modalReceitaTitulo" style="margin:0;">—</h3>
+            <span id="modalReceitaStatusBadge"></span>
+          </div>
+          <p id="modalReceitaDiagnostico" style="margin:0;"></p>
+        </div>
+        <button class="modal-close" id="receitaModalClose" title="Fechar" aria-label="Fechar">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- Informações de emissão -->
+        <div>
+          <div class="receita-section-title">
+            <i class="fas fa-hospital" style="margin-right:5px;"></i>Instituição e Profissional
+          </div>
+          <div class="receita-info-grid">
+            <div class="receita-info-item">
+              <div class="receita-info-label">Instituição</div>
+              <div class="receita-info-value" id="modalInstituicao">—</div>
+            </div>
+            <div class="receita-info-item">
+              <div class="receita-info-label">Médico(a) Responsável</div>
+              <div class="receita-info-value" id="modalMedico">—</div>
+            </div>
+            <div class="receita-info-item">
+              <div class="receita-info-label">CRM</div>
+              <div class="receita-info-value" id="modalCRM">—</div>
+            </div>
+            <div class="receita-info-item">
+              <div class="receita-info-label">Especialidade</div>
+              <div class="receita-info-value" id="modalEspecialidade">—</div>
+            </div>
+            <div class="receita-info-item">
+              <div class="receita-info-label">Data de Emissão</div>
+              <div class="receita-info-value" id="modalEmissao">—</div>
+            </div>
+            <div class="receita-info-item">
+              <div class="receita-info-label">Válida até</div>
+              <div class="receita-info-value" id="modalValidade">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Itens da receita -->
+        <div>
+          <div class="receita-section-title">
+            <i class="fas fa-pills" style="margin-right:5px;"></i>Itens Prescritos
+          </div>
+          <div id="modalItens">
+            <!-- renderizado via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-primary" id="receitaModalFechar">
+          <i class="fas fa-times"></i>
+          Fechar
+        </button>
+      </div>
+
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/script.js"></script>

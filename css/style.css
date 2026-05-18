@@ -877,7 +877,13 @@ tbody tr:hover { background:var(--gray-50); }
 }
 .modal-close:hover { background: var(--gray-100); color: var(--text-primary); }
 
-.modal-body   { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+.modal-body {
+  padding: 20px 24px;
+  display: flex; flex-direction: column; gap: 16px;
+  overflow-y: auto; max-height: 65vh;
+}
+.modal-box-lg { max-width: 600px; }
+
 .modal-footer {
   padding: 14px 24px;
   border-top: 1px solid var(--border-color);
@@ -905,6 +911,53 @@ tbody tr:hover { background:var(--gray-50); }
   .modal-footer { flex-direction: column-reverse; }
   .modal-footer .btn-primary,
   .modal-footer .btn-outline { width: 100%; justify-content: center; }
+}
+
+/* ===================================
+   RECEITA MODAL
+   =================================== */
+
+.receita-section-title {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.receita-info-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+@media (max-width: 480px) { .receita-info-grid { grid-template-columns: 1fr; } }
+
+.receita-info-item {}
+.receita-info-label { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-bottom: 2px; }
+.receita-info-value { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+
+.receita-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+.receita-item + .receita-item { margin-top: 8px; }
+
+.receita-item-num {
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  background: var(--primary-50); color: var(--primary);
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.receita-item-body { flex: 1; min-width: 0; }
+.receita-item-nome {
+  font-size: 14px; font-weight: 700; color: var(--text-primary);
+  margin-bottom: 3px;
+}
+.receita-item-posologia { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; line-height: 1.5; }
+.receita-item-obs {
+  font-size: 11px; color: var(--text-muted);
+  background: var(--gray-50); border-radius: var(--radius-sm);
+  padding: 5px 10px; display: inline-block; line-height: 1.5;
 }
 
 /* ===================================
