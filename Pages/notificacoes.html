@@ -2,9 +2,9 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" href="../images/favicon.png" type="image/png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notificações - Care Plus</title>
+  <title>Notificações — Care Plus</title>
+  <link rel="icon" href="../images/favicon.png" type="image/png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,10 +12,11 @@
 </head>
 
 <body data-page="notificacoes">
+
   <div class="sidebar-overlay"></div>
 
   <!-- Sidebar -->
-  <aside class="sidebar mobile-hidden">
+  <aside class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">CP</div>
       <div class="sidebar-info">
@@ -25,15 +26,36 @@
     </div>
 
     <nav class="sidebar-nav">
+      <span class="nav-section-label">Principal</span>
+
       <a href="../dashboard.html" class="nav-item">
         <i class="fas fa-home"></i>
         <span class="nav-item-label">Início</span>
       </a>
-      <a href="../Pages/notificacoes.html" class="nav-item active">
+      <a href="./vacinas.html" class="nav-item">
+        <i class="fas fa-syringe"></i>
+        <span class="nav-item-label">Vacinas</span>
+      </a>
+      <a href="./receitas.html" class="nav-item">
+        <i class="fas fa-file-prescription"></i>
+        <span class="nav-item-label">Receitas</span>
+      </a>
+      <a href="./profissionais.html" class="nav-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span class="nav-item-label">Agendar</span>
+      </a>
+      <a href="./historico.html" class="nav-item">
+        <i class="fas fa-history"></i>
+        <span class="nav-item-label">Histórico</span>
+      </a>
+
+      <span class="nav-section-label">Conta</span>
+
+      <a href="./notificacoes.html" class="nav-item">
         <i class="fas fa-bell"></i>
         <span class="nav-item-label">Notificações</span>
       </a>
-      <a href="../Pages/configuracoes.html" class="nav-item">
+      <a href="./configuracoes.html" class="nav-item">
         <i class="fas fa-cog"></i>
         <span class="nav-item-label">Configurações</span>
       </a>
@@ -47,128 +69,195 @@
     </div>
   </aside>
 
-  <!-- Main Wrapper (Contém Topbar e Content) -->
+  <!-- Main Wrapper -->
   <div class="main-wrapper">
-    <!-- Top Bar -->
+
+    <!-- Topbar -->
     <header class="topbar">
       <div class="topbar-left">
-        <!-- Botão de Controle Único -->
-        <button class="toggle-btn">
+        <button class="toggle-btn" title="Menu">
           <i class="fas fa-bars"></i>
         </button>
+        <span class="topbar-title">Notificações</span>
       </div>
       <div class="topbar-right">
         <a href="./notificacoes.html" class="notification-btn" title="Notificações">
-          <i class="fas fa-bell"></i> <span class="notification-badge"></span>
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge"></span>
         </a>
         <a href="./configuracoes.html" class="notification-btn" title="Configurações">
           <i class="fas fa-cog"></i>
         </a>
-        <div class="user-avatar">JD</div>
+        <div class="user-avatar">JS</div>
       </div>
     </header>
 
-  <!-- Main Content -->
-  <main class="main-content">
-    <!-- Header -->
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px;">
-      <div>
-        <h1 style="font-size: 32px; font-weight: bold; margin-bottom: 8px;">Notificações</h1>
-        <p style="color: var(--text-secondary);">Fique atualizado sobre sua saude</p>
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Header -->
+      <div class="page-header">
+        <div class="page-header-text">
+          <h1>Notificações</h1>
+          <p>Fique atualizado sobre sua saúde</p>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn-outline btn-sm">
+            <i class="fas fa-check-double"></i>
+            Marcar todas como lidas
+          </button>
+        </div>
       </div>
-      <button class="btn btn-outline">Marcar todas como lidas</button>
+
+      <!-- Lista -->
+      <div class="notification-list">
+
+        <!-- Consulta Confirmada -->
+        <div class="notification-item type-success unread">
+          <div class="notification-icon success">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="notification-body">
+            <div class="notification-title">Consulta Confirmada</div>
+            <div class="notification-desc">
+              Sua consulta com Dra. Ana Silva foi confirmada para 15/05/2026 às 14:30.
+            </div>
+            <div class="notification-time">
+              <i class="fas fa-clock" style="font-size:10px;"></i>
+              10/05/2026 às 10:30
+            </div>
+          </div>
+          <div class="notification-actions">
+            <button class="notification-action-btn" data-action="mark-read" title="Marcar como lida">
+              <i class="fas fa-check"></i>
+            </button>
+            <button class="notification-action-btn" data-action="delete" title="Excluir">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Vacina Pendente -->
+        <div class="notification-item type-warning unread">
+          <div class="notification-icon warning">
+            <i class="fas fa-syringe"></i>
+          </div>
+          <div class="notification-body">
+            <div class="notification-title">Vacina Pendente</div>
+            <div class="notification-desc">
+              Você tem uma vacina de Influenza pendente. Agende sua aplicação o quanto antes.
+            </div>
+            <div class="notification-time">
+              <i class="fas fa-clock" style="font-size:10px;"></i>
+              08/05/2026 às 14:15
+            </div>
+          </div>
+          <div class="notification-actions">
+            <button class="notification-action-btn" data-action="mark-read" title="Marcar como lida">
+              <i class="fas fa-check"></i>
+            </button>
+            <button class="notification-action-btn" data-action="delete" title="Excluir">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Receita Expirada -->
+        <div class="notification-item type-danger">
+          <div class="notification-icon danger">
+            <i class="fas fa-file-medical-alt"></i>
+          </div>
+          <div class="notification-body">
+            <div class="notification-title">Receita Expirada</div>
+            <div class="notification-desc">
+              Sua receita de 20/03/2026 expirou. Solicite uma nova ao seu médico.
+            </div>
+            <div class="notification-time">
+              <i class="fas fa-clock" style="font-size:10px;"></i>
+              05/05/2026 às 09:00
+            </div>
+          </div>
+          <div class="notification-actions">
+            <button class="notification-action-btn" data-action="delete" title="Excluir">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Resultado de Exame -->
+        <div class="notification-item type-info">
+          <div class="notification-icon info">
+            <i class="fas fa-flask"></i>
+          </div>
+          <div class="notification-body">
+            <div class="notification-title">Resultado de Exame Disponível</div>
+            <div class="notification-desc">
+              Seu resultado de exame está disponível. Acesse em Meus Exames para visualizar.
+            </div>
+            <div class="notification-time">
+              <i class="fas fa-clock" style="font-size:10px;"></i>
+              01/05/2026 às 16:45
+            </div>
+          </div>
+          <div class="notification-actions">
+            <button class="notification-action-btn" data-action="delete" title="Excluir">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Lembrete de Medicação -->
+        <div class="notification-item">
+          <div class="notification-icon info">
+            <i class="fas fa-pills"></i>
+          </div>
+          <div class="notification-body">
+            <div class="notification-title">Lembrete de Medicação</div>
+            <div class="notification-desc">
+              Não esqueça de tomar sua medicação prescrita conforme orientado pelo médico.
+            </div>
+            <div class="notification-time">
+              <i class="fas fa-clock" style="font-size:10px;"></i>
+              30/04/2026 às 08:00
+            </div>
+          </div>
+          <div class="notification-actions">
+            <button class="notification-action-btn" data-action="delete" title="Excluir">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <div class="mobile-bottom-nav-inner">
+      <a href="../dashboard.html" class="mobile-nav-item" data-page-link="dashboard">
+        <i class="fas fa-home"></i>
+        <span>Início</span>
+      </a>
+      <a href="./vacinas.html" class="mobile-nav-item" data-page-link="vacinas">
+        <i class="fas fa-syringe"></i>
+        <span>Vacinas</span>
+      </a>
+      <a href="./profissionais.html" class="mobile-nav-item" data-page-link="profissionais">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Agendar</span>
+      </a>
+      <a href="./receitas.html" class="mobile-nav-item" data-page-link="receitas">
+        <i class="fas fa-file-prescription"></i>
+        <span>Receitas</span>
+      </a>
+      <a href="./historico.html" class="mobile-nav-item" data-page-link="historico">
+        <i class="fas fa-history"></i>
+        <span>Histórico</span>
+      </a>
     </div>
-
-    <!-- Notifications List -->
-    <div style="display: flex; flex-direction: column; gap: 12px;">
-      <!-- Notification 1 -->
-      <div style="border: 1px solid #bbf7d0; background-color: #f0fdf4; border-radius: 8px; padding: 16px; display: flex; align-items: flex-start; gap: 16px;">
-        <div style="flex-shrink: 0; margin-top: 4px;">
-          <i class="fas fa-bell" style="color: var(--text-secondary); font-size: 20px;"></i>
-        </div>
-        <div style="flex: 1;">
-          <h3 style="font-weight: 600; margin-bottom: 4px; color: #15803d;">Consulta Confirmada</h3>
-          <p style="font-size: 14px; color: #15803d; margin-bottom: 8px;">Sua consulta com Dra. Ana Silva foi confirmada para 15/05/2026 as 14:30</p>
-          <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">10/05/2026 10:30</p>
-        </div>
-        <div style="display: flex; gap: 8px; flex-shrink: 0;">
-          <button style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; transition: background-color 0.15s ease;">
-            <i class="fas fa-check" style="color: var(--text-secondary); font-size: 16px;"></i>
-          </button>
-          <button style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; transition: background-color 0.15s ease;">
-            <i class="fas fa-trash" style="color: var(--text-secondary); font-size: 16px;"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Notification 2 -->
-      <div style="border: 1px solid #fdba74; background-color: #fffbeb; border-radius: 8px; padding: 16px; display: flex; align-items: flex-start; gap: 16px;">
-        <div style="flex-shrink: 0; margin-top: 4px;">
-          <i class="fas fa-bell" style="color: var(--text-secondary); font-size: 20px;"></i>
-        </div>
-        <div style="flex: 1;">
-          <h3 style="font-weight: 600; margin-bottom: 4px; color: #92400e;">Vacina Pendente</h3>
-          <p style="font-size: 14px; color: #92400e; margin-bottom: 8px;">Voce tem uma vacina de Influenza pendente. Agende sua aplicacao.</p>
-          <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">08/05/2026 14:15</p>
-        </div>
-        <div style="display: flex; gap: 8px; flex-shrink: 0;">
-          <div style="width: 8px; height: 8px; background-color: #3b82f6; border-radius: 50%; margin-top: 8px;"></div>
-        </div>
-      </div>
-
-      <!-- Notification 3 -->
-      <div style="border: 1px solid #e5e7eb; background-color: #f9fafb; border-radius: 8px; padding: 16px; display: flex; align-items: flex-start; gap: 16px;">
-        <div style="flex-shrink: 0; margin-top: 4px;">
-          <i class="fas fa-bell" style="color: var(--text-secondary); font-size: 20px;"></i>
-        </div>
-        <div style="flex: 1;">
-          <h3 style="font-weight: 600; margin-bottom: 4px; color: #991b1b;">Receita Expirada</h3>
-          <p style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">Sua receita de 20/03/2026 expirou. Solicite uma nova ao seu medico.</p>
-          <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">05/05/2026 09:00</p>
-        </div>
-        <div style="display: flex; gap: 8px; flex-shrink: 0;">
-          <button style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; transition: background-color 0.15s ease;">
-            <i class="fas fa-trash" style="color: var(--text-secondary); font-size: 16px;"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Notification 4 -->
-      <div style="border: 1px solid #e5e7eb; background-color: #f9fafb; border-radius: 8px; padding: 16px; display: flex; align-items: flex-start; gap: 16px;">
-        <div style="flex-shrink: 0; margin-top: 4px;">
-          <i class="fas fa-bell" style="color: var(--text-secondary); font-size: 20px;"></i>
-        </div>
-        <div style="flex: 1;">
-          <h3 style="font-weight: 600; margin-bottom: 4px; color: #0c4a6e;">Resultado de Exame</h3>
-          <p style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">Seu resultado de exame esta disponivel. Acesse em Meus Exames.</p>
-          <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">01/05/2026 16:45</p>
-        </div>
-        <div style="display: flex; gap: 8px; flex-shrink: 0;">
-          <button style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; transition: background-color 0.15s ease;">
-            <i class="fas fa-trash" style="color: var(--text-secondary); font-size: 16px;"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Notification 5 -->
-      <div style="border: 1px solid #e5e7eb; background-color: #f9fafb; border-radius: 8px; padding: 16px; display: flex; align-items: flex-start; gap: 16px;">
-        <div style="flex-shrink: 0; margin-top: 4px;">
-          <i class="fas fa-bell" style="color: var(--text-secondary); font-size: 20px;"></i>
-        </div>
-        <div style="flex: 1;">
-          <h3 style="font-weight: 600; margin-bottom: 4px; color: #0c4a6e;">Lembrete de Medicacao</h3>
-          <p style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">Nao esqueca de tomar sua medicacao prescrita.</p>
-          <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">30/04/2026 08:00</p>
-        </div>
-        <div style="display: flex; gap: 8px; flex-shrink: 0;">
-          <button style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; transition: background-color 0.15s ease;">
-            <i class="fas fa-trash" style="color: var(--text-secondary); font-size: 16px;"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  </main>
-</div>
+  </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/script.js"></script>

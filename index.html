@@ -1,155 +1,448 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Care Plus - Plataforma de Saúde</title>
+  <meta name="description" content="Care Plus — Gerencie consultas, vacinas e receitas médicas em um único lugar.">
+  <title>Care Plus — Plataforma de Saúde</title>
+  <link rel="icon" href="./images/favicon.png" type="image/png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="./css/style.css">
-</head>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-dark: #1e3a8a;
+      --primary-50: #eff6ff;
+      --primary-100: #dbeafe;
+      --success: #10b981;
+      --text-primary: #111827;
+      --text-secondary: #6b7280;
+      --border: #e5e7eb;
+      --gray-50: #f9fafb;
+      --radius-sm: 8px;
+      --radius: 12px;
+      --radius-lg: 18px;
+    }
 
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1,h2,h3,h4 { font-family:'Poppins',sans-serif; font-weight:700; }
+
+    /* NAVBAR */
+    .navbar-cp {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .navbar-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--text-primary);
+    }
+    .brand-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 800; font-size: 14px;
+      box-shadow: 0 2px 8px rgba(30,64,175,.3);
+    }
+    .brand-name { font-size: 17px; font-weight: 700; font-family:'Poppins',sans-serif; }
+
+    .nav-actions { display:flex; align-items:center; gap:10px; }
+
+    .btn-nav-login {
+      padding: 8px 20px; border-radius: 8px;
+      font-weight: 600; font-size: 14px;
+      color: var(--primary); background: transparent;
+      border: 1.5px solid transparent;
+      text-decoration: none; transition: all .15s ease;
+    }
+    .btn-nav-login:hover { background: var(--primary-50); color: var(--primary); }
+
+    .btn-nav-register {
+      padding: 8px 20px; border-radius: 8px;
+      font-weight: 600; font-size: 14px;
+      color: #fff; background: var(--primary);
+      border: none; text-decoration: none;
+      transition: all .15s ease;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-nav-register:hover {
+      background: var(--primary-dark); color: #fff;
+      transform: translateY(-1px); box-shadow: 0 4px 12px rgba(30,64,175,.3);
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(180deg, #f0f7ff 0%, #fff 100%);
+      padding: 80px 24px 64px;
+      overflow: hidden;
+    }
+    .hero-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary-50); color: var(--primary);
+      padding: 5px 14px; border-radius: 99px;
+      font-size: 12px; font-weight: 700; letter-spacing: .04em;
+      text-transform: uppercase; margin-bottom: 20px;
+      border: 1px solid var(--primary-100);
+    }
+    .hero-badge i { font-size: 11px; }
+
+    .hero h1 {
+      font-size: clamp(32px, 4.5vw, 50px);
+      font-weight: 800; line-height: 1.15;
+      color: var(--text-primary); margin-bottom: 18px;
+    }
+    .hero h1 span { color: var(--primary); }
+
+    .hero-desc {
+      color: var(--text-secondary); font-size: 17px;
+      line-height: 1.65; margin-bottom: 32px; max-width: 480px;
+    }
+
+    /* Feature list */
+    .feature-list { display:flex; flex-direction:column; gap:14px; margin-bottom:36px; }
+    .feature-item { display:flex; align-items:flex-start; gap:12px; }
+    .feature-check {
+      width:22px; height:22px; border-radius:50%;
+      background:var(--success); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-size:10px; flex-shrink:0; margin-top:2px;
+    }
+    .feature-item-text strong { font-size:14px; display:block; margin-bottom:2px; }
+    .feature-item-text small  { color:var(--text-secondary); font-size:13px; }
+
+    /* CTA Buttons */
+    .hero-ctas { display:flex; gap:12px; flex-wrap:wrap; }
+    .btn-hero-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; border-radius: 10px;
+      background: var(--primary); color: #fff;
+      font-weight: 700; font-size: 15px; text-decoration: none;
+      transition: all .2s ease; box-shadow: 0 4px 14px rgba(30,64,175,.3);
+    }
+    .btn-hero-primary:hover {
+      background: var(--primary-dark); color: #fff;
+      transform: translateY(-2px); box-shadow: 0 8px 20px rgba(30,64,175,.4);
+    }
+    .btn-hero-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; border-radius: 10px;
+      background: transparent; color: var(--primary);
+      font-weight: 600; font-size: 15px; text-decoration: none;
+      border: 2px solid var(--primary-100); transition: all .2s ease;
+    }
+    .btn-hero-secondary:hover { background: var(--primary-50); border-color: var(--primary); }
+
+    /* Image side */
+    .hero-image-wrapper {
+      background: #fff; border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.1);
+      overflow: hidden; padding: 8px;
+      border: 1px solid var(--border);
+    }
+    .hero-image-wrapper img { border-radius: 14px; width:100%; display:block; }
+
+    /* FEATURES SECTION */
+    .features-section { background: #fff; padding: 72px 24px; }
+    .features-inner { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      text-align: center;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary-50); color: var(--primary);
+      padding: 5px 14px; border-radius: 99px;
+      font-size: 12px; font-weight: 700; letter-spacing: .04em;
+      text-transform: uppercase; margin-bottom: 14px;
+      border: 1px solid var(--primary-100);
+    }
+    .section-header { text-align: center; margin-bottom: 52px; }
+    .section-header h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; margin-bottom: 12px; }
+    .section-header p   { color: var(--text-secondary); font-size: 16px; max-width: 560px; margin: 0 auto; }
+
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 24px;
+    }
+    .feature-card {
+      background: var(--gray-50); border-radius: 16px;
+      padding: 28px 24px; border: 1px solid var(--border);
+      transition: all .2s ease;
+    }
+    .feature-card:hover { background:#fff; box-shadow:0 8px 24px rgba(0,0,0,.07); transform:translateY(-3px); }
+    .feature-icon {
+      width: 52px; height: 52px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 18px;
+    }
+    .feature-icon.blue   { background: var(--primary-50);   color: var(--primary); }
+    .feature-icon.green  { background: #f0fdf4; color: var(--success); }
+    .feature-icon.orange { background: #fffbeb; color: #f59e0b; }
+    .feature-icon.purple { background: #f5f3ff; color: #7c3aed; }
+    .feature-icon.red    { background: #fef2f2; color: #ef4444; }
+    .feature-icon.teal   { background: #f0fdfa; color: #0d9488; }
+    .feature-card h3 { font-size:16px; font-weight:700; margin-bottom:8px; }
+    .feature-card p  { font-size:14px; color:var(--text-secondary); line-height:1.6; margin:0; }
+
+    /* STATS */
+    .stats-section {
+      background: linear-gradient(135deg, var(--primary) 0%, #2563eb 55%, var(--primary-dark) 100%);
+      padding: 64px 24px;
+    }
+    .stats-inner { max-width:1100px; margin:0 auto; }
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; text-align:center; }
+    .stat-num   { font-size:clamp(32px,4vw,46px); font-weight:800; color:#fff; font-family:'Poppins',sans-serif; line-height:1; }
+    .stat-desc  { font-size:14px; color:rgba(255,255,255,.75); margin-top:6px; }
+
+    /* FOOTER */
+    footer {
+      background: var(--text-primary); color: rgba(255,255,255,.75);
+      padding: 40px 24px 24px;
+    }
+    .footer-inner { max-width:1100px; margin:0 auto; }
+    .footer-top {
+      display:flex; align-items:center; justify-content:space-between; gap:20px;
+      padding-bottom:28px; border-bottom:1px solid rgba(255,255,255,.1); margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+    .footer-brand { display:flex; align-items:center; gap:10px; }
+    .footer-brand-icon {
+      width:36px; height:36px; background:var(--primary);
+      border-radius:8px; display:flex; align-items:center; justify-content:center;
+      color:#fff; font-weight:800; font-size:13px;
+    }
+    .footer-brand-name { font-size:16px; font-weight:700; color:#fff; font-family:'Poppins',sans-serif; }
+    .footer-tagline     { font-size:13px; color:rgba(255,255,255,.5); margin-top:1px; }
+    .footer-links { display:flex; gap:20px; flex-wrap:wrap; }
+    .footer-links a { color:rgba(255,255,255,.65); font-size:14px; text-decoration:none; transition:color .15s; }
+    .footer-links a:hover { color:#fff; }
+    .footer-copy { font-size:13px; color:rgba(255,255,255,.4); text-align:center; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero-inner     { grid-template-columns:1fr; gap:40px; }
+      .features-grid  { grid-template-columns:repeat(2,1fr); }
+      .stats-grid     { grid-template-columns:repeat(2,1fr); gap:32px; }
+      .hero { padding:56px 24px 48px; }
+      .hero h1 { font-size:clamp(28px,6vw,40px); }
+    }
+
+    @media (max-width: 580px) {
+      .features-grid  { grid-template-columns:1fr; }
+      .stats-grid     { grid-template-columns:repeat(2,1fr); }
+      .hero-ctas      { flex-direction:column; }
+      .btn-hero-primary, .btn-hero-secondary { justify-content:center; }
+      .footer-top     { flex-direction:column; align-items:flex-start; }
+      .footer-links   { gap:14px; }
+    }
+  </style>
+</head>
 <body>
 
   <!-- NAVBAR -->
-  <nav class="navbar navbar-light bg-white border-bottom py-3">
-    <div class="container">
-
-      <div class="row align-items-center w-100 g-3">
-
-        <!-- LOGO -->
-        <div class="col-12 col-md d-flex justify-content-center justify-content-md-start">
-
-          <a class="navbar-brand d-flex align-items-center gap-2 fw-bold m-0" href="#">
-
-            <div class="bg-primary text-white rounded d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 40px; height: 40px;">
-              CP
-            </div>
-
-            <span class="fs-5">
-              Care Plus
-            </span>
-
-          </a>
-
-        </div>
-
-        <!-- BUTTONS -->
-        <div class="col-12 col-md-auto">
-
-          <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
-
-            <a href="./login.html" class="btn text-primary fw-semibold rounded-3 px-4 py-2">
-              Entrar
-            </a>
-
-            <a href="./registro.html" class="btn btn-outline-primary fw-semibold rounded-3 px-4 py-2">
-              Cadastrar
-            </a>
-
-          </div>
-
-        </div>
-
+  <nav class="navbar-cp">
+    <div class="navbar-inner">
+      <a class="brand" href="#">
+        <div class="brand-icon">CP</div>
+        <span class="brand-name">Care Plus</span>
+      </a>
+      <div class="nav-actions">
+        <a href="./login.html" class="btn-nav-login">Entrar</a>
+        <a href="./registro.html" class="btn-nav-register">
+          <i class="fas fa-user-plus"></i>
+          Cadastrar
+        </a>
       </div>
-
     </div>
   </nav>
 
-
   <!-- HERO -->
-  <section class="py-5 bg-light">
-    <div class="container">
-      <div class="row align-items-center">
+  <section class="hero">
+    <div class="hero-inner">
 
-        <!-- TEXT -->
-        <div class="col-lg-6 order-2 order-lg-1">
-
-          <h1 class="display-5 fw-bold mb-3">
-            Sua Saúde em Primeiro Lugar
-          </h1>
-
-          <p class="text-secondary mb-4">
-            Gerencie suas consultas, vacinas e receitas médicas em um único lugar.
-            Acesso rápido e seguro aos seus dados de saúde.
-          </p>
-
-          <!-- FEATURES -->
-          <div class="mb-4">
-
-            <div class="d-flex gap-2 mb-3">
-              <span class="text-success">✔</span>
-              <div>
-                <div class="fw-semibold">Notificações Eficazes</div>
-                <small class="text-secondary">
-                  Receba lembretes sobre consultas e vacinas
-                </small>
-              </div>
-            </div>
-
-            <div class="d-flex gap-2 mb-3">
-              <span class="text-success">✔</span>
-              <div>
-                <div class="fw-semibold">Agendamentos Fáceis</div>
-                <small class="text-secondary">
-                  Marque consultas com profissionais de saúde
-                </small>
-              </div>
-            </div>
-
-            <div class="d-flex gap-2 mb-3">
-              <span class="text-success">✔</span>
-              <div>
-                <div class="fw-semibold">Histórico Completo</div>
-                <small class="text-secondary">
-                  Acesso a todo seu histórico médico
-                </small>
-              </div>
-            </div>
-
-            <div class="d-flex gap-2">
-              <span class="text-success">✔</span>
-              <div>
-                <div class="fw-semibold">Seguro e Privado</div>
-                <small class="text-secondary">
-                  Seus dados protegidos com criptografia
-                </small>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- BUTTONS -->
-          <div class="d-flex gap-3">
-            <a href="./registro.html" class="btn btn-primary px-4 py-2 fw-semibold rounded-3">
-              <i class="fas fa-user-plus me-2"></i>
-              Começar Agora
-            </a>
-
-            <a href="./login.html" class="btn btn-outline-primary px-4 py-2 fw-semibold rounded-3">
-              <i class="fas fa-sign-in me-2"></i>
-              Acessar Plataforma
-            </a>
-          </div>
-
+      <!-- Text -->
+      <div>
+        <div class="hero-badge">
+          <i class="fas fa-shield-alt"></i>
+          Plataforma de Saúde Digital
         </div>
 
-        <!-- IMAGE -->
-        <div class="col-lg-6 mb-4 mt-lg-0 order-1 order-lg-2">
+        <h1>
+          Sua saúde,<br>
+          <span>simplificada</span> e<br>
+          sempre à mão
+        </h1>
 
-          <div class="rounded-4 overflow-hidden shadow-sm bg-white p-2">
-            <img src="./images/medica.png" class="img-fluid rounded-4" alt="Médica">
+        <p class="hero-desc">
+          Gerencie consultas, vacinas, receitas e seu histórico médico em um único lugar seguro e intuitivo.
+        </p>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-check"><i class="fas fa-check"></i></div>
+            <div class="feature-item-text">
+              <strong>Agendamentos Fáceis</strong>
+              <small>Marque consultas com profissionais de saúde em poucos cliques</small>
+            </div>
           </div>
-
+          <div class="feature-item">
+            <div class="feature-check"><i class="fas fa-check"></i></div>
+            <div class="feature-item-text">
+              <strong>Notificações Inteligentes</strong>
+              <small>Lembretes automáticos de consultas, vacinas e medicações</small>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check"><i class="fas fa-check"></i></div>
+            <div class="feature-item-text">
+              <strong>Histórico Completo</strong>
+              <small>Acesso a todo o seu histórico médico, onde estiver</small>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check"><i class="fas fa-check"></i></div>
+            <div class="feature-item-text">
+              <strong>Seguro e Privado</strong>
+              <small>Seus dados protegidos com criptografia de ponta</small>
+            </div>
+          </div>
         </div>
 
+        <div class="hero-ctas">
+          <a href="./registro.html" class="btn-hero-primary">
+            <i class="fas fa-rocket"></i>
+            Começar Gratuitamente
+          </a>
+          <a href="./login.html" class="btn-hero-secondary">
+            <i class="fas fa-sign-in-alt"></i>
+            Já tenho conta
+          </a>
+        </div>
+      </div>
+
+      <!-- Image -->
+      <div class="hero-image-wrapper">
+        <img src="./images/medica.png" alt="Profissional de saúde">
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features-section">
+    <div class="features-inner">
+
+      <div class="section-header">
+        <div style="display:flex;justify-content:center;margin-bottom:12px;">
+          <span class="section-label"><i class="fas fa-star"></i> Funcionalidades</span>
+        </div>
+        <h2>Tudo que você precisa,<br>em um só lugar</h2>
+        <p>A plataforma completa para gestão da sua saúde pessoal e familiar.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon blue"><i class="fas fa-calendar-check"></i></div>
+          <h3>Agendamento Online</h3>
+          <p>Marque, reagende ou cancele consultas com facilidade, diretamente pelo app.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon green"><i class="fas fa-syringe"></i></div>
+          <h3>Carteira de Vacinação</h3>
+          <p>Controle todas as vacinas, datas de aplicação e próximos reforços.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon orange"><i class="fas fa-file-prescription"></i></div>
+          <h3>Receitas Digitais</h3>
+          <p>Acesse e gerencie suas prescrições médicas de forma organizada.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon purple"><i class="fas fa-history"></i></div>
+          <h3>Histórico Médico</h3>
+          <p>Acompanhe todo o seu histórico de consultas e procedimentos.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon teal"><i class="fas fa-bell"></i></div>
+          <h3>Notificações</h3>
+          <p>Lembretes personalizados para nunca mais perder uma consulta ou vacina.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon red"><i class="fas fa-lock"></i></div>
+          <h3>Privacidade Total</h3>
+          <p>Seus dados de saúde protegidos com os mais altos padrões de segurança.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-section">
+    <div class="stats-inner">
+      <div class="stats-grid">
+        <div>
+          <div class="stat-num">50k+</div>
+          <div class="stat-desc">Pacientes ativos</div>
+        </div>
+        <div>
+          <div class="stat-num">1.200+</div>
+          <div class="stat-desc">Profissionais cadastrados</div>
+        </div>
+        <div>
+          <div class="stat-num">98%</div>
+          <div class="stat-desc">Satisfação dos usuários</div>
+        </div>
+        <div>
+          <div class="stat-num">24/7</div>
+          <div class="stat-desc">Suporte disponível</div>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-brand-icon">CP</div>
+          <div>
+            <div class="footer-brand-name">Care Plus</div>
+            <div class="footer-tagline">Saúde em Primeiro Lugar</div>
+          </div>
+        </div>
+        <div class="footer-links">
+          <a href="#">Sobre</a>
+          <a href="#">Privacidade</a>
+          <a href="#">Termos de Uso</a>
+          <a href="#">Contato</a>
+          <a href="./login.html">Entrar</a>
+          <a href="./registro.html">Cadastrar</a>
+        </div>
+      </div>
+      <p class="footer-copy">© 2026 Care Plus. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+</html>
