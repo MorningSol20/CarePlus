@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
     loadVacinas();
     loadReceitas();
     initializeReceitaModal();
+    loadAgendamentos();
+    initializeAgendamentoConfirm();
+    initializeProfissionaisReagendar();
 });
 
 /* ============================================================
@@ -616,21 +619,252 @@ function openReceitaModal(receitaId) {
 }
 
 /* ============================================================
-   DADOS DO PROFISSIONAL NO RESUMO DE AGENDAMENTO
+   AGENDAMENTOS — Listagem, criação, reagendamento e cancelamento
    ============================================================ */
 
 const profissionais = {
-    1: { nome: 'Dra. Ana Carvalho',   especialidade: 'Clínico Geral',  preco: 150 },
-    2: { nome: 'Dr. Lucas Almeida',   especialidade: 'Cardiologia',    preco: 220 },
-    3: { nome: 'Dra. Beatriz Souza',  especialidade: 'Dermatologia',   preco: 180 },
-    4: { nome: 'Dr. Felipe Monteiro', especialidade: 'Oftalmologia',   preco: 170 },
-    5: { nome: 'Dra. Camila Ribeiro', especialidade: 'Psicologia',     preco: 120 },
-    6: { nome: 'Dr. Rafael Mendes',   especialidade: 'Ortopedia',      preco: 190 }
+    1: { nome: 'Dra. Ana Carvalho',   especialidade: 'Clínico Geral',  local: 'Hospital Santa Clara',          preco: 150 },
+    2: { nome: 'Dr. Lucas Almeida',   especialidade: 'Cardiologia',    local: 'Hospital São Lucas',            preco: 220 },
+    3: { nome: 'Dra. Beatriz Souza',  especialidade: 'Dermatologia',   local: 'Clínica Pele Viva',             preco: 180 },
+    4: { nome: 'Dr. Felipe Monteiro', especialidade: 'Oftalmologia',   local: 'Centro Oftalmológico Paulista', preco: 170 },
+    5: { nome: 'Dra. Camila Ribeiro', especialidade: 'Psicologia',     local: 'Instituto Mente Saudável',      preco: 120 },
+    6: { nome: 'Dr. Rafael Mendes',   especialidade: 'Ortopedia',      local: 'Clínica OrtoVida',              preco: 190 },
 };
+
+/** Dados iniciais pré-carregados na primeira visita */
+const AGENDAMENTOS_DEFAULT = [
+    {
+        id: 'AGD-2026-002',
+        profissionalId: 2,
+        profissional: 'Dr. Lucas Almeida',
+        especialidade: 'Cardiologia',
+        local: 'Hospital São Lucas',
+        data: '2026-05-28',
+        horario: '10:00',
+        status: 'confirmado',
+    },
+    {
+        id: 'AGD-2026-001',
+        profissionalId: 1,
+        profissional: 'Dra. Ana Carvalho',
+        especialidade: 'Clínico Geral',
+        local: 'Hospital Santa Clara',
+        data: '2026-05-10',
+        horario: '14:30',
+        status: 'realizado',
+    },
+];
+
+function getAgendamentos() {
+    try {
+        const raw = localStorage.getItem('careplus_agendamentos');
+        if (!raw) {
+            // Primeira visita: pré-carrega com mock
+            localStorage.setItem('careplus_agendamentos', JSON.stringify(AGENDAMENTOS_DEFAULT));
+            return AGENDAMENTOS_DEFAULT;
+        }
+        return JSON.parse(raw);
+    } catch {
+        return AGENDAMENTOS_DEFAULT;
+    }
+}
+
+function saveAgendamentos(list) {
+    localStorage.setItem('careplus_agendamentos', JSON.stringify(list));
+}
+
+function agendamentoBadge(status) {
+    const map = {
+        confirmado: { cls: 'badge-primary', icon: 'fa-calendar-check', label: 'Confirmado' },
+        realizado:  { cls: 'badge-success', icon: 'fa-check-circle',   label: 'Realizado'  },
+        cancelado:  { cls: 'badge-danger',  icon: 'fa-times-circle',   label: 'Cancelado'  },
+    };
+    const s = map[status] || { cls: 'badge-gray', icon: 'fa-question-circle', label: status };
+    return `<span class="badge ${s.cls}"><i class="fas ${s.icon}"></i>${s.label}</span>`;
+}
+
+/** Renderiza a tabela de agendamentos em agendamentos.html */
+function loadAgendamentos() {
+    const tbody      = document.getElementById('agendamentosTableBody');
+    const emptyState = document.getElementById('agendamentosEmptyState');
+    const wrapper    = document.getElementById('agendamentosTableWrapper');
+    const statP      = document.getElementById('statProximos');
+    const statR      = document.getElementById('statRealizados');
+    const statC      = document.getElementById('statCancelados');
+
+    if (!tbody) return;
+
+    const list   = getAgendamentos();
+    const counts = { confirmado: 0, realizado: 0, cancelado: 0 };
+    list.forEach(a => { if (counts[a.status] !== undefined) counts[a.status]++; });
+
+    if (statP) statP.textContent = counts.confirmado;
+    if (statR) statR.textContent = counts.realizado;
+    if (statC) statC.textContent = counts.cancelado;
+
+    if (list.length === 0) {
+        if (emptyState) emptyState.style.display = 'flex';
+        if (wrapper)    wrapper.style.display    = 'none';
+        return;
+    }
+
+    if (emptyState) emptyState.style.display = 'none';
+    if (wrapper)    wrapper.style.display    = '';
+
+    // Ordena: confirmados primeiro, depois por data desc
+    const sorted = [...list].sort((a, b) => {
+        const order = { confirmado: 0, realizado: 1, cancelado: 2 };
+        if (order[a.status] !== order[b.status]) return order[a.status] - order[b.status];
+        return new Date(b.data) - new Date(a.data);
+    });
+
+    tbody.innerHTML = sorted.map(a => {
+        const isPending = a.status === 'confirmado';
+        const rowStyle  = a.status === 'cancelado' ? 'opacity:.65;' : '';
+
+        const acoes = isPending
+            ? `<div style="display:flex;gap:4px;">
+                 <a href="./profissionais.html?reagendar=${a.id}"
+                    class="btn-outline btn-sm"
+                    title="Reagendar"
+                    style="padding:6px 10px;">
+                   <i class="fas fa-sync-alt"></i>
+                   Reagendar
+                 </a>
+                 <button
+                   class="btn-ghost btn-sm"
+                   title="Cancelar"
+                   onclick="cancelarAgendamento('${a.id}')"
+                   style="color:var(--danger);padding:6px 8px;">
+                   <i class="fas fa-times"></i>
+                 </button>
+               </div>`
+            : '<span style="font-size:12px;color:var(--text-muted);">—</span>';
+
+        return `
+          <tr style="${rowStyle}">
+            <td>
+              <div style="font-weight:600;line-height:1.3;">${a.profissional}</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${a.especialidade} · ${a.local}</div>
+            </td>
+            <td>${formatDate(a.data)}</td>
+            <td>${a.horario}</td>
+            <td>${agendamentoBadge(a.status)}</td>
+            <td>${acoes}</td>
+          </tr>`;
+    }).join('');
+}
+
+/** Cancela um agendamento pelo ID */
+function cancelarAgendamento(id) {
+    const list = getAgendamentos();
+    const agd  = list.find(a => a.id === id);
+    if (!agd) return;
+    agd.status = 'cancelado';
+    saveAgendamentos(list);
+    loadAgendamentos();
+}
+
+/**
+ * Wires up the "Confirmar Agendamento" button in agendamento.html.
+ * Saves a new appointment (or updates existing on reagendar mode) and
+ * redirects to agendamentos.html.
+ */
+function initializeAgendamentoConfirm() {
+    const btn = document.getElementById('btnConfirmarAgendamento');
+    if (!btn) return;
+
+    btn.addEventListener('click', function () {
+        const date    = document.getElementById('selectedDate')?.value;
+        const time    = document.getElementById('selectedTime')?.value;
+        const params  = new URLSearchParams(window.location.search);
+        const profId  = params.get('id');
+        const reagId  = params.get('reagendar');
+
+        if (!date || !time) {
+            alert('Por favor, selecione uma data e um horário antes de confirmar.');
+            return;
+        }
+
+        const prof = profissionais[profId];
+        const list = getAgendamentos();
+
+        if (reagId) {
+            // Reagendamento: atualiza o existente
+            const idx = list.findIndex(a => a.id === reagId);
+            if (idx !== -1) {
+                list[idx].data    = date;
+                list[idx].horario = time;
+                list[idx].status  = 'confirmado';
+                if (prof) {
+                    list[idx].profissionalId = parseInt(profId);
+                    list[idx].profissional   = prof.nome;
+                    list[idx].especialidade  = prof.especialidade;
+                    list[idx].local          = prof.local;
+                }
+            }
+        } else {
+            // Novo agendamento
+            list.unshift({
+                id:            `AGD-${Date.now()}`,
+                profissionalId: parseInt(profId),
+                profissional:  prof ? prof.nome          : 'Profissional',
+                especialidade: prof ? prof.especialidade : '—',
+                local:         prof ? prof.local         : '—',
+                data:          date,
+                horario:       time,
+                status:        'confirmado',
+            });
+        }
+
+        saveAgendamentos(list);
+
+        btn.disabled  = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Confirmando…';
+        setTimeout(() => {
+            window.location.href = './agendamentos.html';
+        }, 700);
+    });
+}
+
+/**
+ * Em profissionais.html: detecta ?reagendar= e:
+ * - Exibe o banner de reagendamento
+ * - Injeta o parâmetro reagendar nos links de agendamento de cada card
+ */
+function initializeProfissionaisReagendar() {
+    const params   = new URLSearchParams(window.location.search);
+    const reagId   = params.get('reagendar');
+    const banner   = document.getElementById('reagendarBanner');
+    const title    = document.getElementById('profissionaisTitle');
+
+    if (!reagId) return;
+
+    if (banner) banner.style.display = 'flex';
+    if (title)  title.textContent    = 'Escolha o novo Profissional';
+
+    // Atualiza todos os links de agendamento para propagar o param reagendar
+    document.querySelectorAll('a[href^="./agendamento.html"]').forEach(link => {
+        const url = new URL(link.href);
+        url.searchParams.set('reagendar', reagId);
+        link.href = url.toString();
+    });
+
+    // Atualiza botão Voltar para retornar a agendamentos em vez do início do fluxo
+    const btnVoltar = document.getElementById('btnVoltarAgendamentos');
+    if (btnVoltar) {
+        btnVoltar.href = './agendamentos.html';
+    }
+}
+
+/* ============================================================
+   DADOS DO PROFISSIONAL NO RESUMO DE AGENDAMENTO
+   ============================================================ */
 
 function loadProfissionalData() {
     const params = new URLSearchParams(window.location.search);
     const id     = params.get('id');
+    const reagId = params.get('reagendar');
     const p      = profissionais[id];
     if (!p) return;
 
@@ -638,6 +872,12 @@ function loadProfissionalData() {
     const espEl  = document.getElementById('res-especialidade');
     if (nomeEl) nomeEl.textContent = p.nome;
     if (espEl)  espEl.textContent  = p.especialidade;
+
+    // Propaga reagendar no link "Voltar" da tela de agendamento
+    const btnVoltar = document.getElementById('btnVoltarProfissionais');
+    if (btnVoltar && reagId) {
+        btnVoltar.href = `./profissionais.html?reagendar=${reagId}`;
+    }
 }
 
 /* ============================================================

@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body data-page="profissionais">
+<body data-page="agendamentos">
 
   <div class="sidebar-overlay"></div>
 
@@ -40,9 +40,9 @@
         <i class="fas fa-file-prescription"></i>
         <span class="nav-item-label">Receitas</span>
       </a>
-      <a href="./profissionais.html" class="nav-item">
+      <a href="./agendamentos.html" class="nav-item">
         <i class="fas fa-calendar-alt"></i>
-        <span class="nav-item-label">Agendar</span>
+        <span class="nav-item-label">Agendamentos</span>
       </a>
       <a href="./historico.html" class="nav-item">
         <i class="fas fa-history"></i>
@@ -113,12 +113,22 @@
     <!-- Main Content -->
     <main class="main-content">
 
+      <!-- Banner de reagendamento (exibido via JS quando ?reagendar= presente) -->
+      <div id="reagendarBanner" style="display:none;background:var(--warning-50);border:1.5px solid var(--warning-100);border-radius:var(--radius);padding:12px 16px;margin-bottom:20px;display:none;align-items:center;gap:10px;">
+        <i class="fas fa-sync-alt" style="color:var(--warning);font-size:15px;flex-shrink:0;"></i>
+        <span style="font-size:13px;font-weight:600;color:var(--text-primary);">Reagendamento — escolha o profissional para o novo horário</span>
+      </div>
+
       <!-- Header + Search -->
       <div class="page-header">
         <div class="page-header-text">
-          <h1>Escolha um Profissional</h1>
+          <h1 id="profissionaisTitle">Escolha um Profissional</h1>
           <p>Selecione o especialista para o seu agendamento</p>
         </div>
+        <a href="./agendamentos.html" class="btn-outline btn-sm" id="btnVoltarAgendamentos">
+          <i class="fas fa-arrow-left"></i>
+          Voltar
+        </a>
       </div>
 
       <!-- Busca -->
@@ -347,7 +357,7 @@
         <i class="fas fa-syringe"></i>
         <span>Vacinas</span>
       </a>
-      <a href="./profissionais.html" class="mobile-nav-item" data-page-link="profissionais">
+      <a href="./agendamentos.html" class="mobile-nav-item" data-page-link="agendamentos">
         <i class="fas fa-calendar-alt"></i>
         <span>Agendar</span>
       </a>
