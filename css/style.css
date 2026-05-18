@@ -1000,6 +1000,102 @@ tbody tr:hover { background:var(--gray-50); }
 }
 
 /* ===================================
+   DASHBOARD — Quick-action cards
+   =================================== */
+
+.dash-quick-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dash-quick-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.dash-quick-icon.green  { background: var(--success-50);  color: var(--success); }
+.dash-quick-icon.blue   { background: var(--primary-50);  color: var(--primary-light); }
+.dash-quick-icon.orange { background: var(--warning-50);  color: var(--warning); }
+.dash-quick-icon.purple { background: #f5f3ff;            color: #7c3aed; }
+
+.dash-quick-info h3 {
+  font-size: 14px; font-weight: 700;
+  margin: 0 0 3px; color: var(--text-primary);
+}
+.dash-quick-info p {
+  font-size: 12px; color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Dashboard — próximo agendamento */
+.dash-appt-card {
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 16px;
+  border: 1.5px solid var(--primary-100);
+  border-radius: var(--radius);
+  background: var(--primary-50);
+}
+.dash-appt-date {
+  flex-shrink: 0;
+  width: 56px;
+  background: var(--primary-light);
+  border-radius: var(--radius);
+  color: #fff;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 8px 6px;
+  line-height: 1.2;
+}
+.dash-appt-date-day   { font-size: 24px; font-weight: 700; }
+.dash-appt-date-month { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.dash-appt-body { flex: 1; min-width: 0; }
+.dash-appt-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+.dash-appt-spec { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+.dash-appt-meta { display: flex; gap: 14px; flex-wrap: wrap; }
+.dash-appt-meta span { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+.dash-appt-meta i { color: var(--primary-light); }
+
+/* Dashboard — alert item */
+.dash-alert-item {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px; line-height: 1.4;
+}
+.dash-alert-item.warning { background: var(--warning-50); border: 1px solid var(--warning-100); }
+.dash-alert-item.danger  { background: var(--danger-50);  border: 1px solid var(--danger-100);  }
+.dash-alert-item.info    { background: var(--info-50);    border: 1px solid var(--info-100);     }
+.dash-alert-item.success { background: var(--success-50); border: 1px solid var(--success-100); }
+.dash-alert-icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+.dash-alert-item.warning .dash-alert-icon { color: var(--warning); }
+.dash-alert-item.danger  .dash-alert-icon { color: var(--danger);  }
+.dash-alert-item.info    .dash-alert-icon { color: var(--info);    }
+.dash-alert-item.success .dash-alert-icon { color: var(--success); }
+.dash-alert-text strong  { display: block; font-weight: 600; margin-bottom: 1px; color: var(--text-primary); }
+.dash-alert-text span    { color: var(--text-secondary); font-size: 12px; }
+
+/* Dashboard — consultas recentes */
+.dash-hist-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.dash-hist-item:last-child { border-bottom: none; padding-bottom: 0; }
+.dash-hist-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-50), var(--primary-100));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; color: var(--primary-light); flex-shrink: 0;
+}
+.dash-hist-body { flex: 1; min-width: 0; }
+.dash-hist-name { font-size: 14px; font-weight: 600; margin-bottom: 1px; }
+.dash-hist-sub  { font-size: 11px; color: var(--text-muted); }
+.dash-hist-right { text-align: right; flex-shrink: 0; }
+.dash-hist-date  { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+
+/* ===================================
    RESPONSIVIDADE
    =================================== */
 

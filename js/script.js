@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeProfissionaisReagendar();
     loadHistorico();
     initializeAvaliacaoModal();
+    loadDashboard();
 });
 
 /* ============================================================
@@ -1409,4 +1410,258 @@ function openVacinaModal(vacinaId) {
 
     modal.classList.add('show');
     setTimeout(() => dataInput.focus(), 200);
+}
+
+/* ============================================================
+   DASHBOARD — Visão geral dinâmica
+   ============================================================ */
+
+/**
+ * Popula todos os elementos dinâmicos do dashboard:
+ * stat-cards, próximo agendamento, alertas e consultas recentes.
+ */
+function loadDashboard() {
+    const page = document.body.getAttribute('data-page');
+    if (page !== 'dashboard') return;
+
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    /* ── Dados de cada módulo ── */
+    const agendamentos = getAgendamentos();
+    const historico    = getHistorico();
+    const registros    = getVacinasRegistros();
+
+    /* ── Vacinas ── */
+    let vacinasAplicadas = 0;
+    let vacinasVencidas  = 0;
+    VACINAS_LISTA.forEach(v => {
+        const reg = registros[v.id] || null;
+        const st  = getVacinaStatus(v, reg);
+        if (st === 'aplicada') vacinasAplicadas++;
+        if (st === 'vencida')  vacinasVencidas++;
+    });
+
+    /* ── Receitas ── */
+    let receitasAtivas = 0;
+    let receitaProxVencimento = null; // receita ativa que vence nos próximos 14 dias
+    RECEITAS_MOCK.forEach(r => {
+        const st = getReceitaStatus(r.validade);
+        if (st === 'ativa') {
+            receitasAtivas++;
+            const diff = Math.ceil((new Date(r.validade + 'T00:00:00') - hoje) / 86400000);
+            if (diff <= 14 && (!receitaProxVencimento || diff < receitaProxVencimento.diff)) {
+                receitaProxVencimento = { receita: r, diff };
+            }
+        }
+    });
+
+    /* ── Histórico — avaliações pendentes ── */
+    const pendentes = historico.filter(c => !c.avaliacao).length;
+
+    /* ── Próximo agendamento confirmado ── */
+    const confirmados = agendamentos
+        .filter(a => a.status === 'confirmado')
+        .sort((a, b) => new Date(a.data) - new Date(b.data));
+    const proximo = confirmados[0] || null;
+
+    /* ──────────────────────────────────────────
+       Stat cards
+       ────────────────────────────────────────── */
+
+    const elProxima   = document.getElementById('dashStatProxima');
+    const elVacinas   = document.getElementById('dashStatVacinas');
+    const elReceitas  = document.getElementById('dashStatReceitas');
+    const elPendentes = document.getElementById('dashStatPendentes');
+
+    if (elVacinas)   elVacinas.textContent   = `${vacinasAplicadas}/${VACINAS_LISTA.length}`;
+    if (elReceitas)  elReceitas.textContent  = receitasAtivas;
+    if (elPendentes) elPendentes.textContent = pendentes;
+
+    if (elProxima) {
+        if (proximo) {
+            const [y, m, d] = proximo.data.split('-');
+            const diffDias  = Math.ceil((new Date(proximo.data + 'T00:00:00') - hoje) / 86400000);
+            if (diffDias === 0) {
+                elProxima.textContent = 'Hoje';
+            } else if (diffDias === 1) {
+                elProxima.textContent = 'Amanhã';
+            } else {
+                elProxima.textContent = `${d}/${m}`;
+            }
+        } else {
+            elProxima.textContent = '—';
+        }
+    }
+
+    /* ──────────────────────────────────────────
+       Próximo agendamento — card detalhado
+       ────────────────────────────────────────── */
+
+    const elAppt = document.getElementById('dashProximoAgendamento');
+    if (elAppt) {
+        if (proximo) {
+            const [y, m, d] = proximo.data.split('-');
+            const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+            const mesStr = meses[parseInt(m, 10) - 1];
+            const diffDias = Math.ceil((new Date(proximo.data + 'T00:00:00') - hoje) / 86400000);
+            const diffLabel = diffDias === 0 ? 'Hoje'
+                            : diffDias === 1 ? 'Amanhã'
+                            : `Em ${diffDias} dias`;
+
+            elAppt.innerHTML = `
+              <div class="dash-appt-card">
+                <div class="dash-appt-date">
+                  <span class="dash-appt-date-day">${d}</span>
+                  <span class="dash-appt-date-month">${mesStr}</span>
+                </div>
+                <div class="dash-appt-body">
+                  <div class="dash-appt-name">${proximo.profissional}</div>
+                  <div class="dash-appt-spec">${proximo.especialidade}</div>
+                  <div class="dash-appt-meta">
+                    <span><i class="fas fa-clock"></i>${proximo.horario}</span>
+                    <span><i class="fas fa-map-marker-alt"></i>${proximo.local}</span>
+                    <span><i class="fas fa-hourglass-half"></i>${diffLabel}</span>
+                  </div>
+                </div>
+                <a href="./Pages/agendamentos.html"
+                   class="btn-outline btn-sm"
+                   style="align-self:flex-start;white-space:nowrap;">
+                  <i class="fas fa-external-link-alt"></i>
+                  Detalhes
+                </a>
+              </div>`;
+        } else {
+            elAppt.innerHTML = `
+              <div class="empty-state" style="padding:24px 0;">
+                <div class="empty-state-icon">
+                  <i class="fas fa-calendar-alt" style="font-size:32px;color:var(--primary-light);"></i>
+                </div>
+                <h4 style="font-size:15px;">Nenhuma consulta agendada</h4>
+                <p>Agende uma consulta para acompanhar aqui.</p>
+                <a href="./Pages/agendamentos.html" class="btn-primary btn-sm">
+                  <i class="fas fa-calendar-plus"></i>
+                  Agendar Consulta
+                </a>
+              </div>`;
+        }
+    }
+
+    /* ──────────────────────────────────────────
+       Alertas & Pendências
+       ────────────────────────────────────────── */
+
+    const elAlertas = document.getElementById('dashAlertas');
+    if (elAlertas) {
+        const alertas = [];
+
+        // Avaliações pendentes
+        if (pendentes > 0) {
+            alertas.push({
+                type: 'warning',
+                icon: 'fa-star',
+                title: `${pendentes} avaliação${pendentes > 1 ? 'ões' : ''} pendente${pendentes > 1 ? 's' : ''}`,
+                desc: 'Avalie os profissionais das suas consultas recentes.',
+                link: './Pages/historico.html',
+                linkLabel: 'Avaliar agora',
+            });
+        }
+
+        // Vacinas vencidas
+        if (vacinasVencidas > 0) {
+            alertas.push({
+                type: 'danger',
+                icon: 'fa-syringe',
+                title: `${vacinasVencidas} vacina${vacinasVencidas > 1 ? 's' : ''} vencida${vacinasVencidas > 1 ? 's' : ''}`,
+                desc: 'Renove seus reforços para manter sua proteção em dia.',
+                link: './Pages/vacinas.html',
+                linkLabel: 'Ver vacinas',
+            });
+        }
+
+        // Receita próxima do vencimento
+        if (receitaProxVencimento) {
+            const { receita, diff } = receitaProxVencimento;
+            alertas.push({
+                type: 'warning',
+                icon: 'fa-file-prescription',
+                title: 'Receita prestes a expirar',
+                desc: `${receita.id} vence em ${diff} dia${diff > 1 ? 's' : ''}.`,
+                link: './Pages/receitas.html',
+                linkLabel: 'Ver receitas',
+            });
+        }
+
+        // Vacinas não registradas (só mostra se não há outros alertas)
+        const naoRegistradas = VACINAS_LISTA.length - vacinasAplicadas - vacinasVencidas;
+        if (alertas.length === 0 && naoRegistradas > 0) {
+            alertas.push({
+                type: 'info',
+                icon: 'fa-info-circle',
+                title: `${naoRegistradas} vacina${naoRegistradas > 1 ? 's' : ''} sem registro`,
+                desc: 'Complete sua carteira de vacinação no histórico.',
+                link: './Pages/vacinas.html',
+                linkLabel: 'Registrar vacinas',
+            });
+        }
+
+        // Tudo em ordem
+        if (alertas.length === 0) {
+            alertas.push({
+                type: 'success',
+                icon: 'fa-check-circle',
+                title: 'Tudo em ordem!',
+                desc: 'Nenhuma pendência encontrada. Continue assim.',
+                link: null,
+            });
+        }
+
+        elAlertas.innerHTML = alertas.map(a => `
+          <div class="dash-alert-item ${a.type}">
+            <i class="fas ${a.icon} dash-alert-icon"></i>
+            <div class="dash-alert-text">
+              <strong>${a.title}</strong>
+              <span>${a.desc}</span>
+              ${a.link ? `<a href="${a.link}" style="font-size:12px;font-weight:600;color:inherit;display:inline-block;margin-top:4px;">${a.linkLabel} →</a>` : ''}
+            </div>
+          </div>`).join('');
+    }
+
+    /* ──────────────────────────────────────────
+       Consultas Recentes (últimas 3)
+       ────────────────────────────────────────── */
+
+    const elRecentes = document.getElementById('dashConsultasRecentes');
+    if (elRecentes) {
+        const recentes = [...historico]
+            .sort((a, b) => new Date(b.data) - new Date(a.data))
+            .slice(0, 3);
+
+        if (recentes.length === 0) {
+            elRecentes.innerHTML = `
+              <div class="empty-state" style="padding:20px 0;">
+                <div class="empty-state-icon">
+                  <i class="fas fa-history" style="font-size:28px;color:var(--primary-light);"></i>
+                </div>
+                <h4 style="font-size:14px;">Nenhuma consulta no histórico</h4>
+                <p>Suas consultas realizadas aparecerão aqui.</p>
+              </div>`;
+        } else {
+            elRecentes.innerHTML = recentes.map(c => {
+                const initials = c.profissional.split(' ').filter(w => /^[A-ZÀ-Ú]/.test(w)).slice(0,2).map(w => w[0]).join('');
+                return `
+                  <div class="dash-hist-item">
+                    <div class="dash-hist-avatar">${initials || '<i class="fas fa-user-md"></i>'}</div>
+                    <div class="dash-hist-body">
+                      <div class="dash-hist-name">${c.profissional}</div>
+                      <div class="dash-hist-sub">${c.especialidade} · ${c.local}</div>
+                    </div>
+                    <div class="dash-hist-right">
+                      <div class="dash-hist-date">${formatDate(c.data)}</div>
+                      ${renderStarsDisplay(c.avaliacao?.nota)}
+                    </div>
+                  </div>`;
+            }).join('');
+        }
+    }
 }
