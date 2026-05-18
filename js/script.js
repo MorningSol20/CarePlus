@@ -330,7 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const btn = document.createElement("button");
             btn.type = "button";
-            btn.className = "btn btn-outline-primary btn-sm";
+            btn.className = "btn btn-outline-primary btn-sm w-100 calendar-btn";
             btn.textContent = day;
 
             btn.addEventListener("click", () => {
@@ -483,3 +483,98 @@ if (p) {
     document.getElementById("res-profissional").textContent = p.nome;
     document.getElementById("res-especialidade").textContent = p.especialidade;
 }
+
+
+// Resumo agendamento - Preço, local e avaliação do profissional
+document.addEventListener("DOMContentLoaded", () => {
+
+    // =========================
+    // ELEMENTOS
+    // =========================
+    const btnConfirmar = document.getElementById("confirmarAgendamento");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+
+    const stepHorario = document.getElementById("step-horario");
+    const stepConfirmar = document.getElementById("step-confirmar");
+    const stepProfissional = document.getElementById("step-profissional");
+
+    const cardDataHora = document.querySelector(".col-lg-6"); // esquerda (data)
+    const cardTime = document.querySelector("#timeSlots")?.closest(".card");
+
+    const finalResumo = document.getElementById("final-resumo");
+
+    // dados do resumo
+    const resProfissional = document.getElementById("res-profissional").textContent;
+    const resEspecialidade = document.getElementById("res-especialidade").textContent;
+    const resData = document.getElementById("res-data");
+    const resHorario = document.getElementById("res-horario");
+
+    // finais
+    const finalProf = document.getElementById("final-profissional");
+    const finalEsp = document.getElementById("final-especialidade");
+    const finalData = document.getElementById("final-data");
+    const finalHora = document.getElementById("final-horario");
+    const finalLocal = document.getElementById("final-local");
+    const finalPreco = document.getElementById("final-preco");
+
+    // valores simulados
+    const local = "Clínica Central São Paulo";
+    const preco = "R$ 150,00";
+
+    // =========================
+    // CLICK CONFIRMAR
+    // =========================
+    btnConfirmar.addEventListener("click", () => {
+
+        // mostra loading
+        loadingOverlay.classList.remove("d-none");
+        loadingOverlay.classList.add("d-flex");
+
+        setTimeout(() => {
+
+            // esconde loading
+            loadingOverlay.classList.add("d-none");
+
+            // =========================
+            // ATUALIZA BREADCRUMB
+            // =========================
+            stepHorario.classList.remove("bg-primary");
+            stepHorario.classList.add("bg-success");
+
+            stepProfissional.classList.remove("bg-primary");
+            stepProfissional.classList.add("bg-success");
+
+            stepConfirmar.classList.remove("bg-secondary");
+            stepConfirmar.classList.add("bg-primary");
+
+            // =========================
+            // ESCONDE SEÇÕES
+            // =========================
+            if (cardDataHora) cardDataHora.classList.add("d-none");
+            if (cardTime) cardTime.classList.add("d-none");
+
+            // =========================
+            // MOSTRA RESUMO FINAL
+            // =========================
+            finalResumo.classList.remove("d-none");
+
+            // =========================
+            // PREENCHER FINAL
+            // =========================
+            finalProf.textContent = resProfissional;
+            finalEsp.textContent = resEspecialidade;
+
+            finalData.textContent = resData.textContent;
+            finalHora.textContent = resHorario.textContent;
+
+            finalLocal.textContent = local;
+            finalPreco.textContent = preco;
+
+            // opcional: esconder botão
+            btnConfirmar.classList.add("d-none");
+
+        }, 3000); // 5 segundos loading
+
+    });
+
+});

@@ -31,7 +31,12 @@ body {
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
   color: var(--text-primary);
@@ -402,9 +407,17 @@ body.sidebar-collapsed .main-wrapper {
   gap: 24px;
 }
 
-.grid-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
 
 /* =========================
    RESPONSIVIDADE
@@ -432,17 +445,34 @@ body.sidebar-collapsed .main-wrapper {
     padding: 16px;
   }
 
-  .grid-4, .grid-3 {
+  .grid-4,
+  .grid-3 {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .grid-4, .grid-3, .grid-2 {
+
+  .grid-4,
+  .grid-3,
+  .grid-2 {
     grid-template-columns: 1fr;
   }
-  
+
   .hero-content {
     grid-template-columns: 1fr;
+  }
+}
+
+.calendar-btn {
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  font-size: 0.85rem;
+  min-width: 0;
+}
+
+@media (max-width: 576px) {
+  .calendar-btn {
+    font-size: 0.75rem;
   }
 }
