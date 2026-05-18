@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeToggleSwitches();
     initializeSearch();
     loadProfissionalData();
+    initializeVacinaForm();
+    loadVacinas();
 });
 
 /* ============================================================
@@ -433,4 +435,235 @@ function loadProfissionalData() {
     const espEl  = document.getElementById('res-especialidade');
     if (nomeEl) nomeEl.textContent = p.nome;
     if (espEl)  espEl.textContent  = p.especialidade;
+}
+
+/* ============================================================
+   VACINAS — Registro e Listagem
+   ============================================================ */
+
+/**
+ * Retorna todas as vacinas salvas no localStorage.
+ * @returns {Array}
+ */
+function getVacinas() {
+    try {
+        return JSON.parse(localStorage.getItem('careplus_vacinas') || '[]');
+    } catch {
+        return [];
+    }
+}
+
+/**
+ * Salva o array de vacinas no localStorage.
+ * @param {Array} vacinas
+ */
+function saveVacinas(vacinas) {
+    localStorage.setItem('careplus_vacinas', JSON.stringify(vacinas));
+}
+
+/**
+ * Formata uma string ISO (YYYY-MM-DD) para DD/MM/YYYY.
+ * @param {string} iso
+ * @returns {string}
+ */
+function formatDate(iso) {
+    if (!iso) return '—';
+    const [y, m, d] = iso.split('-');
+    return `${d}/${m}/${y}`;
+}
+
+/**
+ * Retorna o HTML do badge para um status de vacina.
+ * @param {string} status
+ * @returns {string}
+ */
+function vacinaBadge(status) {
+    const map = {
+        completa: { cls: 'badge-success', icon: 'fa-check-circle',      label: 'Completa' },
+        pendente: { cls: 'badge-warning', icon: 'fa-clock',             label: 'Pendente' },
+        vencida:  { cls: 'badge-danger',  icon: 'fa-exclamation-circle', label: 'Vencida'  },
+    };
+    const s = map[status] || { cls: 'badge-gray', icon: 'fa-question-circle', label: status };
+    return `<span class="badge ${s.cls}"><i class="fas ${s.icon}"></i>${s.label}</span>`;
+}
+
+/* ── Formulário de registro (registro-vacina.html) ── */
+
+function initializeVacinaForm() {
+    const form = document.getElementById('vacinaForm');
+    if (!form) return;
+
+    // Preview em tempo real
+    const fields = {
+        nome:          document.getElementById('vacinaNome'),
+        status:        document.getElementById('vacinaStatus'),
+        dataAplicacao: document.getElementById('vacinaAplicacao'),
+        validade:      document.getElementById('vacinaValidade'),
+        dataRenovacao: document.getElementById('vacinaRenovacao'),
+    };
+
+    const preview = {
+        nome:      document.getElementById('previewNome'),
+        status:    document.getElementById('previewStatus'),
+        aplicacao: document.getElementById('previewAplicacao'),
+        validade:  document.getElementById('previewValidade'),
+        renovacao: document.getElementById('previewRenovacao'),
+    };
+
+    const statusLabels = {
+        completa: { cls: 'badge-success', label: 'Completa' },
+        pendente: { cls: 'badge-warning', label: 'Pendente' },
+        vencida:  { cls: 'badge-danger',  label: 'Vencida'  },
+    };
+
+    function updatePreview() {
+        // Nome
+        if (preview.nome) {
+            const val = fields.nome ? fields.nome.value.trim() : '';
+            preview.nome.textContent = val || '—';
+            preview.nome.classList.toggle('placeholder', !val);
+        }
+
+        // Status
+        if (preview.status && fields.status) {
+            const s = statusLabels[fields.status.value];
+            if (s) {
+                preview.status.innerHTML = `<span class="badge ${s.cls}">${s.label}</span>`;
+            } else {
+                preview.status.innerHTML = `<span class="badge badge-gray">—</span>`;
+            }
+        }
+
+        // Datas
+        [
+            [fields.dataAplicacao, preview.aplicacao],
+            [fields.validade,      preview.validade],
+            [fields.dataRenovacao, preview.renovacao],
+        ].forEach(([input, el]) => {
+            if (!input || !el) return;
+            const val = formatDate(input.value);
+            el.textContent = val;
+            el.classList.toggle('placeholder', !input.value);
+        });
+    }
+
+    // Escuta mudanças em todos os campos
+    Object.values(fields).forEach(f => {
+        if (f) f.addEventListener('input', updatePreview);
+        if (f) f.addEventListener('change', updatePreview);
+    });
+
+    // Submit
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const nome   = fields.nome   ? fields.nome.value.trim()   : '';
+        const status = fields.status ? fields.status.value.trim() : '';
+
+        // Validação básica
+        if (!nome) {
+            showFieldError(fields.nome, 'Informe o nome da vacina.');
+            fields.nome.focus();
+            return;
+        }
+        if (!status) {
+            showFieldError(fields.status, 'Selecione o status da vacina.');
+            fields.status.focus();
+            return;
+        }
+
+        const vacina = {
+            id:            Date.now(),
+            nome,
+            status,
+            dataAplicacao: fields.dataAplicacao ? fields.dataAplicacao.value : '',
+            validade:      fields.validade      ? fields.validade.value      : '',
+            dataRenovacao: fields.dataRenovacao ? fields.dataRenovacao.value : '',
+        };
+
+        const vacinas = getVacinas();
+        vacinas.push(vacina);
+        saveVacinas(vacinas);
+
+        // Feedback visual
+        const btn = document.getElementById('btnRegistrar');
+        if (btn) {
+            btn.disabled  = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando…';
+        }
+
+        const toast = document.getElementById('toastSucesso');
+        if (toast) {
+            toast.classList.add('show');
+        }
+
+        setTimeout(() => {
+            window.location.href = './vacinas.html';
+        }, 1200);
+    });
+}
+
+/* ── Listagem de vacinas (vacinas.html) ── */
+
+function loadVacinas() {
+    const tbody      = document.getElementById('vacinasTableBody');
+    const emptyState = document.getElementById('vacinasEmptyState');
+    const statC      = document.getElementById('statCompletas');
+    const statP      = document.getElementById('statPendentes');
+    const statV      = document.getElementById('statVencidas');
+
+    if (!tbody) return;
+
+    const vacinas = getVacinas();
+
+    // Contadores
+    const counts = { completa: 0, pendente: 0, vencida: 0 };
+    vacinas.forEach(v => { if (counts[v.status] !== undefined) counts[v.status]++; });
+
+    if (statC) statC.textContent = counts.completa;
+    if (statP) statP.textContent = counts.pendente;
+    if (statV) statV.textContent = counts.vencida;
+
+    // Tabela / empty state
+    if (vacinas.length === 0) {
+        if (emptyState) emptyState.style.display = '';
+        return;
+    }
+
+    if (emptyState) emptyState.style.display = 'none';
+
+    tbody.innerHTML = vacinas.map(v => `
+        <tr>
+          <td>
+            <span style="font-weight:600;">${v.nome}</span>
+          </td>
+          <td>${vacinaBadge(v.status)}</td>
+          <td>${formatDate(v.dataAplicacao)}</td>
+          <td>${formatDate(v.dataRenovacao) !== '—'
+                ? formatDate(v.dataRenovacao)
+                : '<span style="color:var(--text-muted);font-size:12px;">Não informado</span>'
+              }</td>
+          <td>
+            <div style="display:flex;gap:6px;">
+              <button
+                class="btn-ghost btn-sm"
+                title="Excluir"
+                onclick="excluirVacina(${v.id})"
+                style="color:var(--danger);padding:5px 8px;">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+    `).join('');
+}
+
+/**
+ * Remove uma vacina pelo ID e recarrega a listagem.
+ * @param {number} id
+ */
+function excluirVacina(id) {
+    const vacinas = getVacinas().filter(v => v.id !== id);
+    saveVacinas(vacinas);
+    loadVacinas();
 }

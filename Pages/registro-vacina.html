@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar Vacina — Care Plus</title>
+  <link rel="icon" href="../images/favicon.png" type="image/png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* --- Estilos locais da tela de registro --- */
+
+    .form-select {
+      width: 100%; padding: 10px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-size: 14px; font-family: inherit;
+      color: var(--text-primary); background: var(--white);
+      transition: border-color var(--ease-fast), box-shadow var(--ease-fast);
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    .form-select:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+    }
+
+    /* Indicador de status no select */
+    .status-indicator {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; padding: 5px 12px;
+      border-radius: var(--radius-full);
+    }
+    .status-indicator.completa  { background: var(--success-100); color: #065f46; }
+    .status-indicator.pendente  { background: var(--warning-100); color: #92400e; }
+    .status-indicator.vencida   { background: var(--danger-100);  color: #991b1b; }
+
+    /* Preview card */
+    .preview-card {
+      background: var(--primary-50);
+      border: 1.5px solid var(--primary-100);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+    .preview-card-title {
+      font-size: 12px; font-weight: 700; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--primary);
+      margin-bottom: 16px;
+    }
+    .preview-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--primary-100);
+      gap: 8px;
+    }
+    .preview-row:last-child { border-bottom: none; }
+    .preview-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+    .preview-value { font-size: 13px; font-weight: 600; color: var(--text-primary); text-align: right; }
+    .preview-value.placeholder { color: var(--text-muted); font-weight: 400; font-style: italic; }
+
+    /* Separador de seção */
+    .form-section-title {
+      font-size: 13px; font-weight: 700; color: var(--text-secondary);
+      letter-spacing: .05em; text-transform: uppercase;
+      margin-bottom: 16px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Campo com hint */
+    .form-hint {
+      font-size: 11px; color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Botões de ação do formulário */
+    .form-actions {
+      display: flex; gap: 12px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+      margin-top: 24px;
+    }
+    @media (max-width: 640px) {
+      .form-actions { flex-direction: column-reverse; }
+      .form-actions .btn-primary,
+      .form-actions .btn-outline { width: 100%; justify-content: center; }
+    }
+
+    /* Toast de sucesso */
+    .toast-success {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--success); color: #fff;
+      padding: 14px 20px; border-radius: var(--radius);
+      font-weight: 600; font-size: 14px;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 24px rgba(16,185,129,.35);
+      z-index: 9999;
+      transform: translateY(20px); opacity: 0;
+      transition: all .3s cubic-bezier(.34,1.56,.64,1);
+      pointer-events: none;
+    }
+    .toast-success.show { transform: translateY(0); opacity: 1; }
+  </style>
+</head>
+
+<body data-page="vacinas">
+
+  <div class="sidebar-overlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">CP</div>
+      <div class="sidebar-info">
+        <div class="sidebar-title">Care Plus</div>
+        <div class="sidebar-subtitle">Saúde em Primeiro Lugar</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Principal</span>
+
+      <a href="../dashboard.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span class="nav-item-label">Início</span>
+      </a>
+      <a href="./vacinas.html" class="nav-item">
+        <i class="fas fa-syringe"></i>
+        <span class="nav-item-label">Vacinas</span>
+      </a>
+      <a href="./receitas.html" class="nav-item">
+        <i class="fas fa-file-prescription"></i>
+        <span class="nav-item-label">Receitas</span>
+      </a>
+      <a href="./profissionais.html" class="nav-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span class="nav-item-label">Agendar</span>
+      </a>
+      <a href="./historico.html" class="nav-item">
+        <i class="fas fa-history"></i>
+        <span class="nav-item-label">Histórico</span>
+      </a>
+
+      <span class="nav-section-label">Conta</span>
+
+      <a href="./notificacoes.html" class="nav-item">
+        <i class="fas fa-bell"></i>
+        <span class="nav-item-label">Notificações</span>
+      </a>
+      <a href="./configuracoes.html" class="nav-item">
+        <i class="fas fa-cog"></i>
+        <span class="nav-item-label">Configurações</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="../index.html" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Sair</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Wrapper -->
+  <div class="main-wrapper">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="toggle-btn" title="Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <span class="topbar-title">Registrar Vacina</span>
+      </div>
+      <div class="topbar-right">
+        <a href="./notificacoes.html" class="notification-btn" title="Notificações">
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge"></span>
+        </a>
+        <a href="./configuracoes.html" class="notification-btn" title="Configurações">
+          <i class="fas fa-cog"></i>
+        </a>
+        <div class="user-avatar">JS</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-header-text">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+            <a href="./vacinas.html" class="btn-ghost btn-sm" style="padding:6px 10px;">
+              <i class="fas fa-arrow-left"></i>
+              Voltar
+            </a>
+          </div>
+          <h1>Registrar Vacina</h1>
+          <p>Preencha os dados da vacina para adicioná-la à sua carteira</p>
+        </div>
+      </div>
+
+      <!-- Layout: formulário + preview -->
+      <div class="row g-4">
+
+        <!-- Formulário -->
+        <div class="col-12 col-lg-7">
+          <div class="card">
+            <form id="vacinaForm" novalidate>
+
+              <!-- Seção: Identificação -->
+              <div class="form-section-title">
+                <i class="fas fa-syringe" style="margin-right:6px; color:var(--primary);"></i>
+                Identificação
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="vacinaNome">Nome da Vacina <span style="color:var(--danger)">*</span></label>
+                <input
+                  type="text"
+                  id="vacinaNome"
+                  name="nome"
+                  class="form-control"
+                  placeholder="Ex.: Influenza, Hepatite B, COVID-19…"
+                  autocomplete="off"
+                  list="vacinaSugestoes"
+                  required
+                >
+                <datalist id="vacinaSugestoes">
+                  <option value="BCG">
+                  <option value="Hepatite A">
+                  <option value="Hepatite B">
+                  <option value="Tríplice Bacteriana (DTPa)">
+                  <option value="Tetravalente (DTP + Hib)">
+                  <option value="Pentavalente">
+                  <option value="Poliomielite (VIP)">
+                  <option value="Pneumocócica 10-Valente">
+                  <option value="Pneumocócica 23-Valente">
+                  <option value="Rotavírus">
+                  <option value="Meningocócica C">
+                  <option value="Meningocócica ACWY">
+                  <option value="Febre Amarela">
+                  <option value="Tríplice Viral (SCR)">
+                  <option value="Varicela">
+                  <option value="HPV Quadrivalente">
+                  <option value="HPV Bivalente">
+                  <option value="Influenza">
+                  <option value="Tétano (dT)">
+                  <option value="COVID-19 (Coronavac)">
+                  <option value="COVID-19 (Pfizer)">
+                  <option value="COVID-19 (AstraZeneca)">
+                  <option value="Dengue">
+                  <option value="Herpes Zóster">
+                </datalist>
+                <p class="form-hint">Digite ou selecione entre as vacinas sugeridas</p>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label" for="vacinaStatus">Status <span style="color:var(--danger)">*</span></label>
+                <select id="vacinaStatus" name="status" class="form-select" required>
+                  <option value="" disabled selected>Selecione o status</option>
+                  <option value="completa">Completa</option>
+                  <option value="pendente">Pendente</option>
+                  <option value="vencida">Vencida</option>
+                </select>
+              </div>
+
+              <!-- Seção: Datas -->
+              <div class="form-section-title" style="margin-top:8px;">
+                <i class="fas fa-calendar-alt" style="margin-right:6px; color:var(--primary);"></i>
+                Datas
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-12 col-sm-6">
+                  <label class="form-label" for="vacinaAplicacao">Data de Aplicação</label>
+                  <input type="date" id="vacinaAplicacao" name="dataAplicacao" class="form-control">
+                  <p class="form-hint">Quando foi aplicada</p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label class="form-label" for="vacinaValidade">Validade</label>
+                  <input type="date" id="vacinaValidade" name="validade" class="form-control">
+                  <p class="form-hint">Data de vencimento da dose</p>
+                </div>
+              </div>
+
+              <div class="row g-3 mb-2">
+                <div class="col-12 col-sm-6">
+                  <label class="form-label" for="vacinaRenovacao">Data de Renovação</label>
+                  <input type="date" id="vacinaRenovacao" name="dataRenovacao" class="form-control">
+                  <p class="form-hint">Próxima dose ou reforço</p>
+                </div>
+              </div>
+
+              <!-- Ações -->
+              <div class="form-actions">
+                <a href="./vacinas.html" class="btn-outline">
+                  <i class="fas fa-times"></i>
+                  Cancelar
+                </a>
+                <button type="submit" class="btn-primary" id="btnRegistrar">
+                  <i class="fas fa-save"></i>
+                  Registrar Vacina
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="col-12 col-lg-5">
+
+          <!-- Card de resumo -->
+          <div class="preview-card mb-3">
+            <div class="preview-card-title">
+              <i class="fas fa-eye" style="margin-right:5px;"></i>
+              Pré-visualização
+            </div>
+
+            <div class="preview-row">
+              <span class="preview-label">Nome</span>
+              <span class="preview-value placeholder" id="previewNome">—</span>
+            </div>
+            <div class="preview-row">
+              <span class="preview-label">Status</span>
+              <span id="previewStatus">
+                <span class="badge badge-gray">—</span>
+              </span>
+            </div>
+            <div class="preview-row">
+              <span class="preview-label">Data de Aplicação</span>
+              <span class="preview-value placeholder" id="previewAplicacao">—</span>
+            </div>
+            <div class="preview-row">
+              <span class="preview-label">Validade</span>
+              <span class="preview-value placeholder" id="previewValidade">—</span>
+            </div>
+            <div class="preview-row">
+              <span class="preview-label">Próxima Renovação</span>
+              <span class="preview-value placeholder" id="previewRenovacao">—</span>
+            </div>
+          </div>
+
+          <!-- Dicas -->
+          <div class="card" style="border-color:var(--info-100); background:var(--info-50);">
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:36px;height:36px;background:var(--info-100);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <i class="fas fa-lightbulb" style="color:#0369a1;font-size:15px;"></i>
+              </div>
+              <div>
+                <h4 style="font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text-primary);">Dicas de preenchimento</h4>
+                <ul style="font-size:12px;color:var(--text-secondary);padding-left:14px;margin:0;line-height:1.8;">
+                  <li>O <strong>nome</strong> e o <strong>status</strong> são obrigatórios</li>
+                  <li>Use a <strong>data de aplicação</strong> para registrar quando foi vacinado</li>
+                  <li>A <strong>validade</strong> é a data de vencimento da dose aplicada</li>
+                  <li>A <strong>renovação</strong> indica quando você deve tomar a próxima dose</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <div class="mobile-bottom-nav-inner">
+      <a href="../dashboard.html" class="mobile-nav-item" data-page-link="dashboard">
+        <i class="fas fa-home"></i>
+        <span>Início</span>
+      </a>
+      <a href="./vacinas.html" class="mobile-nav-item" data-page-link="vacinas">
+        <i class="fas fa-syringe"></i>
+        <span>Vacinas</span>
+      </a>
+      <a href="./profissionais.html" class="mobile-nav-item" data-page-link="profissionais">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Agendar</span>
+      </a>
+      <a href="./receitas.html" class="mobile-nav-item" data-page-link="receitas">
+        <i class="fas fa-file-prescription"></i>
+        <span>Receitas</span>
+      </a>
+      <a href="./historico.html" class="mobile-nav-item" data-page-link="historico">
+        <i class="fas fa-history"></i>
+        <span>Histórico</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Toast de sucesso -->
+  <div class="toast-success" id="toastSucesso">
+    <i class="fas fa-check-circle"></i>
+    Vacina registrada com sucesso!
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/script.js"></script>
+</body>
+</html>

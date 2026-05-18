@@ -102,10 +102,10 @@
           <p>Acompanhe seu histórico e próximas doses</p>
         </div>
         <div class="page-header-actions">
-          <button class="btn-primary">
+          <a href="./registro-vacina.html" class="btn-primary">
             <i class="fas fa-plus"></i>
             Registrar Vacina
-          </button>
+          </a>
         </div>
       </div>
 
@@ -118,7 +118,7 @@
           </div>
           <div class="stat-card-info">
             <div class="stat-card-label">Completas</div>
-            <div class="stat-card-value">0</div>
+            <div class="stat-card-value" id="statCompletas">0</div>
           </div>
         </div>
 
@@ -128,7 +128,7 @@
           </div>
           <div class="stat-card-info">
             <div class="stat-card-label">Pendentes</div>
-            <div class="stat-card-value">0</div>
+            <div class="stat-card-value" id="statPendentes">0</div>
           </div>
         </div>
 
@@ -138,7 +138,7 @@
           </div>
           <div class="stat-card-info">
             <div class="stat-card-label">Vencidas</div>
-            <div class="stat-card-value">0</div>
+            <div class="stat-card-value" id="statVencidas">0</div>
           </div>
         </div>
 
@@ -168,16 +168,16 @@
         </div>
 
         <!-- Empty State -->
-        <div class="empty-state">
+        <div class="empty-state" id="vacinasEmptyState">
           <div class="empty-state-icon">
             <img src="../images/syringe.png" alt="Vacinas">
           </div>
           <h4>Nenhuma vacina registrada</h4>
           <p>Quando houver vacinas cadastradas, elas aparecerão aqui para acompanhamento.</p>
-          <button class="btn-primary btn-sm">
+          <a href="./registro-vacina.html" class="btn-primary btn-sm">
             <i class="fas fa-plus"></i>
             Registrar Primeira Vacina
-          </button>
+          </a>
         </div>
 
       </div>
