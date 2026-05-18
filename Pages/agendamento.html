@@ -1,110 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" href="../images/favicon.png" type="image/png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agendamento - Care Plus</title>
+  <title>Agendamento — Care Plus</title>
+  <link rel="icon" href="../images/favicon.png" type="image/png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../css/style.css">
-  <style>
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-
-    .calendar-day {
-      aspect-ratio: 1;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 13px;
-      transition: all 0.15s ease;
-      background: white;
-    }
-
-    .calendar-day:hover:not(:disabled) {
-      border-color: var(--primary);
-      background-color: #eff6ff;
-    }
-
-    .calendar-day.available {
-      cursor: pointer;
-    }
-
-    .calendar-day.selected {
-      background-color: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-
-    .calendar-day:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      background-color: #f9fafb;
-    }
-
-    .time-slots {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-
-    .time-slot {
-      padding: 12px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background: white;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 13px;
-      transition: all 0.15s ease;
-    }
-
-    .time-slot:hover {
-      border-color: var(--primary);
-      background-color: #eff6ff;
-    }
-
-    .time-slot.selected {
-      background-color: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-
-    .confirmation-section {
-      display: none;
-      background-color: #f0fdf4;
-      border: 1px solid #86efac;
-      border-radius: 12px;
-      padding: 24px;
-      margin-top: 24px;
-    }
-
-    .confirmation-section.show {
-      display: block;
-    }
-  </style>
 </head>
 
-<body data-page="agendamento">
+<body data-page="profissionais">
+
   <div class="sidebar-overlay"></div>
 
-
   <!-- Sidebar -->
-  <aside class="sidebar mobile-hidden">
+  <aside class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">CP</div>
       <div class="sidebar-info">
@@ -114,29 +26,38 @@
     </div>
 
     <nav class="sidebar-nav">
+      <span class="nav-section-label">Principal</span>
+
       <a href="../dashboard.html" class="nav-item">
         <i class="fas fa-home"></i>
         <span class="nav-item-label">Início</span>
       </a>
-
-      <a href="../Pages/vacinas.html" class="nav-item">
+      <a href="./vacinas.html" class="nav-item">
         <i class="fas fa-syringe"></i>
         <span class="nav-item-label">Vacinas</span>
       </a>
-
-      <a href="../Pages/receitas.html" class="nav-item">
-        <i class="fas fa-file-medical"></i>
+      <a href="./receitas.html" class="nav-item">
+        <i class="fas fa-file-prescription"></i>
         <span class="nav-item-label">Receitas</span>
       </a>
-
-      <a href="../Pages/profissionais.html" class="nav-item active">
-        <i class="fas fa-calendar"></i>
+      <a href="./profissionais.html" class="nav-item">
+        <i class="fas fa-calendar-alt"></i>
         <span class="nav-item-label">Agendar</span>
       </a>
-
-      <a href="../Pages/historico.html" class="nav-item">
-        <i class="fas fa-clock"></i>
+      <a href="./historico.html" class="nav-item">
+        <i class="fas fa-history"></i>
         <span class="nav-item-label">Histórico</span>
+      </a>
+
+      <span class="nav-section-label">Conta</span>
+
+      <a href="./notificacoes.html" class="nav-item">
+        <i class="fas fa-bell"></i>
+        <span class="nav-item-label">Notificações</span>
+      </a>
+      <a href="./configuracoes.html" class="nav-item">
+        <i class="fas fa-cog"></i>
+        <span class="nav-item-label">Configurações</span>
       </a>
     </nav>
 
@@ -148,212 +69,168 @@
     </div>
   </aside>
 
-  <!-- Main Wrapper (Contém Topbar e Content) -->
-  <main class="main-wrapper">
-    <!-- Top Bar -->
+  <!-- Main Wrapper -->
+  <div class="main-wrapper">
+
+    <!-- Topbar -->
     <header class="topbar">
       <div class="topbar-left">
-        <!-- Botão de Controle Único -->
-        <button class="toggle-btn">
+        <button class="toggle-btn" title="Menu">
           <i class="fas fa-bars"></i>
         </button>
+        <span class="topbar-title">Agendar Consulta</span>
       </div>
       <div class="topbar-right">
         <a href="./notificacoes.html" class="notification-btn" title="Notificações">
-          <i class="fas fa-bell"></i> <span class="notification-badge"></span>
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge"></span>
         </a>
         <a href="./configuracoes.html" class="notification-btn" title="Configurações">
           <i class="fas fa-cog"></i>
         </a>
-        <div class="user-avatar">JD</div>
+        <div class="user-avatar">JS</div>
       </div>
     </header>
 
-    <!-- breadcrumb -->
-    <div class="container mb-3 p-3">
-
-      <div class="d-flex justify-content-between align-items-center">
-
-        <!-- Step 1 -->
-        <div class="text-center flex-fill">
-          <div id="step-profissional"
-            class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto"
-            style="width: 36px; height: 36px;">
-            <i class="fas fa-user"></i>
-          </div>
-          <small class="d-block mt-1 fw-semibold text-muted">Profissional</small>
-        </div>
-
-        <!-- Line -->
-        <div class="flex-fill border-top mx-2"></div>
-
-        <!-- Step 2 -->
-        <div class="text-center flex-fill">
-          <div id="step-horario"
-            class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto"
-            style="width: 36px; height: 36px;">
-            <i class="fas fa-clock"></i>
-          </div>
-          <small class="d-block mt-1 fw-semibold">Data & Hora</small>
-        </div>
-
-        <!-- Line -->
-        <div class="flex-fill border-top mx-2"></div>
-
-        <!-- Step 3 -->
-        <div class="text-center flex-fill">
-          <div id="step-confirmar"
-            class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto"
-            style="width: 36px; height: 36px;">
-            <i class="fas fa-check"></i>
-          </div>
-          <small class="d-block mt-1 fw-semibold text-muted">Confirmar</small>
-        </div>
-
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+      <div class="step-item">
+        <div class="step-circle done"><i class="fas fa-check"></i></div>
+        <span class="step-label done">Profissional</span>
+      </div>
+      <div class="step-line done"></div>
+      <div class="step-item">
+        <div class="step-circle active"><i class="fas fa-clock"></i></div>
+        <span class="step-label active">Data & Hora</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item">
+        <div class="step-circle pending"><i class="fas fa-check"></i></div>
+        <span class="step-label">Confirmar</span>
       </div>
     </div>
 
     <!-- Main Content -->
-    <main class="container py-4">
+    <main class="main-content">
 
-      <!-- Header -->
-      <div class="mb-4">
-        <h1 class="fw-bold mb-1">Agendar Consulta</h1>
-        <p class="text-muted mb-0">
-          Escolha um profissional e horário disponível
-        </p>
+      <div class="page-header">
+        <div class="page-header-text">
+          <h1>Selecione Data e Horário</h1>
+          <p>Escolha o melhor momento para sua consulta</p>
+        </div>
+        <a href="./profissionais.html" class="btn-outline btn-sm">
+          <i class="fas fa-arrow-left"></i>
+          Voltar
+        </a>
       </div>
 
       <div class="row g-4">
 
-        <!-- Left Column -->
+        <!-- Coluna Esquerda: Calendário -->
         <div class="col-12 col-lg-6">
-
-          <!-- Date Selection -->
-          <div class="card border-0 shadow-sm rounded-4 p-3">
-            <h5 class="fw-semibold mb-3">Selecione a Data</h5>
-            <!-- Weekdays -->
-            <div class="d-grid text-center small fw-semibold text-muted mb-2"
-              style="grid-template-columns: repeat(7, 1fr);">
-              <div>Dom</div>
-              <div>Seg</div>
-              <div>Ter</div>
-              <div>Qua</div>
-              <div>Qui</div>
-              <div>Sex</div>
-              <div>Sab</div>
+          <div class="card">
+            <div class="calendar-header">
+              <h5 class="calendar-month" id="calendarTitle">Carregando...</h5>
             </div>
 
-            <!-- Calendar -->
-            <div id="calendar" class="d-grid gap-1 gap-md-2" style="grid-template-columns: repeat(7, minmax(0, 1fr));">
+            <div class="calendar-weekdays">
+              <div class="calendar-weekday">Dom</div>
+              <div class="calendar-weekday">Seg</div>
+              <div class="calendar-weekday">Ter</div>
+              <div class="calendar-weekday">Qua</div>
+              <div class="calendar-weekday">Qui</div>
+              <div class="calendar-weekday">Sex</div>
+              <div class="calendar-weekday">Sáb</div>
             </div>
-            <!-- Selected date -->
+
+            <div id="calendar" class="calendar-days"></div>
             <input type="hidden" id="selectedDate" name="selectedDate">
           </div>
         </div>
 
-        <!-- Right Column -->
+        <!-- Coluna Direita: Horários + Resumo -->
         <div class="col-12 col-lg-6">
 
-          <!-- Time Selection -->
-          <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
-            <h5 class="fw-semibold mb-3">Selecione o Horário</h5>
-            <div id="timeSlots" class="d-flex flex-wrap gap-2"></div>
+          <!-- Horários -->
+          <div class="card" style="margin-bottom:20px;">
+            <h5 style="font-size:15px;font-weight:600;margin-bottom:16px;">
+              <i class="fas fa-clock" style="color:var(--primary);margin-right:6px;"></i>
+              Horários Disponíveis
+            </h5>
+            <div id="timeSlots" class="time-slots"></div>
             <input type="hidden" id="selectedTime" name="selectedTime">
           </div>
-        </div>
 
-        <!-- Confirmation -->
-        <div class="card border-0 shadow-sm rounded-4 p-3">
+          <!-- Resumo -->
+          <div class="card" style="border:1.5px solid var(--success-100);background:var(--success-50);">
+            <h5 style="font-size:15px;font-weight:600;margin-bottom:16px;color:var(--success);">
+              <i class="fas fa-clipboard-list" style="margin-right:6px;"></i>
+              Resumo da Consulta
+            </h5>
 
-          <h5 class="fw-semibold text-success mb-3">Resumo da Consulta</h5>
+            <div style="display:flex;flex-direction:column;gap:12px;">
 
-          <div class="d-flex flex-column gap-3">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--success-100);">
+                <span style="font-size:13px;color:var(--text-secondary);">Profissional</span>
+                <span style="font-size:14px;font-weight:600;" id="res-profissional">—</span>
+              </div>
 
-            <div class="d-flex justify-content-between border-bottom pb-2">
-              <span class="text-muted">Profissional</span>
-              <span class="fw-semibold" id="res-profissional">Dra. Ana Silva</span>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--success-100);">
+                <span style="font-size:13px;color:var(--text-secondary);">Especialidade</span>
+                <span style="font-size:14px;font-weight:600;" id="res-especialidade">—</span>
+              </div>
+
+              <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--success-100);">
+                <span style="font-size:13px;color:var(--text-secondary);">Data</span>
+                <span style="font-size:14px;font-weight:600;" id="res-data">—</span>
+              </div>
+
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-size:13px;color:var(--text-secondary);">Horário</span>
+                <span style="font-size:14px;font-weight:600;" id="res-horario">—</span>
+              </div>
+
             </div>
 
-            <div class="d-flex justify-content-between border-bottom pb-2">
-              <span class="text-muted">Especialidade</span>
-              <span class="fw-semibold" id="res-especialidade">Clínico Geral</span>
-            </div>
-
-            <div class="d-flex justify-content-between border-bottom pb-2">
-              <span class="text-muted">Data</span>
-              <span class="fw-semibold" id="res-data">--</span>
-            </div>
-
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Horário</span>
-              <span class="fw-semibold" id="res-horario">--</span>
-            </div>
-
+            <button class="btn-success btn-w100" style="margin-top:20px;">
+              <i class="fas fa-calendar-check"></i>
+              Confirmar Agendamento
+            </button>
           </div>
 
-          <div class="d-none mt-3" id="final-resumo">
-
-            <div class="alert alert-success rounded-3">
-
-              <h6 class="fw-bold mb-3">Agendamento Confirmado</h6>
-
-              <div class="d-flex justify-content-between mb-2">
-                <span>Profissional</span>
-                <span class="fw-semibold" id="final-profissional"></span>
-              </div>
-
-              <div class="d-flex justify-content-between mb-2">
-                <span>Especialidade</span>
-                <span class="fw-semibold" id="final-especialidade"></span>
-              </div>
-
-              <div class="d-flex justify-content-between mb-2">
-                <span>Local</span>
-                <span class="fw-semibold" id="final-local"></span>
-              </div>
-
-              <div class="d-flex justify-content-between mb-2">
-                <span>Data</span>
-                <span class="fw-semibold" id="final-data"></span>
-              </div>
-
-              <div class="d-flex justify-content-between mb-2">
-                <span>Horário</span>
-                <span class="fw-semibold" id="final-horario"></span>
-              </div>
-
-              <div class="d-flex justify-content-between mt-3 border-top pt-2">
-                <span class="fw-bold">Valor</span>
-                <span class="fw-bold text-success" id="final-preco"></span>
-              </div>
-
-            </div>
-
-          </div>
-          <button class="btn btn-success w-100 mt-3 d-flex align-items-center justify-content-center gap-2"
-            id="confirmarAgendamento">
-            <i class="fas fa-check"></i>
-            Confirmar Agendamento
-          </button>
-
         </div>
-
       </div>
+
     </main>
-  </main>
-  <!-- LOADING OVERLAY -->
-  <div id="loadingOverlay"
-    class="position-fixed top-0 start-0 w-100 h-100 d-none align-items-center justify-content-center bg-success"
-    style="z-index: 9999;">
-    <div class="text-center">
-      <div class="spinner-border text-light" role="status"></div>
-      <p class="mt-3 fw-semibold text-light">Confirmando agendamento...</p>
-    </div>
   </div>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <div class="mobile-bottom-nav-inner">
+      <a href="../dashboard.html" class="mobile-nav-item" data-page-link="dashboard">
+        <i class="fas fa-home"></i>
+        <span>Início</span>
+      </a>
+      <a href="./vacinas.html" class="mobile-nav-item" data-page-link="vacinas">
+        <i class="fas fa-syringe"></i>
+        <span>Vacinas</span>
+      </a>
+      <a href="./profissionais.html" class="mobile-nav-item" data-page-link="profissionais">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Agendar</span>
+      </a>
+      <a href="./receitas.html" class="mobile-nav-item" data-page-link="receitas">
+        <i class="fas fa-file-prescription"></i>
+        <span>Receitas</span>
+      </a>
+      <a href="./historico.html" class="mobile-nav-item" data-page-link="historico">
+        <i class="fas fa-history"></i>
+        <span>Histórico</span>
+      </a>
+    </div>
+  </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/script.js"></script>
 </body>
-
 </html>

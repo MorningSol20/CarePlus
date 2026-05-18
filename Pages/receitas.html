@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" href="../images/favicon.png" type="image/png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Receitas - Care Plus</title>
+  <title>Receitas — Care Plus</title>
+  <link rel="icon" href="../images/favicon.png" type="image/png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body data-page="receitas">
+
   <div class="sidebar-overlay"></div>
 
   <!-- Sidebar -->
-  <aside class="sidebar mobile-hidden">
+  <aside class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">CP</div>
       <div class="sidebar-info">
@@ -28,29 +26,38 @@
     </div>
 
     <nav class="sidebar-nav">
+      <span class="nav-section-label">Principal</span>
+
       <a href="../dashboard.html" class="nav-item">
         <i class="fas fa-home"></i>
         <span class="nav-item-label">Início</span>
       </a>
-
-      <a href="../Pages/vacinas.html" class="nav-item">
+      <a href="./vacinas.html" class="nav-item">
         <i class="fas fa-syringe"></i>
         <span class="nav-item-label">Vacinas</span>
       </a>
-
-      <a href="../Pages/receitas.html" class="nav-item active">
-        <i class="fas fa-file-medical"></i>
+      <a href="./receitas.html" class="nav-item">
+        <i class="fas fa-file-prescription"></i>
         <span class="nav-item-label">Receitas</span>
       </a>
-
-      <a href="../Pages/profissionais.html" class="nav-item">
-        <i class="fas fa-calendar"></i>
+      <a href="./profissionais.html" class="nav-item">
+        <i class="fas fa-calendar-alt"></i>
         <span class="nav-item-label">Agendar</span>
       </a>
-
-      <a href="../Pages/historico.html" class="nav-item">
-        <i class="fas fa-clock"></i>
+      <a href="./historico.html" class="nav-item">
+        <i class="fas fa-history"></i>
         <span class="nav-item-label">Histórico</span>
+      </a>
+
+      <span class="nav-section-label">Conta</span>
+
+      <a href="./notificacoes.html" class="nav-item">
+        <i class="fas fa-bell"></i>
+        <span class="nav-item-label">Notificações</span>
+      </a>
+      <a href="./configuracoes.html" class="nav-item">
+        <i class="fas fa-cog"></i>
+        <span class="nav-item-label">Configurações</span>
       </a>
     </nav>
 
@@ -62,113 +69,116 @@
     </div>
   </aside>
 
-  <!-- Main Wrapper (Contém Topbar e Content) -->
+  <!-- Main Wrapper -->
   <div class="main-wrapper">
-    <!-- Top Bar -->
+
+    <!-- Topbar -->
     <header class="topbar">
       <div class="topbar-left">
-        <!-- Botão de Controle Único -->
-        <button class="toggle-btn">
+        <button class="toggle-btn" title="Menu">
           <i class="fas fa-bars"></i>
         </button>
+        <span class="topbar-title">Minhas Receitas</span>
       </div>
       <div class="topbar-right">
         <a href="./notificacoes.html" class="notification-btn" title="Notificações">
-          <i class="fas fa-bell"></i> <span class="notification-badge"></span>
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge"></span>
         </a>
         <a href="./configuracoes.html" class="notification-btn" title="Configurações">
           <i class="fas fa-cog"></i>
         </a>
-        <div class="user-avatar">JD</div>
+        <div class="user-avatar">JS</div>
       </div>
     </header>
 
     <!-- Main Content -->
     <main class="main-content">
+
       <!-- Header -->
-      <div style="margin-bottom: 32px;">
-        <h1 style="font-size: 32px; font-weight: bold; margin-bottom: 8px;">Minhas Receitas</h1>
-        <p style="color: var(--text-secondary);">Acesse suas receitas medicas e prescricoes</p>
+      <div class="page-header">
+        <div class="page-header-text">
+          <h1>Minhas Receitas</h1>
+          <p>Acesse suas receitas médicas e prescrições</p>
+        </div>
       </div>
 
       <!-- Stats -->
-      <div class="row g-3 mb-4">
+      <div class="grid grid-3" style="margin-bottom:24px;">
 
-        <!-- Receitas Ativas -->
-        <div class="col-12 col-md-4">
-          <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-success">
-            <div class="card-body">
-
-              <p class="text-success fw-semibold small mb-2">
-                Receitas Ativas
-              </p>
-
-              <h2 class="fw-bold text-success mb-0">
-                0
-              </h2>
-
-            </div>
+        <div class="stat-card">
+          <div class="stat-card-icon green">
+            <i class="fas fa-file-medical"></i>
+          </div>
+          <div class="stat-card-info">
+            <div class="stat-card-label">Receitas Ativas</div>
+            <div class="stat-card-value">0</div>
           </div>
         </div>
 
-        <!-- Expiradas -->
-        <div class="col-12 col-md-4">
-          <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-warning">
-            <div class="card-body">
-
-              <p class="text-warning fw-semibold small mb-2">
-                Expiradas
-              </p>
-
-              <h2 class="fw-bold text-warning mb-0">
-                0
-              </h2>
-
-            </div>
+        <div class="stat-card">
+          <div class="stat-card-icon orange">
+            <i class="fas fa-hourglass-end"></i>
+          </div>
+          <div class="stat-card-info">
+            <div class="stat-card-label">Expiradas</div>
+            <div class="stat-card-value">0</div>
           </div>
         </div>
 
-        <!-- Total -->
-        <div class="col-12 col-md-4">
-          <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-danger">
-            <div class="card-body">
-
-              <p class="text-danger fw-semibold small mb-2">
-                Total de Receitas
-              </p>
-
-              <h2 class="fw-bold text-danger mb-0">
-                0
-              </h2>
-
-            </div>
+        <div class="stat-card">
+          <div class="stat-card-icon blue">
+            <i class="fas fa-layer-group"></i>
           </div>
+          <div class="stat-card-info">
+            <div class="stat-card-label">Total</div>
+            <div class="stat-card-value">0</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Lista / Empty State -->
+      <div class="card">
+        <div class="empty-state">
+          <div class="empty-state-icon">
+            <img src="../images/evidence.png" alt="Receitas">
+          </div>
+          <h4>Nenhuma receita registrada</h4>
+          <p>Quando houver receitas cadastradas, elas aparecerão aqui para acompanhamento.</p>
         </div>
       </div>
 
-      <!-- Receitas List -->
-       
-      <!-- Empty State -->
-      <div class="card border-0 shadow-sm rounded-4 py-5 px-4 mt-3 bg-white empty-state">
-        <div class="d-flex flex-column align-items-center justify-content-center text-center w-100 mx-auto">
-          <div class="bg-primary bg-opacity-10 rounded-circle p-4 mb-4">
-            <img src="../images/evidence.png" alt="Receitas" style="width: 70px;">
-          </div>
-          <h4 class="fw-semibold mb-2">
-            Nenhuma receita registrada
-          </h4>
-          <p class="text-muted mb-4 col-lg-6">
-            Quando houver receitas cadastradas, elas aparecerão aqui para acompanhamento.
-          </p>
-        </div>
-      </div>
     </main>
-
   </div>
-  <!-- End Main Wrapper -->
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <div class="mobile-bottom-nav-inner">
+      <a href="../dashboard.html" class="mobile-nav-item" data-page-link="dashboard">
+        <i class="fas fa-home"></i>
+        <span>Início</span>
+      </a>
+      <a href="./vacinas.html" class="mobile-nav-item" data-page-link="vacinas">
+        <i class="fas fa-syringe"></i>
+        <span>Vacinas</span>
+      </a>
+      <a href="./profissionais.html" class="mobile-nav-item" data-page-link="profissionais">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Agendar</span>
+      </a>
+      <a href="./receitas.html" class="mobile-nav-item" data-page-link="receitas">
+        <i class="fas fa-file-prescription"></i>
+        <span>Receitas</span>
+      </a>
+      <a href="./historico.html" class="mobile-nav-item" data-page-link="historico">
+        <i class="fas fa-history"></i>
+        <span>Histórico</span>
+      </a>
+    </div>
+  </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/script.js"></script>
 </body>
-
 </html>

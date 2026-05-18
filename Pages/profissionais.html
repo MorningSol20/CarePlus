@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" href="../images/favicon.png" type="image/png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profissionais - Care Plus</title>
+  <title>Profissionais — Care Plus</title>
+  <link rel="icon" href="../images/favicon.png" type="image/png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body data-page="profissionais">
+
   <div class="sidebar-overlay"></div>
 
   <!-- Sidebar -->
-  <aside class="sidebar mobile-hidden">
+  <aside class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">CP</div>
       <div class="sidebar-info">
@@ -28,29 +26,38 @@
     </div>
 
     <nav class="sidebar-nav">
+      <span class="nav-section-label">Principal</span>
+
       <a href="../dashboard.html" class="nav-item">
         <i class="fas fa-home"></i>
         <span class="nav-item-label">Início</span>
       </a>
-
-      <a href="../Pages/vacinas.html" class="nav-item">
+      <a href="./vacinas.html" class="nav-item">
         <i class="fas fa-syringe"></i>
         <span class="nav-item-label">Vacinas</span>
       </a>
-
-      <a href="../Pages/receitas.html" class="nav-item">
-        <i class="fas fa-file-medical"></i>
+      <a href="./receitas.html" class="nav-item">
+        <i class="fas fa-file-prescription"></i>
         <span class="nav-item-label">Receitas</span>
       </a>
-
-      <a href="../Pages/profissionais.html" class="nav-item">
-        <i class="fas fa-calendar"></i>
+      <a href="./profissionais.html" class="nav-item">
+        <i class="fas fa-calendar-alt"></i>
         <span class="nav-item-label">Agendar</span>
       </a>
-
-      <a href="../Pages/historico.html" class="nav-item">
-        <i class="fas fa-clock"></i>
+      <a href="./historico.html" class="nav-item">
+        <i class="fas fa-history"></i>
         <span class="nav-item-label">Histórico</span>
+      </a>
+
+      <span class="nav-section-label">Conta</span>
+
+      <a href="./notificacoes.html" class="nav-item">
+        <i class="fas fa-bell"></i>
+        <span class="nav-item-label">Notificações</span>
+      </a>
+      <a href="./configuracoes.html" class="nav-item">
+        <i class="fas fa-cog"></i>
+        <span class="nav-item-label">Configurações</span>
       </a>
     </nav>
 
@@ -62,305 +69,300 @@
     </div>
   </aside>
 
-  <!-- Main Wrapper (Contém Topbar e Content) -->
+  <!-- Main Wrapper -->
   <div class="main-wrapper">
-    <!-- Top Bar -->
+
+    <!-- Topbar -->
     <header class="topbar">
       <div class="topbar-left">
-        <!-- Botão de Controle Único -->
-        <button class="toggle-btn">
+        <button class="toggle-btn" title="Menu">
           <i class="fas fa-bars"></i>
         </button>
+        <span class="topbar-title">Escolher Profissional</span>
       </div>
       <div class="topbar-right">
         <a href="./notificacoes.html" class="notification-btn" title="Notificações">
-          <i class="fas fa-bell"></i> <span class="notification-badge"></span>
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge"></span>
         </a>
         <a href="./configuracoes.html" class="notification-btn" title="Configurações">
           <i class="fas fa-cog"></i>
         </a>
-        <div class="user-avatar">JD</div>
+        <div class="user-avatar">JS</div>
       </div>
     </header>
 
-    <!-- breadcrumb -->
-    <div class="container mb-3 p-3">
-
-      <div class="d-flex justify-content-between align-items-center">
-
-        <!-- Step 1 -->
-        <div class="text-center flex-fill">
-          <div id="step-profissional"
-            class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto"
-            style="width: 36px; height: 36px;">
-            <i class="fas fa-user"></i>
-          </div>
-          <small class="d-block mt-1 fw-semibold">Profissional</small>
-        </div>
-
-        <!-- Line -->
-        <div class="flex-fill border-top mx-2"></div>
-
-        <!-- Step 2 -->
-        <div class="text-center flex-fill">
-          <div id="step-horario"
-            class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto"
-            style="width: 36px; height: 36px;">
-            <i class="fas fa-clock"></i>
-          </div>
-          <small class="d-block mt-1 fw-semibold text-muted">Data & Hora</small>
-        </div>
-
-        <!-- Line -->
-        <div class="flex-fill border-top mx-2"></div>
-
-        <!-- Step 3 -->
-        <div class="text-center flex-fill">
-          <div id="step-confirmar"
-            class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto"
-            style="width: 36px; height: 36px;">
-            <i class="fas fa-check"></i>
-          </div>
-          <small class="d-block mt-1 fw-semibold text-muted">Confirmar</small>
-        </div>
-
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+      <div class="step-item">
+        <div class="step-circle active"><i class="fas fa-user-md"></i></div>
+        <span class="step-label active">Profissional</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item">
+        <div class="step-circle pending"><i class="fas fa-clock"></i></div>
+        <span class="step-label">Data & Hora</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item">
+        <div class="step-circle pending"><i class="fas fa-check"></i></div>
+        <span class="step-label">Confirmar</span>
       </div>
     </div>
 
-    <!-- Profissionais Grid -->
-    <div class="fluid-container m-4">
-      <h2 class="mb-4">Escolha um Profissional</h2>
-    </div>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <!-- Main Content -->
+    <main class="main-content">
 
-      <!-- Card 1 -->
-      <div class="col">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
-
-          <div class="bg-primary bg-opacity-10 d-flex align-items-center justify-content-center rounded-top-4"
-            style="height: 140px;">
-            <i class="fas fa-user fs-1 text-primary opacity-50"></i>
-          </div>
-
-          <div class="card-body">
-            <h5 class="fw-semibold mb-1">Dra. Ana Carvalho</h5>
-            <p class="text-muted small mb-3">Clínico Geral</p>
-
-            <div class="d-flex align-items-center gap-2 mb-2">
-              <i class="fas fa-star text-warning"></i>
-              <span class="fw-semibold">4.9</span>
-              <span class="text-muted small">(127)</span>
-            </div>
-
-            <div class="d-flex align-items-center gap-2 text-muted small mb-3">
-              <i class="fas fa-map-marker-alt"></i>
-              <span>Hospital Santa Clara</span>
-            </div>
-
-            <div class="bg-light rounded-3 p-3 mb-3">
-              <small class="text-muted d-block">Valor da consulta</small>
-              <h5 class="fw-bold text-primary mb-0">R$ 150</h5>
-            </div>
-
-            <a href="./agendamento.html?id=1" class="btn btn-primary w-100 rounded-3">
-              Agendar
-            </a>
-          </div>
-
+      <!-- Header + Search -->
+      <div class="page-header">
+        <div class="page-header-text">
+          <h1>Escolha um Profissional</h1>
+          <p>Selecione o especialista para o seu agendamento</p>
         </div>
       </div>
 
-      <!-- Card 2 -->
-      <div class="col">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
-
-          <div class="bg-primary bg-opacity-10 d-flex align-items-center justify-content-center rounded-top-4"
-            style="height: 140px;">
-            <i class="fas fa-user fs-1 text-primary opacity-50"></i>
-          </div>
-
-          <div class="card-body">
-            <h5 class="fw-semibold mb-1">Dr. Lucas Almeida</h5>
-            <p class="text-muted small mb-3">Cardiologia</p>
-
-            <div class="d-flex align-items-center gap-2 mb-2">
-              <i class="fas fa-star text-warning"></i>
-              <span class="fw-semibold">4.7</span>
-              <span class="text-muted small">(88)</span>
-            </div>
-
-            <div class="d-flex align-items-center gap-2 text-muted small mb-3">
-              <i class="fas fa-map-marker-alt"></i>
-              <span>Hospital São Lucas</span>
-            </div>
-
-            <div class="bg-light rounded-3 p-3 mb-3">
-              <small class="text-muted d-block">Valor da consulta</small>
-              <h5 class="fw-bold text-primary mb-0">R$ 220</h5>
-            </div>
-
-            <a href="./agendamento.html?id=2" class="btn btn-primary w-100 rounded-3">
-              Agendar
-            </a>
-          </div>
-
+      <!-- Busca -->
+      <div style="margin-bottom:24px;">
+        <div style="position:relative;max-width:380px;">
+          <i class="fas fa-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:14px;pointer-events:none;"></i>
+          <input type="text" class="search-input"
+            style="width:100%;padding:10px 14px 10px 38px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;transition:border-color .15s,box-shadow .15s;"
+            placeholder="Buscar por nome ou especialidade…">
         </div>
       </div>
 
-      <!-- Card 3 -->
-      <div class="col">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
+      <!-- Grid de Profissionais -->
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
 
-          <div class="bg-primary bg-opacity-10 d-flex align-items-center justify-content-center rounded-top-4"
-            style="height: 140px;">
-            <i class="fas fa-user fs-1 text-primary opacity-50"></i>
+        <!-- Card 1 -->
+        <div class="col" data-searchable>
+          <div class="card p-0 h-100" style="overflow:hidden;">
+            <div class="prof-card-avatar">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <div class="card-body p-3" style="padding:16px!important;">
+              <h5 style="font-weight:600;margin-bottom:2px;font-size:15px;">Dra. Ana Carvalho</h5>
+              <p style="color:var(--text-secondary);font-size:13px;margin-bottom:12px;">Clínico Geral</p>
+
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                <span class="badge badge-warning"><i class="fas fa-star"></i> 4.9</span>
+                <span style="font-size:12px;color:var(--text-muted);">(127 avaliações)</span>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:13px;margin-bottom:14px;">
+                <i class="fas fa-map-marker-alt" style="font-size:12px;color:var(--text-muted);"></i>
+                <span>Hospital Santa Clara</span>
+              </div>
+
+              <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;">
+                <small style="color:var(--text-muted);display:block;font-size:11px;margin-bottom:2px;">Valor da consulta</small>
+                <strong style="color:var(--primary);font-size:17px;">R$ 150</strong>
+              </div>
+
+              <a href="./agendamento.html?id=1" class="btn-primary btn-w100">
+                <i class="fas fa-calendar-plus"></i>
+                Agendar
+              </a>
+            </div>
           </div>
-
-          <div class="card-body">
-            <h5 class="fw-semibold mb-1">Dra. Beatriz Souza</h5>
-            <p class="text-muted small mb-3">Dermatologia</p>
-
-            <div class="d-flex align-items-center gap-2 mb-2">
-              <i class="fas fa-star text-warning"></i>
-              <span class="fw-semibold">5.0</span>
-              <span class="text-muted small">(210)</span>
-            </div>
-
-            <div class="d-flex align-items-center gap-2 text-muted small mb-3">
-              <i class="fas fa-map-marker-alt"></i>
-              <span>Clínica Pele Viva</span>
-            </div>
-
-            <div class="bg-light rounded-3 p-3 mb-3">
-              <small class="text-muted d-block">Valor da consulta</small>
-              <h5 class="fw-bold text-primary mb-0">R$ 180</h5>
-            </div>
-
-            <a href="./agendamento.html?id=3" class="btn btn-primary w-100 rounded-3">
-              Agendar
-            </a>
-          </div>
-
         </div>
-      </div>
 
-      <!-- Card 4 -->
-      <div class="col">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
+        <!-- Card 2 -->
+        <div class="col" data-searchable>
+          <div class="card p-0 h-100" style="overflow:hidden;">
+            <div class="prof-card-avatar">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <div style="padding:16px;">
+              <h5 style="font-weight:600;margin-bottom:2px;font-size:15px;">Dr. Lucas Almeida</h5>
+              <p style="color:var(--text-secondary);font-size:13px;margin-bottom:12px;">Cardiologia</p>
 
-          <div class="bg-primary bg-opacity-10 d-flex align-items-center justify-content-center rounded-top-4"
-            style="height: 140px;">
-            <i class="fas fa-user fs-1 text-primary opacity-50"></i>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                <span class="badge badge-warning"><i class="fas fa-star"></i> 4.7</span>
+                <span style="font-size:12px;color:var(--text-muted);">(88 avaliações)</span>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:13px;margin-bottom:14px;">
+                <i class="fas fa-map-marker-alt" style="font-size:12px;color:var(--text-muted);"></i>
+                <span>Hospital São Lucas</span>
+              </div>
+
+              <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;">
+                <small style="color:var(--text-muted);display:block;font-size:11px;margin-bottom:2px;">Valor da consulta</small>
+                <strong style="color:var(--primary);font-size:17px;">R$ 220</strong>
+              </div>
+
+              <a href="./agendamento.html?id=2" class="btn-primary btn-w100">
+                <i class="fas fa-calendar-plus"></i>
+                Agendar
+              </a>
+            </div>
           </div>
-
-          <div class="card-body">
-            <h5 class="fw-semibold mb-1">Dr. Felipe Monteiro</h5>
-            <p class="text-muted small mb-3">Oftalmologia</p>
-
-            <div class="d-flex align-items-center gap-2 mb-2">
-              <i class="fas fa-star text-warning"></i>
-              <span class="fw-semibold">4.6</span>
-              <span class="text-muted small">(73)</span>
-            </div>
-
-            <div class="d-flex align-items-center gap-2 text-muted small mb-3">
-              <i class="fas fa-map-marker-alt"></i>
-              <span>Centro Oftalmológico Paulista</span>
-            </div>
-
-            <div class="bg-light rounded-3 p-3 mb-3">
-              <small class="text-muted d-block">Valor da consulta</small>
-              <h5 class="fw-bold text-primary mb-0">R$ 170</h5>
-            </div>
-
-            <a href="./agendamento.html?id=4" class="btn btn-primary w-100 rounded-3">
-              Agendar
-            </a>
-          </div>
-
         </div>
-      </div>
 
-      <!-- Card 5 -->
-      <div class="col">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
+        <!-- Card 3 -->
+        <div class="col" data-searchable>
+          <div class="card p-0 h-100" style="overflow:hidden;">
+            <div class="prof-card-avatar">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <div style="padding:16px;">
+              <h5 style="font-weight:600;margin-bottom:2px;font-size:15px;">Dra. Beatriz Souza</h5>
+              <p style="color:var(--text-secondary);font-size:13px;margin-bottom:12px;">Dermatologia</p>
 
-          <div class="bg-primary bg-opacity-10 d-flex align-items-center justify-content-center rounded-top-4"
-            style="height: 140px;">
-            <i class="fas fa-user fs-1 text-primary opacity-50"></i>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                <span class="badge badge-warning"><i class="fas fa-star"></i> 5.0</span>
+                <span style="font-size:12px;color:var(--text-muted);">(210 avaliações)</span>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:13px;margin-bottom:14px;">
+                <i class="fas fa-map-marker-alt" style="font-size:12px;color:var(--text-muted);"></i>
+                <span>Clínica Pele Viva</span>
+              </div>
+
+              <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;">
+                <small style="color:var(--text-muted);display:block;font-size:11px;margin-bottom:2px;">Valor da consulta</small>
+                <strong style="color:var(--primary);font-size:17px;">R$ 180</strong>
+              </div>
+
+              <a href="./agendamento.html?id=3" class="btn-primary btn-w100">
+                <i class="fas fa-calendar-plus"></i>
+                Agendar
+              </a>
+            </div>
           </div>
-
-          <div class="card-body">
-            <h5 class="fw-semibold mb-1">Dra. Camila Ribeiro</h5>
-            <p class="text-muted small mb-3">Psicologia</p>
-
-            <div class="d-flex align-items-center gap-2 mb-2">
-              <i class="fas fa-star text-warning"></i>
-              <span class="fw-semibold">4.8</span>
-              <span class="text-muted small">(140)</span>
-            </div>
-
-            <div class="d-flex align-items-center gap-2 text-muted small mb-3">
-              <i class="fas fa-map-marker-alt"></i>
-              <span>Instituto Mente Saudável</span>
-            </div>
-
-            <div class="bg-light rounded-3 p-3 mb-3">
-              <small class="text-muted d-block">Valor da consulta</small>
-              <h5 class="fw-bold text-primary mb-0">R$ 120</h5>
-            </div>
-
-            <a href="./agendamento.html?id=5" class="btn btn-primary w-100 rounded-3">
-              Agendar
-            </a>
-          </div>
-
         </div>
-      </div>
 
-      <!-- Card 6 -->
-      <div class="col">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
+        <!-- Card 4 -->
+        <div class="col" data-searchable>
+          <div class="card p-0 h-100" style="overflow:hidden;">
+            <div class="prof-card-avatar">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <div style="padding:16px;">
+              <h5 style="font-weight:600;margin-bottom:2px;font-size:15px;">Dr. Felipe Monteiro</h5>
+              <p style="color:var(--text-secondary);font-size:13px;margin-bottom:12px;">Oftalmologia</p>
 
-          <div class="bg-primary bg-opacity-10 d-flex align-items-center justify-content-center rounded-top-4"
-            style="height: 140px;">
-            <i class="fas fa-user fs-1 text-primary opacity-50"></i>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                <span class="badge badge-warning"><i class="fas fa-star"></i> 4.6</span>
+                <span style="font-size:12px;color:var(--text-muted);">(73 avaliações)</span>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:13px;margin-bottom:14px;">
+                <i class="fas fa-map-marker-alt" style="font-size:12px;color:var(--text-muted);"></i>
+                <span>Centro Oftalmológico Paulista</span>
+              </div>
+
+              <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;">
+                <small style="color:var(--text-muted);display:block;font-size:11px;margin-bottom:2px;">Valor da consulta</small>
+                <strong style="color:var(--primary);font-size:17px;">R$ 170</strong>
+              </div>
+
+              <a href="./agendamento.html?id=4" class="btn-primary btn-w100">
+                <i class="fas fa-calendar-plus"></i>
+                Agendar
+              </a>
+            </div>
           </div>
-
-          <div class="card-body">
-            <h5 class="fw-semibold mb-1">Dr. Rafael Mendes</h5>
-            <p class="text-muted small mb-3">Ortopedia</p>
-
-            <div class="d-flex align-items-center gap-2 mb-2">
-              <i class="fas fa-star text-warning"></i>
-              <span class="fw-semibold">4.5</span>
-              <span class="text-muted small">(66)</span>
-            </div>
-
-            <div class="d-flex align-items-center gap-2 text-muted small mb-3">
-              <i class="fas fa-map-marker-alt"></i>
-              <span>Clínica OrtoVida</span>
-            </div>
-
-            <div class="bg-light rounded-3 p-3 mb-3">
-              <small class="text-muted d-block">Valor da consulta</small>
-              <h5 class="fw-bold text-primary mb-0">R$ 190</h5>
-            </div>
-
-            <a href="./agendamento.html?id=6" class="btn btn-primary w-100 rounded-3">
-              Agendar
-            </a>
-          </div>
-
         </div>
+
+        <!-- Card 5 -->
+        <div class="col" data-searchable>
+          <div class="card p-0 h-100" style="overflow:hidden;">
+            <div class="prof-card-avatar">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <div style="padding:16px;">
+              <h5 style="font-weight:600;margin-bottom:2px;font-size:15px;">Dra. Camila Ribeiro</h5>
+              <p style="color:var(--text-secondary);font-size:13px;margin-bottom:12px;">Psicologia</p>
+
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                <span class="badge badge-warning"><i class="fas fa-star"></i> 4.8</span>
+                <span style="font-size:12px;color:var(--text-muted);">(140 avaliações)</span>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:13px;margin-bottom:14px;">
+                <i class="fas fa-map-marker-alt" style="font-size:12px;color:var(--text-muted);"></i>
+                <span>Instituto Mente Saudável</span>
+              </div>
+
+              <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;">
+                <small style="color:var(--text-muted);display:block;font-size:11px;margin-bottom:2px;">Valor da consulta</small>
+                <strong style="color:var(--primary);font-size:17px;">R$ 120</strong>
+              </div>
+
+              <a href="./agendamento.html?id=5" class="btn-primary btn-w100">
+                <i class="fas fa-calendar-plus"></i>
+                Agendar
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="col" data-searchable>
+          <div class="card p-0 h-100" style="overflow:hidden;">
+            <div class="prof-card-avatar">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <div style="padding:16px;">
+              <h5 style="font-weight:600;margin-bottom:2px;font-size:15px;">Dr. Rafael Mendes</h5>
+              <p style="color:var(--text-secondary);font-size:13px;margin-bottom:12px;">Ortopedia</p>
+
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                <span class="badge badge-warning"><i class="fas fa-star"></i> 4.5</span>
+                <span style="font-size:12px;color:var(--text-muted);">(66 avaliações)</span>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:13px;margin-bottom:14px;">
+                <i class="fas fa-map-marker-alt" style="font-size:12px;color:var(--text-muted);"></i>
+                <span>Clínica OrtoVida</span>
+              </div>
+
+              <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;">
+                <small style="color:var(--text-muted);display:block;font-size:11px;margin-bottom:2px;">Valor da consulta</small>
+                <strong style="color:var(--primary);font-size:17px;">R$ 190</strong>
+              </div>
+
+              <a href="./agendamento.html?id=6" class="btn-primary btn-w100">
+                <i class="fas fa-calendar-plus"></i>
+                Agendar
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
+    </main>
   </div>
-  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <div class="mobile-bottom-nav-inner">
+      <a href="../dashboard.html" class="mobile-nav-item" data-page-link="dashboard">
+        <i class="fas fa-home"></i>
+        <span>Início</span>
+      </a>
+      <a href="./vacinas.html" class="mobile-nav-item" data-page-link="vacinas">
+        <i class="fas fa-syringe"></i>
+        <span>Vacinas</span>
+      </a>
+      <a href="./profissionais.html" class="mobile-nav-item" data-page-link="profissionais">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Agendar</span>
+      </a>
+      <a href="./receitas.html" class="mobile-nav-item" data-page-link="receitas">
+        <i class="fas fa-file-prescription"></i>
+        <span>Receitas</span>
+      </a>
+      <a href="./historico.html" class="mobile-nav-item" data-page-link="historico">
+        <i class="fas fa-history"></i>
+        <span>Histórico</span>
+      </a>
+    </div>
+  </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/script.js"></script>
-  </div>
 </body>
-
 </html>

@@ -1,73 +1,65 @@
 /**
- * Care Plus - JavaScript Unificado e Corrigido
+ * Care Plus — JavaScript Unificado
+ * Responsável por: Sidebar, Navegação, Formulários, Calendário,
+ *                  Notificações, Abas, Busca, Toggles e Bottom Nav.
  */
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Inicializa todas as funcionalidades
     initializeSidebar();
     initializeNavigation();
+    initializeMobileBottomNav();
     initializeForms();
+    initializePasswordToggle();
     initializeCalendar();
     initializeNotifications();
     initializeTabs();
+    initializeToggleSwitches();
     initializeSearch();
-
-    console.log("Care Plus: Sistema inicializado com sucesso!");
+    loadProfissionalData();
 });
 
-/**
- * SIDEBAR - LÓGICA DE FUNCIONAMENTO (EXPANDIR/RECOLHER)
- */
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+
 function initializeSidebar() {
-    const toggleBtn = document.querySelector('.toggle-btn');
-    const sidebar = document.querySelector('.sidebar');
-    const overlay = document.querySelector('.sidebar-overlay');
-    const body = document.body;
-    const navItems = document.querySelectorAll('.nav-item');
+    const toggleBtn  = document.querySelector('.toggle-btn');
+    const sidebar    = document.querySelector('.sidebar');
+    const overlay    = document.querySelector('.sidebar-overlay');
+    const body       = document.body;
+    const navItems   = document.querySelectorAll('.nav-item');
 
-    if (!sidebar || !toggleBtn) {
-        console.warn('Sidebar: Elementos de controle não encontrados.');
-        return;
-    }
+    if (!sidebar || !toggleBtn) return;
 
-    // Função principal de alternância
+    function isMobile() { return window.innerWidth <= 991.98; }
+
     function handleToggle(e) {
         if (e) e.preventDefault();
 
-        if (window.innerWidth <= 991.98) {
-            // Comportamento Mobile: Abre/Fecha lateralmente
+        if (isMobile()) {
             sidebar.classList.toggle('show');
             if (overlay) overlay.classList.toggle('show');
         } else {
-            // Comportamento Desktop: Recolhe/Expande (Mini Sidebar)
             sidebar.classList.toggle('collapsed');
             body.classList.toggle('sidebar-collapsed');
         }
     }
 
-    // Fechar tudo (usado no mobile)
     function closeAll() {
         sidebar.classList.remove('show');
         if (overlay) overlay.classList.remove('show');
     }
 
-    // Eventos
     toggleBtn.addEventListener('click', handleToggle);
 
-    if (overlay) {
-        overlay.addEventListener('click', closeAll);
-    }
+    if (overlay) overlay.addEventListener('click', closeAll);
 
-    // Fechar ao clicar nos itens (apenas mobile)
     navItems.forEach(item => {
         item.addEventListener('click', () => {
-            if (window.innerWidth <= 991.98) {
-                closeAll();
-            }
+            if (isMobile()) closeAll();
         });
     });
 
-    // Resetar estados ao redimensionar para evitar bugs visuais
     window.addEventListener('resize', () => {
         if (window.innerWidth >= 992) {
             sidebar.classList.remove('show');
@@ -79,38 +71,71 @@ function initializeSidebar() {
     });
 }
 
-/**
- * NAVEGAÇÃO - ESTADO ATIVO
- */
+/* ============================================================
+   NAVEGAÇÃO ATIVA (Sidebar)
+   ============================================================ */
+
 function initializeNavigation() {
     const currentPage = document.body.getAttribute('data-page');
-    const navItems = document.querySelectorAll('.nav-item');
+    if (!currentPage) return;
 
-    navItems.forEach(item => {
-        // Verifica se o link corresponde à página atual
-        const href = item.getAttribute('href');
-        if (href && href.includes(currentPage)) {
+    document.querySelectorAll('.nav-item').forEach(item => {
+        const href = item.getAttribute('href') || '';
+        // Extrai o nome do arquivo sem extensão ou query
+        const filename = href.split('/').pop().split('?')[0].replace('.html', '');
+        if (filename === currentPage) {
             item.classList.add('active');
         }
     });
 }
 
-/**
- * FORMULÁRIOS - LOGIN E REGISTRO
- */
+/* ============================================================
+   MOBILE BOTTOM NAV ATIVA
+   ============================================================ */
+
+function initializeMobileBottomNav() {
+    const currentPage = document.body.getAttribute('data-page');
+    if (!currentPage) return;
+
+    document.querySelectorAll('.mobile-nav-item').forEach(item => {
+        const pageLink = item.getAttribute('data-page-link');
+        if (pageLink === currentPage) {
+            item.classList.add('active');
+        }
+    });
+}
+
+/* ============================================================
+   FORMULÁRIOS — Login e Registro
+   ============================================================ */
+
 function initializeForms() {
-    const loginForm = document.querySelector('#loginForm');
+    const loginForm    = document.querySelector('#loginForm');
     const registroForm = document.querySelector('#registroForm');
 
     if (loginForm) {
         loginForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            const email = this.querySelector('input[type="email"]').value;
-            const password = this.querySelector('input[type="password"]').value;
 
-            if (email && password) {
-                localStorage.setItem('userEmail', email);
-                window.location.href = 'dashboard.html';
+            const email    = this.querySelector('#email, [name="email"]');
+            const password = this.querySelector('#password, [name="password"]');
+            const btn      = this.querySelector('button[type="submit"]');
+
+            if (!email || !password) return;
+
+            if (email.value && password.value) {
+                // Feedback visual de loading
+                if (btn) {
+                    btn.disabled  = true;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando…';
+                }
+
+                localStorage.setItem('userEmail', email.value);
+                localStorage.setItem('userLoggedIn', 'true');
+
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 600);
             }
         });
     }
@@ -118,463 +143,294 @@ function initializeForms() {
     if (registroForm) {
         registroForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            const password = this.querySelector('input[name="password"]').value;
-            const confirmPassword = this.querySelector('input[name="confirmPassword"]').value;
 
-            if (password !== confirmPassword) {
-                alert('As senhas não coincidem');
+            const name            = this.querySelector('input[name="name"]');
+            const email           = this.querySelector('input[name="email"]');
+            const password        = this.querySelector('input[name="password"]');
+            const confirmPassword = this.querySelector('input[name="confirmPassword"]');
+            const btn             = this.querySelector('button[type="submit"]');
+
+            if (password && confirmPassword && password.value !== confirmPassword.value) {
+                confirmPassword.style.borderColor = '#ef4444';
+                confirmPassword.focus();
+                // Inline error sem alert nativo
+                showFieldError(confirmPassword, 'As senhas não coincidem.');
                 return;
             }
 
-            const name = this.querySelector('input[name="name"]').value;
-            localStorage.setItem('userName', name);
-            localStorage.setItem('userEmail', this.querySelector('input[name="email"]').value);
+            if (btn) {
+                btn.disabled  = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando conta…';
+            }
 
-            window.location.href = 'dashboard.html';
+            if (name)  localStorage.setItem('userName', name.value);
+            if (email) localStorage.setItem('userEmail', email.value);
+            localStorage.setItem('userLoggedIn', 'true');
+
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 700);
         });
     }
 }
 
-/**
- * CALENDÁRIO - AGENDAMENTO
- */
+function showFieldError(input, message) {
+    // Remove erro anterior
+    const existing = input.parentElement.querySelector('.field-error');
+    if (existing) existing.remove();
+
+    const err = document.createElement('p');
+    err.className   = 'field-error';
+    err.textContent = message;
+    err.style.cssText = 'color:#ef4444;font-size:12px;margin:4px 0 0;';
+    input.parentElement.appendChild(err);
+
+    input.addEventListener('input', () => err.remove(), { once: true });
+}
+
+/* ============================================================
+   TOGGLE DE SENHA (mostrar / ocultar)
+   ============================================================ */
+
+function initializePasswordToggle() {
+    document.querySelectorAll('.input-toggle-pw').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const targetId = this.getAttribute('data-target');
+            const input    = document.getElementById(targetId);
+            if (!input) return;
+
+            const isPassword = input.type === 'password';
+            input.type       = isPassword ? 'text' : 'password';
+
+            const icon = this.querySelector('i');
+            if (icon) {
+                icon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+            }
+            this.setAttribute('title', isPassword ? 'Ocultar senha' : 'Mostrar senha');
+        });
+    });
+}
+
+/* ============================================================
+   CALENDÁRIO — Agendamento
+   ============================================================ */
+
 function initializeCalendar() {
-    const calendarDays = document.querySelector('.calendar-days');
-    if (!calendarDays) return;
+    const calendarEl = document.getElementById('calendar');
+    if (!calendarEl) return;
 
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth();
+    const today   = new Date();
+    const year    = today.getFullYear();
+    const month   = today.getMonth();
 
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    const startingDayOfWeek = firstDay.getDay();
+    // Título do mês
+    const titleEl = document.getElementById('calendarTitle');
+    if (titleEl) {
+        titleEl.textContent = today.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+        titleEl.style.textTransform = 'capitalize';
+    }
+
+    const firstDay      = new Date(year, month, 1).getDay();
+    const daysInMonth   = new Date(year, month + 1, 0).getDate();
+    const todayDate     = today.getDate();
 
     let html = '';
 
-    for (let i = 0; i < startingDayOfWeek; i++) {
-        html += '<div class="calendar-day empty"></div>';
+    // Células vazias antes do primeiro dia
+    for (let i = 0; i < firstDay; i++) {
+        html += '<button class="calendar-day empty" disabled aria-hidden="true"></button>';
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
-        const isAvailable = day > 10;
-        const date = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const isAvailable = day > todayDate; // apenas datas futuras
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const isToday = (day === todayDate);
+        const extraClass = !isAvailable ? 'disabled' : '';
+        const todayAttr  = isToday ? 'style="font-weight:800;color:var(--primary);"' : '';
+
         html += `
-            <button class="calendar-day ${isAvailable ? 'available' : 'disabled'}" 
-                    data-date="${date}" 
-                    ${isAvailable ? '' : 'disabled'}>
-                ${day}
-            </button>
-        `;
+          <button class="calendar-day ${extraClass}"
+            data-date="${dateStr}"
+            ${!isAvailable ? 'disabled' : ''}
+            aria-label="${dateStr}"
+            ${todayAttr}>
+            ${day}
+          </button>`;
     }
 
-    calendarDays.innerHTML = html;
+    calendarEl.innerHTML = html;
 
-    document.querySelectorAll('.calendar-day.available').forEach(day => {
-        day.addEventListener('click', function () {
-            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+    calendarEl.querySelectorAll('.calendar-day:not(:disabled):not(.empty)').forEach(btn => {
+        btn.addEventListener('click', function () {
+            calendarEl.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
             this.classList.add('selected');
 
-            const dateInput = document.querySelector('input[name="selectedDate"]');
+            const dateInput = document.getElementById('selectedDate');
             if (dateInput) dateInput.value = this.getAttribute('data-date');
 
-            showTimeSlots();
+            updateResumoData(this.getAttribute('data-date'));
+            renderTimeSlots();
         });
     });
 }
 
-function showTimeSlots() {
-    const timeSlotsContainer = document.querySelector('.time-slots');
-    if (!timeSlotsContainer) return;
+function renderTimeSlots() {
+    const container = document.getElementById('timeSlots');
+    if (!container) return;
 
-    const horarios = ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'];
-    let html = '';
+    const horarios = [
+        '08:00','08:30','09:00','09:30','10:00','10:30',
+        '14:00','14:30','15:00','15:30','16:00','16:30'
+    ];
 
-    horarios.forEach(time => {
-        html += `<button class="time-slot" data-time="${time}">${time}</button>`;
-    });
+    container.innerHTML = horarios.map(time =>
+        `<button class="time-slot" data-time="${time}">${time}</button>`
+    ).join('');
 
-    timeSlotsContainer.innerHTML = html;
-
-    document.querySelectorAll('.time-slot').forEach(slot => {
+    container.querySelectorAll('.time-slot').forEach(slot => {
         slot.addEventListener('click', function () {
-            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+            container.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
             this.classList.add('selected');
 
-            const timeInput = document.querySelector('input[name="selectedTime"]');
+            const timeInput = document.getElementById('selectedTime');
             if (timeInput) timeInput.value = this.getAttribute('data-time');
 
-            showConfirmation();
+            updateResumoHorario(this.getAttribute('data-time'));
         });
     });
 }
 
-function showConfirmation() {
-    const confirmationDiv = document.querySelector('.confirmation-section');
-    if (!confirmationDiv) return;
+function updateResumoData(dateStr) {
+    const el = document.getElementById('res-data');
+    if (!el || !dateStr) return;
+    const [y, m, d] = dateStr.split('-');
+    el.textContent = `${d}/${m}/${y}`;
+}
 
-    const date = document.querySelector('input[name="selectedDate"]')?.value;
-    const time = document.querySelector('input[name="selectedTime"]')?.value;
+function updateResumoHorario(time) {
+    const el = document.getElementById('res-horario');
+    if (el) el.textContent = time;
+}
 
-    if (date && time) {
-        confirmationDiv.style.display = 'block';
-        const dateDisplay = confirmationDiv.querySelector('.confirmation-date');
-        const timeDisplay = confirmationDiv.querySelector('.confirmation-time');
+/* ============================================================
+   NOTIFICAÇÕES
+   ============================================================ */
 
-        if (dateDisplay) dateDisplay.textContent = formatDate(date);
-        if (timeDisplay) timeDisplay.textContent = time;
+function initializeNotifications() {
+    document.addEventListener('click', function (e) {
+        const btn  = e.target.closest('[data-action]');
+        if (!btn)  return;
+
+        const action = btn.getAttribute('data-action');
+        const item   = btn.closest('.notification-item');
+        if (!item)   return;
+
+        if (action === 'delete') {
+            item.style.transition = 'opacity .25s ease, transform .25s ease';
+            item.style.opacity    = '0';
+            item.style.transform  = 'translateX(20px)';
+            setTimeout(() => item.remove(), 260);
+
+        } else if (action === 'mark-read') {
+            item.classList.remove('unread', 'type-success', 'type-warning', 'type-danger', 'type-info');
+            item.style.opacity = '0.65';
+            btn.remove();
+        }
+    });
+
+    // "Marcar todas como lidas"
+    const markAllBtn = document.querySelector('.btn-outline.btn-sm');
+    if (markAllBtn && markAllBtn.textContent.includes('lidas')) {
+        markAllBtn.addEventListener('click', () => {
+            document.querySelectorAll('.notification-item.unread').forEach(item => {
+                item.classList.remove('unread', 'type-success', 'type-warning', 'type-danger', 'type-info');
+                item.style.opacity = '0.65';
+                const checkBtn = item.querySelector('[data-action="mark-read"]');
+                if (checkBtn) checkBtn.remove();
+            });
+        });
     }
 }
 
-function formatDate(dateStr) {
-    const date = new Date(dateStr + 'T00:00:00');
-    return date.toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' });
+/* ============================================================
+   ABAS (TABS)
+   ============================================================ */
+
+function initializeTabs() {
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', function () {
+            const tabId  = this.getAttribute('data-tab');
+            const parent = this.closest('.card') || document;
+
+            parent.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            this.classList.add('active');
+            const target = parent.querySelector(`#${tabId}`);
+            if (target) target.classList.add('active');
+        });
+    });
 }
 
-/**
- * NOTIFICAÇÕES
- */
-function initializeNotifications() {
-    const notificationButtons = document.querySelectorAll('.notification-action');
-    notificationButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-            const action = this.getAttribute('data-action');
-            const item = this.closest('.notification-item');
-            if (!item) return;
+/* ============================================================
+   TOGGLE SWITCHES (Configurações)
+   ============================================================ */
 
-            if (action === 'delete') {
-                item.remove();
-            } else if (action === 'mark-read') {
-                item.classList.add('read');
+function initializeToggleSwitches() {
+    document.querySelectorAll('.toggle-switch').forEach(toggle => {
+        toggle.addEventListener('click', function () {
+            const isActive = this.classList.toggle('active');
+            this.setAttribute('aria-checked', String(isActive));
+        });
+
+        // Acessibilidade: suporte a teclado
+        toggle.addEventListener('keydown', function (e) {
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                this.click();
             }
         });
     });
 }
 
-/**
- * ABAS (TABS)
- */
-function initializeTabs() {
-    const tabButtons = document.querySelectorAll('.tab-button');
-    const tabContents = document.querySelectorAll('.tab-content');
+/* ============================================================
+   BUSCA (Profissionais)
+   ============================================================ */
 
-    tabButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const tabId = this.getAttribute('data-tab');
-            tabButtons.forEach(b => b.classList.remove('active'));
-            tabContents.forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            const targetContent = document.querySelector(`#${tabId}`);
-            if (targetContent) targetContent.classList.add('active');
-        });
-    });
-}
-
-/**
- * BUSCA (SEARCH)
- */
 function initializeSearch() {
     const searchInput = document.querySelector('.search-input');
     if (!searchInput) return;
 
-    searchInput.addEventListener('input', function (e) {
-        const query = e.target.value.toLowerCase();
-        const items = document.querySelectorAll('[data-searchable]');
-        items.forEach(item => {
+    searchInput.addEventListener('input', function () {
+        const query = this.value.toLowerCase().trim();
+        document.querySelectorAll('[data-searchable]').forEach(item => {
             const text = item.textContent.toLowerCase();
-            item.style.display = text.includes(query) ? '' : 'none';
+            item.style.display = (!query || text.includes(query)) ? '' : 'none';
         });
     });
 }
 
+/* ============================================================
+   DADOS DO PROFISSIONAL NO RESUMO DE AGENDAMENTO
+   ============================================================ */
 
-// =========================
-// CALENDÁRIO + HORÁRIOS + RESUMO AGENDAMENTO
-// =========================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    // =========================
-    // ELEMENTOS RESUMO
-    // =========================
-    const resData = document.getElementById("res-data");
-    const resHorario = document.getElementById("res-horario");
-
-    const selectedDateInput = document.getElementById("selectedDate");
-    const selectedTimeInput = document.getElementById("selectedTime");
-
-    // =========================
-    // CALENDÁRIO
-    // =========================
-    const calendar = document.getElementById("calendar");
-
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth();
-
-    let selectedDateBtn = null;
-
-    function updateResumoData(dateFormatted) {
-        const [year, month, day] = dateFormatted.split("-");
-
-        const formatted = `${day}/${month}/${year}`;
-
-        if (resData) resData.textContent = formatted;
-    }
-
-    function createCalendar() {
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        for (let day = 1; day <= daysInMonth; day++) {
-
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.className = "btn btn-outline-primary btn-sm w-100 calendar-btn";
-            btn.textContent = day;
-
-            btn.addEventListener("click", () => {
-
-                // remove seleção anterior
-                if (selectedDateBtn) {
-                    selectedDateBtn.classList.remove("btn-primary");
-                    selectedDateBtn.classList.add("btn-outline-primary");
-                }
-
-                // ativa novo
-                btn.classList.remove("btn-outline-primary");
-                btn.classList.add("btn-primary");
-
-                selectedDateBtn = btn;
-
-                const formatted = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-
-                if (selectedDateInput) {
-                    selectedDateInput.value = formatted;
-                }
-
-                updateResumoData(formatted);
-            });
-
-            calendar.appendChild(btn);
-        }
-    }
-
-    createCalendar();
-
-    // =========================
-    // HORÁRIOS
-    // =========================
-    const timeSlots = document.getElementById("timeSlots");
-
-    const hours = [
-        "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
-        "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"
-    ];
-
-    let selectedTimeBtn = null;
-
-    function updateResumoHorario(time) {
-        if (resHorario) resHorario.textContent = time;
-    }
-
-    function renderTimes() {
-
-        hours.forEach(time => {
-
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.className = "btn btn-outline-primary btn-sm";
-            btn.textContent = time;
-
-            btn.addEventListener("click", () => {
-
-                // remove seleção anterior
-                if (selectedTimeBtn) {
-                    selectedTimeBtn.classList.remove("btn-primary");
-                    selectedTimeBtn.classList.add("btn-outline-primary");
-                }
-
-                // seleciona novo
-                btn.classList.remove("btn-outline-primary");
-                btn.classList.add("btn-primary");
-
-                selectedTimeBtn = btn;
-
-                if (selectedTimeInput) {
-                    selectedTimeInput.value = time;
-                }
-
-                updateResumoHorario(time);
-            });
-
-            timeSlots.appendChild(btn);
-        });
-    }
-
-    renderTimes();
-
-});
-
-
-// resumo agendamento - Nome e especialidade do profissional
 const profissionais = {
-    1: {
-        nome: "Dra. Ana Carvalho",
-        especialidade: "Clínico Geral",
-        preco: 150,
-        local: "Clínica Central",
-        rating: 4.9,
-        reviews: 127
-    },
-
-    2: {
-        nome: "Dr. Lucas Almeida",
-        especialidade: "Cardiologia",
-        preco: 220,
-        local: "Hospital São Paulo",
-        rating: 4.8,
-        reviews: 95
-    },
-
-    3: {
-        nome: "Dra. Beatriz Souza",
-        especialidade: "Dermatologia",
-        preco: 180,
-        local: "Clínica Derma Plus",
-        rating: 5.0,
-        reviews: 156
-    },
-
-    4: {
-        nome: "Dr. Felipe Monteiro",
-        especialidade: "Oftalmologia",
-        preco: 170,
-        local: "Centro Oftalmológico Vision",
-        rating: 4.7,
-        reviews: 82
-    },
-
-    5: {
-        nome: "Dra. Camila Ribeiro",
-        especialidade: "Psicologia",
-        preco: 120,
-        local: "Instituto Mental Health",
-        rating: 4.9,
-        reviews: 110
-    },
-
-    6: {
-        nome: "Dr. Rafael Mendes",
-        especialidade: "Ortopedia",
-        preco: 190,
-        local: "Clínica Ortopédica São Lucas",
-        rating: 4.6,
-        reviews: 78
-    }
+    1: { nome: 'Dra. Ana Carvalho',   especialidade: 'Clínico Geral',  preco: 150 },
+    2: { nome: 'Dr. Lucas Almeida',   especialidade: 'Cardiologia',    preco: 220 },
+    3: { nome: 'Dra. Beatriz Souza',  especialidade: 'Dermatologia',   preco: 180 },
+    4: { nome: 'Dr. Felipe Monteiro', especialidade: 'Oftalmologia',   preco: 170 },
+    5: { nome: 'Dra. Camila Ribeiro', especialidade: 'Psicologia',     preco: 120 },
+    6: { nome: 'Dr. Rafael Mendes',   especialidade: 'Ortopedia',      preco: 190 }
 };
 
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+function loadProfissionalData() {
+    const params = new URLSearchParams(window.location.search);
+    const id     = params.get('id');
+    const p      = profissionais[id];
+    if (!p) return;
 
-const p = profissionais[id];
-
-if (p) {
-    document.getElementById("res-profissional").textContent = p.nome;
-    document.getElementById("res-especialidade").textContent = p.especialidade;
+    const nomeEl = document.getElementById('res-profissional');
+    const espEl  = document.getElementById('res-especialidade');
+    if (nomeEl) nomeEl.textContent = p.nome;
+    if (espEl)  espEl.textContent  = p.especialidade;
 }
-
-
-// Resumo agendamento - Preço, local e avaliação do profissional
-document.addEventListener("DOMContentLoaded", () => {
-
-    // =========================
-    // ELEMENTOS
-    // =========================
-    const btnConfirmar = document.getElementById("confirmarAgendamento");
-    const loadingOverlay = document.getElementById("loadingOverlay");
-
-    const stepHorario = document.getElementById("step-horario");
-    const stepConfirmar = document.getElementById("step-confirmar");
-    const stepProfissional = document.getElementById("step-profissional");
-
-    const cardDataHora = document.querySelector(".col-lg-6"); // esquerda (data)
-    const cardTime = document.querySelector("#timeSlots")?.closest(".card");
-
-    const finalResumo = document.getElementById("final-resumo");
-
-    // dados do resumo
-    const resProfissional = document.getElementById("res-profissional").textContent;
-    const resEspecialidade = document.getElementById("res-especialidade").textContent;
-    const resData = document.getElementById("res-data");
-    const resHorario = document.getElementById("res-horario");
-
-    // finais
-    const finalProf = document.getElementById("final-profissional");
-    const finalEsp = document.getElementById("final-especialidade");
-    const finalData = document.getElementById("final-data");
-    const finalHora = document.getElementById("final-horario");
-    const finalLocal = document.getElementById("final-local");
-    const finalPreco = document.getElementById("final-preco");
-
-    // valores simulados
-    const local = "Clínica Central São Paulo";
-    const preco = "R$ 150,00";
-
-    // =========================
-    // CLICK CONFIRMAR
-    // =========================
-    btnConfirmar.addEventListener("click", () => {
-
-        // mostra loading
-        loadingOverlay.classList.remove("d-none");
-        loadingOverlay.classList.add("d-flex");
-
-        setTimeout(() => {
-
-            // esconde loading
-            loadingOverlay.classList.add("d-none");
-
-            // =========================
-            // ATUALIZA BREADCRUMB
-            // =========================
-            stepHorario.classList.remove("bg-primary");
-            stepHorario.classList.add("bg-success");
-
-            stepProfissional.classList.remove("bg-primary");
-            stepProfissional.classList.add("bg-success");
-
-            stepConfirmar.classList.remove("bg-secondary");
-            stepConfirmar.classList.add("bg-primary");
-
-            // =========================
-            // ESCONDE SEÇÕES
-            // =========================
-            if (cardDataHora) cardDataHora.classList.add("d-none");
-            if (cardTime) cardTime.classList.add("d-none");
-
-            // =========================
-            // MOSTRA RESUMO FINAL
-            // =========================
-            finalResumo.classList.remove("d-none");
-
-            // =========================
-            // PREENCHER FINAL
-            // =========================
-            finalProf.textContent = resProfissional;
-            finalEsp.textContent = resEspecialidade;
-
-            finalData.textContent = resData.textContent;
-            finalHora.textContent = resHorario.textContent;
-
-            finalLocal.textContent = local;
-            finalPreco.textContent = preco;
-
-            // opcional: esconder botão
-            btnConfirmar.classList.add("d-none");
-
-        }, 3000); // 5 segundos loading
-
-    });
-
-});
