@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', function () {
     loadAgendamentos();
     initializeAgendamentoConfirm();
     initializeProfissionaisReagendar();
+    loadHistorico();
+    initializeAvaliacaoModal();
 });
 
 /* ============================================================
@@ -878,6 +880,248 @@ function loadProfissionalData() {
     if (btnVoltar && reagId) {
         btnVoltar.href = `./profissionais.html?reagendar=${reagId}`;
     }
+}
+
+/* ============================================================
+   HISTÓRICO — Consultas realizadas e avaliação de profissionais
+   ============================================================ */
+
+const RATING_LABELS = ['', 'Péssimo', 'Ruim', 'Regular', 'Bom', 'Excelente'];
+
+const HISTORICO_DEFAULT = [
+    {
+        id: 'HST-001',
+        profissional:  'Dra. Ana Carvalho',
+        especialidade: 'Clínico Geral',
+        local:         'Hospital Santa Clara',
+        data:          '2026-05-10',
+        horario:       '14:30',
+        avaliacao: {
+            nota:       5,
+            comentario: 'Médica muito atenciosa e prestativa. Explicou tudo com clareza.',
+        },
+    },
+    {
+        id: 'HST-002',
+        profissional:  'Dr. Rafael Mendes',
+        especialidade: 'Ortopedia',
+        local:         'Clínica OrtoVida',
+        data:          '2026-03-22',
+        horario:       '09:00',
+        avaliacao:     null,
+    },
+    {
+        id: 'HST-003',
+        profissional:  'Dra. Beatriz Souza',
+        especialidade: 'Dermatologia',
+        local:         'Clínica Pele Viva',
+        data:          '2026-01-15',
+        horario:       '11:00',
+        avaliacao: {
+            nota:       4,
+            comentario: 'Ótima profissional, consulta objetiva e bem conduzida.',
+        },
+    },
+];
+
+function getHistorico() {
+    try {
+        const raw = localStorage.getItem('careplus_historico');
+        if (!raw) {
+            localStorage.setItem('careplus_historico', JSON.stringify(HISTORICO_DEFAULT));
+            return HISTORICO_DEFAULT;
+        }
+        return JSON.parse(raw);
+    } catch {
+        return HISTORICO_DEFAULT;
+    }
+}
+
+function saveHistorico(list) {
+    localStorage.setItem('careplus_historico', JSON.stringify(list));
+}
+
+/**
+ * Gera o HTML de estrelas de exibição (read-only).
+ * @param {number|null} nota  1-5 ou null para sem avaliação
+ */
+function renderStarsDisplay(nota) {
+    if (!nota) return '<span style="color:var(--text-muted);font-size:12px;">—</span>';
+    let html = '<span class="stars-display">';
+    for (let i = 1; i <= 5; i++) {
+        html += `<i class="${i <= nota ? 'fas' : 'far'} fa-star ${i <= nota ? 'filled' : 'empty'}"></i>`;
+    }
+    html += '</span>';
+    return html;
+}
+
+/** Renderiza a tabela de histórico e atualiza os stat-cards. */
+function loadHistorico() {
+    const tbody   = document.getElementById('historicoTableBody');
+    const statT   = document.getElementById('statTotal');
+    const statA   = document.getElementById('statAvaliadas');
+    const statP   = document.getElementById('statPendentes');
+
+    if (!tbody) return;
+
+    const list      = getHistorico();
+    const avaliadas = list.filter(c => c.avaliacao).length;
+
+    if (statT) statT.textContent = list.length;
+    if (statA) statA.textContent = avaliadas;
+    if (statP) statP.textContent = list.length - avaliadas;
+
+    tbody.innerHTML = list.map(consulta => {
+        const avaliada = !!consulta.avaliacao;
+        const btnLabel = avaliada ? 'Editar' : 'Avaliar';
+        const btnIcon  = avaliada ? 'fa-pencil-alt' : 'fa-star';
+        const btnClass = avaliada ? 'btn-ghost btn-sm' : 'btn-outline btn-sm';
+
+        return `
+          <tr>
+            <td>
+              <div style="font-weight:600;line-height:1.3;">${consulta.profissional}</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${consulta.especialidade} · ${consulta.local}</div>
+            </td>
+            <td>${formatDate(consulta.data)}</td>
+            <td>${consulta.horario}</td>
+            <td>
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                ${renderStarsDisplay(consulta.avaliacao?.nota)}
+                ${consulta.avaliacao?.comentario
+                    ? `<span style="font-size:11px;color:var(--text-muted);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;"
+                         title="${consulta.avaliacao.comentario}">
+                         "${consulta.avaliacao.comentario}"
+                       </span>`
+                    : ''}
+              </div>
+            </td>
+            <td>
+              <button
+                class="${btnClass}"
+                onclick="openAvaliacaoModal('${consulta.id}')"
+                title="${btnLabel} avaliação"
+                style="${avaliada ? '' : 'color:var(--warning);border-color:var(--warning-100);'}">
+                <i class="fas ${btnIcon}"></i>
+                ${btnLabel}
+              </button>
+            </td>
+          </tr>`;
+    }).join('');
+}
+
+/** Inicializa os eventos do modal de avaliação. */
+function initializeAvaliacaoModal() {
+    const modal      = document.getElementById('avaliacaoModal');
+    if (!modal) return;
+
+    const closeModal = () => {
+        modal.classList.remove('show');
+        document.getElementById('selectedRating').value = '0';
+        document.getElementById('avaliacaoComentario').value = '';
+        document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('lit'));
+        document.getElementById('ratingLabel').textContent = 'Selecione uma nota';
+        document.getElementById('ratingLabel').style.color = '';
+    };
+
+    document.getElementById('avaliacaoModalClose').addEventListener('click',    closeModal);
+    document.getElementById('avaliacaoModalCancelar').addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && modal.classList.contains('show')) closeModal();
+    });
+
+    // Interação com as estrelas
+    const picker      = document.getElementById('starPicker');
+    const ratingInput = document.getElementById('selectedRating');
+    const ratingLabel = document.getElementById('ratingLabel');
+
+    picker.addEventListener('mouseover', function (e) {
+        const btn = e.target.closest('.star-btn');
+        if (!btn) return;
+        const val = parseInt(btn.dataset.value);
+        highlightStars(val);
+        ratingLabel.textContent = RATING_LABELS[val];
+        ratingLabel.style.color = 'var(--warning)';
+    });
+
+    picker.addEventListener('mouseout', function () {
+        const current = parseInt(ratingInput.value);
+        highlightStars(current);
+        ratingLabel.textContent = current ? RATING_LABELS[current] : 'Selecione uma nota';
+        ratingLabel.style.color = current ? 'var(--warning)' : '';
+    });
+
+    picker.addEventListener('click', function (e) {
+        const btn = e.target.closest('.star-btn');
+        if (!btn) return;
+        const val = parseInt(btn.dataset.value);
+        ratingInput.value = val;
+        highlightStars(val);
+        ratingLabel.textContent = RATING_LABELS[val];
+        ratingLabel.style.color = 'var(--warning)';
+    });
+
+    // Salvar avaliação
+    document.getElementById('avaliacaoModalSalvar').addEventListener('click', function () {
+        const nota = parseInt(document.getElementById('selectedRating').value);
+        if (!nota) {
+            ratingLabel.textContent = 'Por favor, selecione uma nota';
+            ratingLabel.style.color = 'var(--danger)';
+            return;
+        }
+
+        const consultaId = document.getElementById('avaliacaoConsultaId').value;
+        const comentario = document.getElementById('avaliacaoComentario').value.trim();
+        const list       = getHistorico();
+        const consulta   = list.find(c => c.id === consultaId);
+
+        if (consulta) {
+            consulta.avaliacao = { nota, comentario };
+            saveHistorico(list);
+        }
+
+        closeModal();
+        loadHistorico();
+    });
+}
+
+/**
+ * Ilumina as estrelas do picker até o valor informado.
+ * @param {number} value
+ */
+function highlightStars(value) {
+    document.querySelectorAll('.star-btn').forEach(btn => {
+        btn.classList.toggle('lit', parseInt(btn.dataset.value) <= value);
+    });
+}
+
+/**
+ * Abre o modal de avaliação pré-preenchido para uma consulta.
+ * @param {string} consultaId
+ */
+function openAvaliacaoModal(consultaId) {
+    const modal   = document.getElementById('avaliacaoModal');
+    const consulta = getHistorico().find(c => c.id === consultaId);
+    if (!modal || !consulta) return;
+
+    document.getElementById('avaliacaoConsultaId').value = consultaId;
+    document.getElementById('modalProfNome').textContent         = consulta.profissional;
+    document.getElementById('modalProfEspecialidade').textContent = consulta.especialidade;
+    document.getElementById('modalConsultaData').textContent =
+        `Consulta realizada em ${formatDate(consulta.data)} às ${consulta.horario}`;
+
+    // Pré-preenche avaliação existente
+    const nota = consulta.avaliacao?.nota || 0;
+    document.getElementById('selectedRating').value = nota;
+    document.getElementById('avaliacaoComentario').value = consulta.avaliacao?.comentario || '';
+    highlightStars(nota);
+
+    const ratingLabel = document.getElementById('ratingLabel');
+    ratingLabel.textContent = nota ? RATING_LABELS[nota] : 'Selecione uma nota';
+    ratingLabel.style.color = nota ? 'var(--warning)' : '';
+
+    modal.classList.add('show');
 }
 
 /* ============================================================
